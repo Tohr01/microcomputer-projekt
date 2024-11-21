@@ -18,11 +18,11 @@ Bit-Darstellung 16 Bit Befehl:
 | NOT         | `01001`            | `R1 = NOT R2`                       |Tizio & Jannik|
 | CMP         | `01010`            | Vergleiche `R1` und `R2`            |
 | JUMP        | `01011`            | Unbedingter Sprung zu `Label`       |
-| BEQ         | `01100`            | Sprung, wenn `R1 == R2`             |
-| BNE         | `01101`            | Sprung, wenn `R1 != R2`             |
-| BLT         | `01110`            | Sprung, wenn `R1 < R2`              |
-| BGT         | `01111`            | Sprung, wenn `R1 > R2`              |
-| LSH         | `10000`            | `R1 = R2 << N` (Links-Shift)        |
-| RSH         | `10001`            | `R1 = R2 >> N` (Rechts-Shift)       |
+| BEQ         | `01100`            | Sprung, wenn `R1 == R2`             |Carl & Phil|
+| BNE         | `01101`            | Sprung, wenn `R1 != R2`             |Carl & Phil|
+| BLT         | `01110`            | Sprung, wenn `R1 < R2`              |Carl & Phil|
+| BGT         | `01111`            | Sprung, wenn `R1 > R2`              |Carl & Phil|
+| LSH         | `10000`            | `R1 = R2 << N` (Links-Shift)        |Tizio & Jannik|
+| RSH         | `10001`            | `R1 = R2 >> N` (Rechts-Shift)       |Tizio & Jannik|
 | BITTEST     | `10010`            | Teste Bit `N` in `R1`               |
 | OUT         | `10011`            | Sende den Wert aus `R1` an Display  |
