@@ -54,6 +54,10 @@ begin
                 else
                     res <= x'0000';
                     carryout_alu <= '1';
+            when "00110" => res <= A and B; -- AND
+            when "00111" => res <= A or B; -- OR
+            when "01000" => res <= A xor B; -- XOR
+            when "01001" => res <= not A; -- NOT (bezieht sich nur auf A)
             when "01100" => -- Equality check
                 if(A=B) then
                     res <= x'0001';
@@ -78,6 +82,9 @@ begin
                 else
                     res <= x'0000';
                 end if;
+            when "10000" => res <= std_logic_vector(unsigned(A) sll N) -- Left shift
+            when "10001" => res <= std_logic_vector(unsigned(A) srl N) -- Right shift
+            when others => res <= (others => NULL); -- Default case
         end case;
     end process;
 
