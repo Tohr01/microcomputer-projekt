@@ -1,4 +1,4 @@
-library library IEEE;
+library IEEE;
 use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
@@ -8,13 +8,13 @@ entity ALU is
         A, B        : in std_logic_vector(15 downto 0); -- Operants
         I           : in std_logic_vector(4 downto 0); -- Instruction
         out_alu     : out std_logic_vector(15 downto 0); -- Output of ALU
-        carryout_alu: out std_logic; -- Carryout bit
-    )
+        carryout_alu: out std_logic -- Carryout bit
+    );
 end ALU;
 
 architecture Behavioral of ALU is
     -- Signal declarations
-    signal res: std_logic_vector(15 downto 0)
+    signal res: std_logic_vector(15 downto 0);
 
     -- Function declarations
     function overflow_detection_addition(A: std_logic_vector; B: std_logic_vector) return std_logic is 
@@ -49,7 +49,7 @@ begin
                 carryout_alu <= overflow_detection_multiplication(A, B, res);
                 res <= std_logic_vector(full_product(15 downto 0));
             when "00011" => -- Division
-                if B(B'length downto 0 /= 0) then
+                if B /= (othrs => '0') then
                     res <= std_logic_vector(to_unsigned((to_integer(unsigned(A)) / to_integer(unsigned(B))),16));
                 else
                     res <= x'0000';
