@@ -3,6 +3,9 @@ use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
 
 entity ALU is 
+     generic (
+        constant N: natural := 1
+     );   
     port(
         -- inputs:
         A, B        : in std_logic_vector(15 downto 0); -- Operants
