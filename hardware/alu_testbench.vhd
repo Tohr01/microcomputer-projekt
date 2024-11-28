@@ -29,7 +29,7 @@ ARCHITECTURE behavior OF tb_ALU IS
   --Outputs
    signal out_alu : signed(15 downto 0);
    signal carryout_alu : std_logic;
-   
+
 BEGIN
     -- Instantiate the Unit Under Test (UUT)
     uut: ALU PORT MAP (
@@ -42,12 +42,92 @@ BEGIN
 
     stim_proc: process
     begin  
-        -- Test 1: Addition (A + B)
-        for iterator in 0 to 15 loop
+        for iterator in 0 to 8 loop
+            -- Test 1: Addition (A + B)
             A <= x"0005";
             B <= x"0003";
             I <= "00000";
-            wait for 10 ms;
+            wait for 10 ns;
+
+            A <= x"0005";
+            B <= x"0003";
+            I <= "00000";
+            wait for 10 ns;
+
+            -- Test 2: Subtraktion (A - B)  
+            A <= x"0005";
+            B <= x"0003";
+            I <= "00001";
+            wait for 10 ns;
+
+            -- Test ?: Multiplikation (A * B)  
+            --    A <= x"0005";
+            --    B <= x"0003";
+            --    I <= "00001"; 
+
+            -- Test ?: Division (A / B)  
+            --   A <= x"0005";
+            --   B <= x"0003";
+            --   I <= "00001";    
+      
+            -- Test 3: And  
+            A <= x"0F0F";  
+            B <= x"00FF";
+            I <= "00110";
+            wait for 10 ns;
+
+            -- Test 4: Or
+            A <= x"0F0F";  
+            B <= x"00FF";
+            I <= "00111";
+            wait for 10 ns;
+
+            -- Test 5: XOR  
+            A <= x"0F0F";  
+            B <= x"00FF";
+            I <= "01000";
+            wait for 10 ns;
+
+           -- Test 6: NOT  
+            A <= x"0F0F";  
+            B <= x"0000";
+            I <= "01001";
+
+            -- Test 7: Equals  
+            A <= x"0005";
+            B <= x"0005";
+            I <= "01100";
+            wait for 10 ns;
+
+            -- Test 8: Inequal  
+            A <= x"0005";
+            B <= x"0003";
+            I <= "01101";
+            wait for 10 ns;
+
+            -- Test 9: Less than  
+            A <= x"0003";
+            B <= x"0005";
+            I <= "01110";
+            wait for 10 ns;
+
+            -- Test 10: Greater than
+            A <= x"0005";
+            B <= x"0003";
+            I <= "01111";
+            wait for 10 ns;
+
+            -- Test 11: Left Shift  
+            A <= x"0005";
+            B <= x"0000";
+            I <= "00001";
+            wait for 10 ns;
+
+            -- Test 12: Right Shift  
+            A <= x"0005";
+            B <= x"0000";
+            I <= "00001";
+            wait for 10 ns;
         end loop;
     end process;
 
