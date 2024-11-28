@@ -8,8 +8,8 @@ Bit-Darstellung 16 Bit Befehl:
 |-------------|-------------------|-------------------------------------|----------------|
 | ADD         | `00000`            | `R1 = R2 + R3`                      |Carl & Phil|
 | SUB         | `00001`            | `R1 = R2 - R3`                      |Carl & Phil|
-| MUL         | `00010`            | `R1 = R2 * R3`                      |Carl & Phil|
-| DIV         | `00011`            | `R1 = R2 / R3`                      |Carl & Phil|
+| ~MUL~       | ~`00010`~          | ~`R1 = R2 * R3`~                    |~Carl & Phil~|
+| ~DIV~       | ~`00011`~          | ~`R1 = R2 / R3`~                    |~Carl & Phil~|
 | LOAD        | `00100`            | `R1 = Mem[Addr]`                    |
 | STORE       | `00101`            | `Mem[Addr] = R1`                    |
 | AND         | `00110`            | `R1 = R2 AND R3`                    |Tizio & Jannik|
