@@ -48,7 +48,73 @@ BEGIN
         A <= x"0005";
         B <= x"0003";
         I <= "00000";
-        finish;
+
+      -- Test 2: Subtraktion (A - B)  
+        A <= x"0005";
+        B <= x"0003";
+        I <= "00001";
+
+    -- Test ?: Multiplikation (A * B)  
+    --    A <= x"0005";
+    --    B <= x"0003";
+    --    I <= "00001"; 
+
+    -- Test ?: Division (A / B)  
+    --   A <= x"0005";
+    --   B <= x"0003";
+    --   I <= "00001";    
+      
+      -- Test 3: And  
+        A <= x"0F0F";  
+        B <= x"00FF";
+        I <= "00110";
+
+      -- Test 4: Or
+        A <= x"0F0F";  
+        B <= x"00FF";
+        I <= "00111";
+
+      -- Test 5: XOR  
+        A <= x"0F0F";  
+        B <= x"00FF";
+        I <= "01000";
+
+      -- Test 6: NOT  
+        A <= x"0F0F";  
+        B <= x"0000";
+        I <= "01001";
+
+      -- Test 7: Equals  
+        A <= x"0005";
+        B <= x"0005";
+        I <= "01100";
+
+      -- Test 8: Inequal  
+        A <= x"0005";
+        B <= x"0003";
+        I <= "01101";
+
+      -- Test 9: Less than  
+        A <= x"0003";
+        B <= x"0005";
+        I <= "01110";
+
+      -- Test 10: Greater than
+        A <= x"0005";
+        B <= x"0003";
+        I <= "01111";
+
+      -- Test 11: Left Shift  
+        A <= x"0005";
+        B <= x"0000";
+        I <= "00001";
+
+      -- Test 12: Right Shift  
+        A <= x"0005";
+        B <= x"0000";
+        I <= "00001";
+
+    finish;
     end process;
 
 END;
