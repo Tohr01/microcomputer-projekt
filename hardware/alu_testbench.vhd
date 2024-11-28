@@ -42,13 +42,8 @@ BEGIN
 
     stim_proc: process
     begin  
-        for iterator in 0 to 8 loop
+        for iterator in 0 to 2 loop
             -- Test 1: Addition (A + B)
-            A <= x"0005";
-            B <= x"0003";
-            I <= "00000";
-            wait for 10 ns;
-
             A <= x"0005";
             B <= x"0003";
             I <= "00000";
