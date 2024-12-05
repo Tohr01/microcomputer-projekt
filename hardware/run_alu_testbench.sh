@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd "$(dirname "$0")";
+cd "$(dirname "$0")" || exit
 
 WORK_DIR="work";
 WAVEFORM_FILE="$WORK_DIR/waveform.vcd"
@@ -13,7 +13,7 @@ echo "Deleting old contents of work dir"
 rm "$WORK_DIR/*"
 
 echo "Started ghdl analyse step"
-ghdl -a --workdir=$WORK_DIR alu_testbench.vhd alu.vhd 
+ghdl -a --workdir=$WORK_DIR opcodes_constants.vhd alu.vhd alu_testbench.vhd
 echo "Started ghdl elaborate step" 
 ghdl -e --workdir=$WORK_DIR tb_ALU
 echo "Started ghdl run step"
