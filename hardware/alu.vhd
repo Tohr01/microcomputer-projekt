@@ -1,6 +1,6 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use ieee.NUMERIC_STD.all;
+use IEEE.NUMERIC_STD.all;
 
 entity ALU is 
     generic (
