@@ -6,35 +6,49 @@ entity RegisterBank_tb is
 end RegisterBank_tb;
 
 architecture Behavioral of RegisterBank_tb is
-    constant REGISTER_COUNT : natural := 8;
+    constant REGISTER_BITS : natural := 3;
     constant DATA_WIDTH     : natural := 16;
+
+    COMPONENT RegisterBank
+    port (
+        clk        : in  std_logic;                               -- Takt
+        rst        : in  std_logic;                               -- Reset
+        write_en   : in  std_logic;                               -- Schreibaktivierung
+        read_addr  : in  unsigned(REGISTER_BITS-1 downto 0); -- Leseadresse
+        write_addr : in  unsigned(REGISTER_BITS-1 downto 0); -- Schreibadresse
+        data_in    : in  signed(DATA_WIDTH-1 downto 0);           -- Input
+        data_out   : out signed(DATA_WIDTH-1 downto 0)            -- Output
+    );
+    END COMPONENT;
+
 
     -- Ports der Registerbank
     signal clk        : std_logic := '0';
     signal rst        : std_logic := '0';
     signal write_en   : std_logic := '0';
-    signal read_addr  : unsigned(2 downto 0);
-    signal write_addr : unsigned(2 downto 0);
-    signal data_in    : signed(DATA_WIDTH-1 downto 0);
-    signal data_out   : signed(DATA_WIDTH-1 downto 0);
+    signal read_addr  : unsigned(REGISTER_BITS-1 downto 0) := (others => '0');
+    signal write_addr : unsigned(REGISTER_BITS-1 downto 0) := (others => '0');
+    signal data_in    : signed(DATA_WIDTH-1 downto 0) := (others => '0');
+    signal data_out   : signed(DATA_WIDTH-1 downto 0) := (others => '0');
+
+begin
 
     -- Registerbank-Instanz
     uut: entity work.RegisterBank
-        generic map (
-            REGISTER_COUNT => REGISTER_COUNT,
-            DATA_WIDTH     => DATA_WIDTH
-        )
-        port map (
-            clk        => clk,
-            rst        => rst,
-            write_en   => write_en,
-            read_addr  => read_addr,
-            write_addr => write_addr,
-            data_in    => data_in,
-            data_out   => data_out
-        );
-
-begin
+    generic map (
+        REGISTER_BITS => REGISTER_BITS,
+        DATA_WIDTH     => DATA_WIDTH
+    )
+    port map (
+        clk        => clk,
+        rst        => rst,
+        write_en   => write_en,
+        read_addr  => read_addr,
+        write_addr => write_addr,
+        data_in    => data_in,
+        data_out   => data_out
+    );
+     
     -- Takt erzeugen
     clk <= not clk after 10 ns;
 
