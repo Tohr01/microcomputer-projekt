@@ -36,17 +36,42 @@ architecture Behavioral of ControlUnit is
     );
     END COMPONENT;
     
-    type state_type is (INSTRUCTION_FETCH, INSTRUCTION_DECODE, OPERAND_FETCH, EXECUTE, RESULT_STORE, NEXT_INSTRUCTION);
-    type mock_register_array is array (0 to 1) of unsigned(31 downto 0);
+    type state_type is (INSTRUCTION_FETCH, INSTRUCTION_DECODE, OPERANDS_FETCH, EXECUTE, RESULT_STORE, NEXT_INSTRUCTION);
+    type mock_register_array is array (0 to 3) of unsigned(15 downto 0);
 
-    signal program_counter: signed (31 downto 0) := (others => '0');
+    signal program_counter: unsigned (31 downto 0) := (others => '0');
     signal state, next_state: state_type;
     signal mock_instruction_registers : mock_register_array := (
-        0 => ADD_OP,
-        1 => SUB_OP,
+        0 => "0000000101000000", -- Opcode: 00000, A_reg: 001, B_reg: 010, Immediate/R3: 00/000 -> 2 + 1 = 3 (if RegisterBank[A_reg] = 2, RegisterBank[B_reg] = 1)
+        1 => "0000001000100000", -- Opcode: 00000, A_reg: 001, B_reg: 010, Immediate/R3: 00/000 -> 2 - 1 = 1
+        2 => "0110000100100000", -- Opcode: 01100, A_reg: 001, B_reg: 001, Immediate/R3: 00/000 -> 2 == 2 -> 1
+        3 => "0110000101000000"  -- Opcode: 01100, A_reg: 001, B_reg: 010, Immediate/R3: 00/000 -> 2 == 1 -> 0
         others => (others => '0')
     )
     signal current_instruction: signed(15 downto 0);
+
+    -- For decoding instructions
+    signal opcode: unsigned(4 downto 0);
+    signal A_reg: unsigned(2 downto 0);
+    signal B_reg: unsigned(2 downto 0);
+    signal immediate: unsigned(4 downto 0);
+
+    -- Ports of ALU
+    signal A : signed(15 downto 0) := (others => '0');
+    signal B : signed(15 downto 0) := (others => '0');
+    signal I : integer := 0;
+    signal out_alu : signed(15 downto 0);
+    signal carryout_alu : std_logic;
+
+    -- Ports of Registerbank
+    signal clk        : std_logic := '0';
+    signal rst        : std_logic := '0';
+    signal write_en   : std_logic := '0';
+    signal read_addr  : unsigned(REGISTER_BITS-1 downto 0) := (others => '0');
+    signal write_addr : unsigned(REGISTER_BITS-1 downto 0) := (others => '0');
+    signal data_in    : signed(DATA_WIDTH-1 downto 0) := (others => '0');
+    signal data_out   : signed(DATA_WIDTH-1 downto 0) := (others => '0');
+
 begin
 
     ALU : entity work.ALU
@@ -83,32 +108,46 @@ begin
         end if;
     end process; 
 
-    MOV R1, R2 -> 0001 0001 0010 0000
-    ADD R1, R3
-    JMP 0x04
-
-    process(state)
+    process(all)
     begin
         case state is
             when INSTRUCTION_FETCH =>
-                -- Fetch instruction from memory, ausm RAM and move to instruction register
-                ram_register_address <= program_counter;
-                current_instruction <= -- value from RRRRAMMM at ram_register_address
+                -- Fetch instruction from RAM
+                current_instruction <= mock_instruction_registers(to_integer(program_counter(4 downto 0)));
                 next_state <= INSTRUCTION_DECODE;
             when INSTRUCTION_DECODE =>
                 -- Decode instruction
+                opcode <= unsigned(instruction(15 downto 11));
+                A_reg <= unsigned(instruction(10 downto 8));
+                B_reg <= unsigned(instruction(7 downto 5));
+                immediate <= unsigned(instruction(4 downto 0));
                 next_state <= OPERAND_FETCH;
-            when OPERAND_FETCH =>
+            when OPERANDS_FETCH =>
+                -- Reset Registerbank
+                rst <= '1';
+                wait for 20 ns;
+                rst <= '0';
                 -- Fetch operands
+                write_en <= '0';
+                read_addr <= A_reg;
+                A <= data_out;
+                write_en <= '0';
+                read_addr <= B_reg;
+                B <= data_out;
                 next_state <= EXECUTE;
             when EXECUTE =>
                 -- Execute instruction
+                I <= to_integer(opcode);
                 next_state <= RESULT_STORE;
             when RESULT_STORE =>
                 -- Store result
+                write_en <= '1';
+                write_addr <= immediate(2 downto 0);
+                data_in <= out_alu; -- TODO: check for carryout -> How to handle that?
                 next_state <= NEXT_INSTRUCTION;
             when NEXT_INSTRUCTION =>
                 -- Go to next instruction
+                program_counter <= program_counter + 1;
                 next_state <= INSTRUCTION_FETCH;
             when others =>
                 next_state <= INSTRUCTION_FETCH;
