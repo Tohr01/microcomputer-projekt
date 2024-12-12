@@ -1,32 +1,32 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
-use ieee.NUMERIC_STD.all;
-use work.opcodes_constants.all;
+USE ieee.NUMERIC_STD.ALL;
+USE work.opcodes_constants.ALL;
 
 ENTITY tb_ALU IS
 END tb_ALU;
- 
-ARCHITECTURE behavior OF tb_ALU IS 
- 
-    -- Component Declaration for the Unit Under Test (UUT)
+
+ARCHITECTURE behavior OF tb_ALU IS
+
     COMPONENT ALU
     PORT(
-        -- inputs:
-        A        : in signed(15 downto 0);
-        B        : in signed(15 downto 0);
+        -- Inputs:
+        A           : in signed(15 downto 0);
+        B           : in signed(15 downto 0);
         I           : in integer;
         out_alu     : out signed(15 downto 0);
         carryout_alu: out std_logic
-        );
+    );
     END COMPONENT;
 
-   signal A : signed(15 downto 0) := (others => '0');
-   signal B : signed(15 downto 0) := (others => '0');
-   signal I : integer := 0;
+    -- Signals 
+    signal A            : signed(15 downto 0) := (others => '0');
+    signal B            : signed(15 downto 0) := (others => '0');
+    signal I            : integer := 0;
 
-  --Outputs
-   signal out_alu : signed(15 downto 0);
-   signal carryout_alu : std_logic;
+    -- Outputs
+    signal out_alu      : signed(15 downto 0);
+    signal carryout_alu : std_logic;
 
 BEGIN
     -- Instantiate the Unit Under Test (UUT)
@@ -40,78 +40,95 @@ BEGIN
 
     stim_proc: process
     begin
-        -- Test 1: Addition (A + B)
-        A <= x"0005";
-        B <= x"0003";
-        I <= ADD_OP; 
+        -- Normal Test Cases
+        
+        -- Test 1: Addition (Normal)
+        A <= to_signed(5, 16);
+        B <= to_signed(3, 16);
+        I <= ADD_OP;
         wait for 10 ns;
 
-        -- Test 2: Subtraction (A - B)
-        A <= x"0005";
-        B <= x"0003";
-        I <= SUB_OP; 
+        -- Test 2: Subtraction (Normal)
+        A <= to_signed(10, 16);
+        B <= to_signed(5, 16);
+        I <= SUB_OP;
         wait for 10 ns;
 
-        -- Test 3: AND
-        A <= x"0F0F";
-        B <= x"00FF";
-        I <= AND_OP; 
+        -- Edge Cases
+
+        -- Test 3: Addition (Positive Overflow)
+        A <= to_signed(32767, 16); -- Max positive
+        B <= to_signed(1, 16); 
+        I <= ADD_OP;
         wait for 10 ns;
 
-        -- Test 4: OR
-        A <= x"0F0F";
-        B <= x"00FF";
-        I <= OR_OP; 
+        -- Test 4: Subtraction (Negative Overflow)
+        A <= to_signed(-32768, 16); -- Max negative
+        B <= to_signed(1, 16); 
+        I <= SUB_OP;
         wait for 10 ns;
 
-        -- Test 5: XOR
-        A <= x"0F0F";
-        B <= x"00FF";
-        I <= XOR_OP; 
+        -- Test 5: AND (All bits high)
+        A <= to_signed(-1, 16); -- All bits are '1'
+        B <= to_signed(-1, 16); -- All bits are '1'
+        I <= AND_OP;
         wait for 10 ns;
 
-        -- Test 6: NOT (operates only on A)
-        A <= x"0F0F";
-        B <= x"0000"; -- B is not used in NOT operation
-        I <= NOT_OP; 
+        -- Test 6: OR (Edge with zeros)
+        A <= to_signed(0, 16);
+        B <= to_signed(-1, 16); -- All bits are '1'
+        I <= OR_OP;
         wait for 10 ns;
 
-        -- Test 7: Equals
-        A <= x"0005";
-        B <= x"0005";
-        I <= BEQ_OP; 
+        -- Test 7: XOR (Self XOR should yield zero)
+        A <= to_signed(1234, 16);
+        B <= to_signed(1234, 16);
+        I <= XOR_OP;
         wait for 10 ns;
 
-        -- Test 8: Not Equals
-        A <= x"0005";
-        B <= x"0003";
-        I <= BNE_OP; 
+        -- Test 8: NOT (Boundary check)
+        A <= to_signed(0, 16); -- All bits are '0'
+        B <= to_signed(0, 16); -- Unused
+        I <= NOT_OP;
         wait for 10 ns;
 
-        -- Test 9: Less Than
-        A <= x"0003";
-        B <= x"0005";
-        I <= BLT_OP; 
+        -- Negative Test Cases
+        
+        -- Test 9: Division by Zero (Assuming DIV_OP exists)
+        A <= to_signed(15, 16);
+        B <= to_signed(0, 16); -- Division by zero
+        I <= 99999; -- Dummy operation for robustness
         wait for 10 ns;
 
-        -- Test 10: Greater Than
-        A <= x"0005";
-        B <= x"0003";
-        I <= BGT_OP; 
+        -- Test 10: Invalid Opcode
+        A <= to_signed(5, 16);
+        B <= to_signed(3, 16);
+        I <= 99999; -- Invalid opcode
         wait for 10 ns;
 
-        -- Test 11: Left Shift
-        A <= x"0005";
-        B <= x"0000"; -- B is not used in shift operation
-        I <= LSH_OP; 
+        -- Test 11: Shifts with boundary conditions
+        A <= to_signed(1, 16); -- Only least significant bit set
+        I <= LSH_OP; -- Left shift
         wait for 10 ns;
 
-        -- Test 12: Right Shift
-        A <= x"0005";
-        B <= x"0000"; -- B is not used in shift operation
-        I <= RSH_OP; 
+        A <= to_signed(-32768, 16); -- Max negative
+        I <= RSH_OP; -- Right shift
         wait for 10 ns;
+
+        -- Test 12: Comparison (Boundary checks)
+        A <= to_signed(-32768, 16); -- Max negative
+        B <= to_signed(32767, 16); -- Max positive
+        I <= BLT_OP; -- A < B
+        wait for 10 ns;
+
+        -- Test 13: Equality with zero
+        A <= to_signed(0, 16);
+        B <= to_signed(0, 16);
+        I <= BEQ_OP; -- A == B
+        wait for 10 ns;
+
+        -- End of test
         wait;
     end process;
 
-END;
+END behavior;
