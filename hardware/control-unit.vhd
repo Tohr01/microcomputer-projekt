@@ -2,6 +2,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use work.opcodes_constants.ALL;
+use work.memPkg.ALL;
 
 entity ControlUnit is
     Port (
@@ -49,20 +50,6 @@ architecture Behavioral of ControlUnit is
     -- Instruction Register
     signal instruction_reg : signed(15 downto 0) := (others => '0');
 
-    -- RAM Declaration
-    type RAM_Type is array (0 to 15) of std_logic_vector(15 downto 0);
-    RAM : RAM_Type := (others => (others => '0')); -- Mit Testbench Instruktionen in den RAM schreiben?
-
-
-   -- RAM mit beispielhafter Belegung / Mock Instruction Register
-   -- signal RAM : RAM_Type := (
-    --    0 => "0000000101000000", -- Beispiel-Instruktion
-    --    1 => "0000001000100000", -- Beispiel-Instruktion
-    --    2 => "0110000100100000", -- Beispiel-Instruktion
-    --   3 => "0110000101000000", -- Beispiel-Instruktion
-    --   others => (others => '0')
-   -- );
-
     -- Instruction Decoding
     signal opcode   : unsigned(4 downto 0);
     signal A_reg    : unsigned(2 downto 0);
@@ -70,9 +57,9 @@ architecture Behavioral of ControlUnit is
     signal immediate: unsigned(4 downto 0);
 
     -- ALU Signals
-    signal A, B     : signed(15 downto 0) := (others => '0');
-    signal I        : integer := 0;
-    signal out_alu  : signed(15 downto 0);
+    signal A, B         : signed(15 downto 0) := (others => '0');
+    signal I            : integer := 0;
+    signal out_alu      : signed(15 downto 0);
     signal carryout_alu : std_logic;
 
     -- Register Bank Signals
@@ -81,6 +68,12 @@ architecture Behavioral of ControlUnit is
     signal write_addr : unsigned(REGISTER_BITS-1 downto 0) := (others => '0');
     signal data_in    : signed(DATA_WIDTH-1 downto 0) := (others => '0');
     signal data_out   : signed(DATA_WIDTH-1 downto 0);
+
+    -- RAM Signals
+    signal dnWE		                 : std_logic;
+    signal ram_addr	                 : std_logic_vector(31 downto 0);
+    signal ram_data_in, ram_data_out : std_logic_vector(15 downto 0);
+    signal ram_fileIO	             : fileIoT;
 
 begin
     -- ALU Instantiation    
@@ -107,6 +100,20 @@ begin
             write_addr => write_addr,
             data_in    => data_in,
             data_out   => data_out
+        );
+
+    RAM : entity work.ramIO
+        generic map (
+            addrWd => 32,
+            dataWd => 16,
+            fileId => "memory.dat"
+        )
+        port map (
+            nWE => '0',
+            addr => ram_addr,
+            dataI => ram_data_in,
+            dataO => ram_data_out,
+            fileIO => ram_fileIO
         );
 
     -- State Machine Process
@@ -137,7 +144,8 @@ begin
         case state is
             when INSTRUCTION_FETCH =>
                 -- Fetch Instruction from RAM
-                instruction_reg <= signed(to_integer(unsigned(RAM(to_integer(program_counter(4 downto 0))))));
+                ram_addr <= std_logic_vector(program_counter(31 downto 0));
+                instruction_reg <= signed(ram_data_out(15 downto 0));
                 next_state <= INSTRUCTION_DECODE;
 
             when INSTRUCTION_DECODE =>
