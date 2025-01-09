@@ -16,30 +16,6 @@ architecture Behavioral of ControlUnit is
     constant REGISTER_BITS : natural := 3;
     constant DATA_WIDTH    : natural := 16;
 
-    -- ALU Declaration
-    COMPONENT ALU
-        port (
-            A            : in signed(15 downto 0);
-            B            : in signed(15 downto 0);
-            I            : in integer;
-            out_alu      : out signed(15 downto 0);
-            carryout_alu : out std_logic
-        );
-    END COMPONENT;
-
-    -- Register Bank Declaration
-    COMPONENT RegisterBank
-        port (
-            clk        : in  std_logic;
-            rst        : in  std_logic;
-            write_en   : in  std_logic;
-            read_addr  : in  unsigned(REGISTER_BITS-1 downto 0);
-            write_addr : in  unsigned(REGISTER_BITS-1 downto 0);
-            data_in    : in  signed(DATA_WIDTH-1 downto 0);
-            data_out   : out signed(DATA_WIDTH-1 downto 0)
-        );
-    END COMPONENT;
-
     -- State Definitions
     type state_type is (INSTRUCTION_FETCH, INSTRUCTION_DECODE, OPERAND_FETCH, WAIT_FOR_OPERANDS, EXECUTE, RESULT_STORE, NEXT_INSTRUCTION);
     signal state, next_state : state_type;
@@ -71,7 +47,7 @@ architecture Behavioral of ControlUnit is
 
     -- RAM Signals
     signal dnWE		                 : std_logic;
-    signal ram_addr	                 : std_logic_vector(31 downto 0);
+    signal ram_addr	                 : std_logic_vector(15 downto 0);
     signal ram_data_in, ram_data_out : std_logic_vector(15 downto 0);
     signal ram_fileIO	             : fileIoT;
 
@@ -102,9 +78,9 @@ begin
             data_out   => data_out
         );
 
-    RAM : entity work.ramIO
+    RAM : ramIO
         generic map (
-            addrWd => 32,
+            addrWd => 16,
             dataWd => 16,
             fileId => "memory.dat"
         )
@@ -144,7 +120,8 @@ begin
         case state is
             when INSTRUCTION_FETCH =>
                 -- Fetch Instruction from RAM
-                ram_addr <= std_logic_vector(program_counter(31 downto 0));
+                ram_addr <= std_logic_vector(program_counter(15 downto 0));
+                report "ram_addr: " & integer'image(to_integer(unsigned(ram_addr)));
                 instruction_reg <= signed(ram_data_out(15 downto 0));
                 next_state <= INSTRUCTION_DECODE;
 
