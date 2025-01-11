@@ -4,6 +4,7 @@ use IEEE.numeric_std.all;
 package opcodes_constants is
     constant ADD_OP : integer := 0;
     constant SUB_OP : integer := 1;
+    constant ADD_IMMEDIATE_OP : integer := 2;
     constant LOAD_OP : integer := 4;
     constant STORE_OP : integer := 5;
     constant AND_OP : integer := 6;

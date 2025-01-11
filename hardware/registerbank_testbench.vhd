@@ -48,12 +48,23 @@ begin
         data_in    => data_in,
         data_out   => data_out
     );
-     
+
     -- Takt erzeugen
-    clk <= not clk after 10 ns;
+    clk_process: process
+    begin
+        while now < 100 us loop
+            clk <= '0';
+            wait for 10 ns;
+            clk <= '1';
+            wait for 10 ns;
+        end loop;
+        wait;
+    end process;
 
     process
     begin
+        report "Simulation started";
+
         -- Reset
         rst <= '1';
         wait for 20 ns;
@@ -81,6 +92,7 @@ begin
         read_addr <= "010";
         wait for 20 ns;
 
+        report "Simulation finished";
         wait;
     end process;
 end Behavioral;

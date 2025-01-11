@@ -12,8 +12,7 @@ architecture Behavioral of Control_Unit_tb is
     signal clk       : std_logic := '0';
     signal rst       : std_logic := '1';
     signal start     : std_logic := '0';
-    signal result    : signed(15 downto 0);
-    signal carryout  : std_logic;
+    signal instruction: unsigned(15 downto 0) := (others => '0');
     signal done_internal      : std_logic;
 
     -- Instanziierung der Control Unit
@@ -22,8 +21,7 @@ architecture Behavioral of Control_Unit_tb is
             clk       : in std_logic;
             rst       : in std_logic;
             start     : in std_logic;
-            result    : out signed(15 downto 0);
-            carryout  : out std_logic;
+            instruction: in unsigned(15 downto 0);
             done      : out std_logic
         );
     end component;
@@ -36,43 +34,52 @@ begin
             clk => clk,
             rst => rst,
             start => start,
-            result => result,
-            carryout => carryout,
+            instruction => instruction,
             done => done_internal
         );
 
     -- Taktprozess
     clk_process: process
     begin
-        while now < 100 us loop -- Ändern Sie '1 us' auf die gewünschte Simulationsdauer
+        while now < 1000 us loop
             clk <= '0';
             wait for 10 ns;
             clk <= '1';
             wait for 10 ns;
         end loop;
-        wait; -- Stoppt den Prozess nach 1 us
+        wait;
     end process;
 
     -- Testprozess
     test_process: process
     begin
         -- Reset und Initialisierung
+        rst <= '1';
         wait for 20 ns;
         rst <= '0';
-        wait for 20 ns;
 
-        -- Testfall 1:
+        -- Testfall 1: ADD immediate=1 to value in A_reg=000 and store the result in A_reg
+        instruction <= unsigned'("0001000000000001");
         start <= '1';
         wait for 50 ns;
-        
-        -- Warten auf den Abschluss der Berechnung
+        start <= '0';
         wait until done_internal = '1';
-        assert (result = to_signed(8, 16)) report "Addition - Test fehlgeschlagen" severity error;
-        report "Addition - Test erfolgreich" severity note;
-        
-        -- Weitere Testfälle können hier hinzugefügt werden
+        wait for 100 ns;
+        -- Testfall 2: ADD immediate=2 to value in A_reg=001 and store the result in A_reg
+        instruction <= unsigned'("0001000100000010");
+        start <= '1';
+        wait for 50 ns;
+        start <= '0';
+        wait until done_internal = '1';
+        wait for 100 ns;
 
-        -- Simulation stoppen
+        -- Testfall 3: ADD A_reg=000 to B_reg=001 and store the result in A_reg
+        instruction <= unsigned'("0000000000100000");
+        start <= '1';
+        wait for 50 ns;
+        start <= '0';
+        wait until done_internal = '1';
+
         wait;
     end process;
 

@@ -8,17 +8,18 @@ entity CONTROL_UNIT is
         clk       : in std_logic;
         rst       : in std_logic;
         start     : in std_logic;
-        result    : out signed(15 downto 0);
-        carryout  : out std_logic;
+        instruction: in unsigned(15 downto 0);
         done      : out std_logic
     );
 end CONTROL_UNIT;
 
 architecture Behavioral of Control_Unit is
+    constant REGISTER_BITS : natural := 3;
+    constant DATA_WIDTH     : natural := 16;
 
     type state_type is (IDLE, INSTRUCTION_FETCH, INSTRUCTION_DECODE, OPERAND_FETCH, WAIT_FOR_OPERANDS, EXECUTE, RESULT_STORE, NEXT_INSTRUCTION);
     signal current_state, next_state : state_type;
-    signal instruction: unsigned(15 downto 0);
+    -- signal instruction: unsigned(15 downto 0);
     signal opcode   : unsigned(4 downto 0);
     signal A_reg    : unsigned(2 downto 0);
     signal B_reg    : unsigned(2 downto 0);
@@ -29,6 +30,12 @@ architecture Behavioral of Control_Unit is
     signal res_internal: signed(15 downto 0);
     signal carry_internal: std_logic;
 
+    signal write_en            : std_logic := '0';
+    signal read_addr           : unsigned(REGISTER_BITS-1 downto 0) := (others => '0');
+    signal write_addr          : unsigned(REGISTER_BITS-1 downto 0) := (others => '0');
+    signal data_in             : signed(DATA_WIDTH-1 downto 0) := (others => '0');
+    signal data_out_internal   : signed(DATA_WIDTH-1 downto 0) := (others => '0');
+
     component ALU is
         generic (
             constant N: natural := 1
@@ -38,6 +45,18 @@ architecture Behavioral of Control_Unit is
             I           : in integer;
             out_alu     : out signed(15 downto 0);
             carryout_alu: out std_logic
+        );
+    end component;
+
+    component RegisterBank is
+        port (
+            clk      : in std_logic;
+            rst      : in std_logic;
+            write_en : in std_logic;
+            read_addr: in unsigned(REGISTER_BITS-1 downto 0);
+            write_addr: in unsigned(REGISTER_BITS-1 downto 0);
+            data_in  : in signed(DATA_WIDTH-1 downto 0);
+            data_out : out signed(DATA_WIDTH-1 downto 0)
         );
     end component;
 
@@ -54,6 +73,17 @@ begin
             out_alu => res_internal,
             carryout_alu => carry_internal
         );
+    
+    U2: RegisterBank
+        port map (
+            clk => clk,
+            rst => rst,
+            write_en => write_en,
+            read_addr => read_addr,
+            write_addr => write_addr,
+            data_in => data_in,
+            data_out => data_out_internal
+        );
 
     process(clk, rst)
     begin
@@ -61,12 +91,14 @@ begin
         -- -> since current_state changed to IDLE, the second process will be triggered
         if rst = '1' then
             current_state <= IDLE;
-            result <= (others => '0');
-            carryout <= '0';
-            done <= '0';
         -- on rising edge of clock, we update the current state
         -- -> since current_state changed, the second process will be triggered
         elsif rising_edge(clk) then
+            if current_state = RESULT_STORE and next_state = IDLE then
+                done <= '1';
+            else
+                done <= '0';
+            end if;
             current_state <= next_state;
         end if;
     end process;
@@ -75,7 +107,6 @@ begin
     begin
         case current_state is
             when IDLE =>
-                done <= '0';
                 if start = '1' then
                     next_state <= INSTRUCTION_FETCH;
                 else
@@ -83,25 +114,39 @@ begin
                 end if;
             when INSTRUCTION_FETCH =>
                 -- fetch instruction from random access memory
-                instruction <= unsigned'("0000000100100000");
+                -- instruction <= unsigned'("0001000000000001");
                 next_state <= INSTRUCTION_DECODE;
             when INSTRUCTION_DECODE =>
                 opcode <= unsigned(instruction(15 downto 11));
                 A_reg <= unsigned(instruction(10 downto 8));
                 B_reg <= unsigned(instruction(7 downto 5));
+                immediate <= unsigned(instruction(4 downto 0));
                 next_state <= OPERAND_FETCH;
             when OPERAND_FETCH =>
-                A <= to_signed(5, 16);
-                B <= to_signed(3, 16);
+                write_en <= '0';
+                read_addr <= A_reg;
+                A <= data_out_internal;
+                if opcode = ADD_IMMEDIATE_OP then
+                    B <= signed("00000000000" & immediate);
+                else
+                    read_addr <= B_reg;
+                    B <= data_out_internal;
+                end if;
                 next_state <= EXECUTE;
             when EXECUTE =>
-                I <= to_integer(opcode);
+                if opcode = ADD_IMMEDIATE_OP then
+                    I <= ADD_OP;
+                else 
+                    I <= to_integer(opcode);
+                end if;
                 next_state <= RESULT_STORE;
             when RESULT_STORE =>
-                result <= res_internal; 
-                carryout <= carry_internal;
-                done <= '1';
-                next_state <= IDLE; -- Loop back to idle after completion
+                write_en <= '1';
+                write_addr <= A_reg;
+                data_in <= res_internal;
+                -- TODO: Handle carryout
+                -- carry_internal;
+                next_state <= IDLE;
             when others =>
                 next_state <= IDLE;
         end case;

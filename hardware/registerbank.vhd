@@ -17,15 +17,15 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity RegisterBank is
     generic (
-        REGISTER_BITS : natural := 3;  -- Anzahl der Register (Can be calculated by ceil(log2(num of registers)))
-        DATA_WIDTH     : natural := 16  -- Breite der Register (16 Bit)
+        constant REGISTER_BITS : natural := 3;  -- Anzahl der Register (Can be calculated by ceil(log2(num of registers)))
+        constant DATA_WIDTH     : natural := 16  -- Breite der Register (16 Bit)
     );
     port (
         clk        : in  std_logic;                               -- Takt
         rst        : in  std_logic;                               -- Reset
         write_en   : in  std_logic;                               -- Schreibaktivierung
-        read_addr  : in  unsigned(REGISTER_BITS-1 downto 0); -- Leseadresse
-        write_addr : in  unsigned(REGISTER_BITS-1 downto 0); -- Schreibadresse
+        read_addr  : in  unsigned(REGISTER_BITS-1 downto 0);      -- Leseadresse
+        write_addr : in  unsigned(REGISTER_BITS-1 downto 0);      -- Schreibadresse
         data_in    : in  signed(DATA_WIDTH-1 downto 0);           -- Input
         data_out   : out signed(DATA_WIDTH-1 downto 0)            -- Output
     );
