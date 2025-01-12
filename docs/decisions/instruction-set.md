@@ -2,14 +2,13 @@ Bit-Darstellung 16 Bit Befehl:
 - 5 Bits: Opcode
 - 3 Bits: R1
 - 3 Bits: R2
-- 5 Bits: R3 / Immediate
+- 5 Bits: Immediate
 
 | **Befehl**  | **Opcode (Binär)** | **Beschreibung**                    | **Developer**|
 |-------------|-------------------|-------------------------------------|----------------|
 | ✅ ADD         | `00000`            | `R1 = R1 + R2`                      |Carl & Phil|
 | ✅ SUB         | `00001`            | `R1 = R1 - R2`                      |Carl & Phil|
-| ✅ ADD_IMMEDIATE       | `00010`          | `R1 = R2 * R3`                    |~Carl & Phil~|
-| ~DIV~       | ~`00011`~          | ~`R1 = R2 / R3`~                    |~Carl & Phil~|
+| ✅ ADD_IMMEDIATE       | `00010`          | `R1 = R1 + IMMEDIATE`                    |Phil|
 | LOAD        | `00100`            | `R1 = Mem[Addr]`                    |
 | STORE       | `00101`            | `Mem[Addr] = R1`                    |
 | ✅ AND         | `00110`            | `R1 = R1 AND R2`                    |Tizio & Jannik|
