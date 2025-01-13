@@ -20,6 +20,10 @@ SIEVE_OF_ERATOSTHENES:
     # current_number = memory[current_address]
     # SIEVE_LOOP
     #   square = current_number * current_number
+    # Check for overflow
+    # cmp $OVERFLOW, 1
+    # je OVERFLOW_HANDLING 
+
     #   is_prime = current_number == 0
     #   if is_prime != 0 (current_number is prime)
     #       STRIKE_MULTIPLES
@@ -153,3 +157,47 @@ MULTIPLY:
 
         MULTIPLY_EXIT:
             ret
+
+MULTIPLY_WITH_OVERFLOW_DETECTION:
+    movi $MULRES, 0      # Set result to 0
+    movi $OVERFLOW, 0    # Initialize overflow flag to 0
+    movi $R2, 1          # Store one for comparison
+    movi $MAX_VALUE, 65535 # Max value for 16-bit (2^16 -1)?
+
+    MULTIPLY_LOOP:
+        cmp $MULRIGHT, $0    # Compare multiplier with 0
+        je MULTIPLY_EXIT     # Exit if finished
+
+        mov $R1, $MULRIGHT   # Copy data from MULRIGHT to R1
+        andi $R1, 1          # Check if MULRIGHT is odd
+        cmp $R1, $R2         # Compare to 1 (odd check)
+
+        je MULTIPLY_ADD_TO_RESULT # If odd, add left to result
+
+        MULTIPLY_SHIFT:
+            lsh $MULLEFT, 1  # $MULLEFT = $MULLEFT << 1
+            rsh $MULRIGHT, 1 # $MULRIGHT = $MULRIGHT >> 1
+
+            # Check for overflow during shift
+            cmp $MULLEFT, $MAX_VALUE
+            jg MULTIPLY_OVERFLOW # If MULLEFT exceeds max value, set overflow
+
+            jmp MULTIPLY_LOOP
+
+        MULTIPLY_ADD_TO_RESULT:
+            add $MULRES, $MULLEFT # Add left to result
+            # Check for overflow during addition
+            cmp $MULRES, $MAX_VALUE
+            jg MULTIPLY_OVERFLOW # If MULRES exceeds max value, set overflow
+
+            jmp MULTIPLY_SHIFT
+
+        MULTIPLY_OVERFLOW:
+            movi $OVERFLOW, 1 # Set overflow flag
+            ret               # Exit multiplication
+
+        MULTIPLY_EXIT:
+            ret               # Return from multiplication                 
+
+OVERFLOW_HANDLING:
+    # Handle overflow: Was machen wir hier am besten?            
