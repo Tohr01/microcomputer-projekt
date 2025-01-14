@@ -3,19 +3,16 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity Control_Unit_tb is
--- Leere Entität für die Testbench
 end Control_Unit_tb;
 
 architecture Behavioral of Control_Unit_tb is
 
-    -- Signale zur Verbindung mit der Control Unit
     signal clk       : std_logic := '0';
     signal rst       : std_logic := '1';
     signal start     : std_logic := '0';
     signal instruction: unsigned(15 downto 0) := (others => '0');
     signal done_internal      : std_logic;
 
-    -- Instanziierung der Control Unit
     component Control_Unit is
         port(
             clk       : in std_logic;
@@ -28,7 +25,6 @@ architecture Behavioral of Control_Unit_tb is
 
 begin
 
-    -- Verbinden der Signale mit der Instanz der Control Unit
     UUT: Control_Unit
         port map(
             clk => clk,
@@ -41,7 +37,7 @@ begin
     -- Taktprozess
     clk_process: process
     begin
-        while now < 1000 us loop
+        while now < 1 ms loop
             clk <= '0';
             wait for 10 ns;
             clk <= '1';

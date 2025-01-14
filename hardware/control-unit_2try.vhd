@@ -17,19 +17,20 @@ architecture Behavioral of Control_Unit is
     constant REGISTER_BITS : natural := 3;
     constant DATA_WIDTH     : natural := 16;
 
-    type state_type is (IDLE, INSTRUCTION_FETCH, INSTRUCTION_DECODE, OPERAND_FETCH, WAIT_FOR_OPERANDS, EXECUTE, RESULT_STORE, NEXT_INSTRUCTION);
+    type state_type is (IDLE, INSTRUCTION_FETCH, INSTRUCTION_DECODE, OPERAND_FETCH_A, OPERAND_FETCH_B, WAIT_FOR_OPERAND_A, WAIT_FOR_OPERAND_B, EXECUTE, RESULT_STORE, NEXT_INSTRUCTION);
     signal current_state, next_state : state_type;
-    -- signal instruction: unsigned(15 downto 0);
     signal opcode   : unsigned(4 downto 0);
     signal A_reg    : unsigned(2 downto 0);
     signal B_reg    : unsigned(2 downto 0);
     signal immediate: unsigned(4 downto 0);
 
+    -- ALU signals
     signal A, B: signed(15 downto 0);
     signal I: integer;
     signal res_internal: signed(15 downto 0);
     signal carry_internal: std_logic;
 
+    -- RegisterBank signals
     signal write_en            : std_logic := '0';
     signal read_addr           : unsigned(REGISTER_BITS-1 downto 0) := (others => '0');
     signal write_addr          : unsigned(REGISTER_BITS-1 downto 0) := (others => '0');
@@ -114,24 +115,30 @@ begin
                 end if;
             when INSTRUCTION_FETCH =>
                 -- fetch instruction from random access memory
-                -- instruction <= unsigned'("0001000000000001");
                 next_state <= INSTRUCTION_DECODE;
             when INSTRUCTION_DECODE =>
                 opcode <= unsigned(instruction(15 downto 11));
                 A_reg <= unsigned(instruction(10 downto 8));
                 B_reg <= unsigned(instruction(7 downto 5));
                 immediate <= unsigned(instruction(4 downto 0));
-                next_state <= OPERAND_FETCH;
-            when OPERAND_FETCH =>
+                next_state <= OPERAND_FETCH_A;
+            when OPERAND_FETCH_A =>
                 write_en <= '0';
                 read_addr <= A_reg;
+                next_state <= WAIT_FOR_OPERAND_A;
+            when WAIT_FOR_OPERAND_A =>
                 A <= data_out_internal;
                 if opcode = ADD_IMMEDIATE_OP then
                     B <= signed("00000000000" & immediate);
+                    next_state <= EXECUTE;
                 else
-                    read_addr <= B_reg;
-                    B <= data_out_internal;
+                    next_state <= OPERAND_FETCH_B;
                 end if;
+            when OPERAND_FETCH_B =>
+                read_addr <= B_reg;
+                next_state <= WAIT_FOR_OPERAND_B;
+            when WAIT_FOR_OPERAND_B =>
+                B <= data_out_internal;
                 next_state <= EXECUTE;
             when EXECUTE =>
                 if opcode = ADD_IMMEDIATE_OP then
