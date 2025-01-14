@@ -53,6 +53,8 @@ SIEVE_OF_ERATOSTHENES:
         mov $MULLEFT, $CNUM
         mov $MULRIGHT, $CNUM 
         call MULTIPLY # Calculate square
+        cmp $OVERFLOW, 1
+        je OVERFLOW_HANDLING 
 
         # $MULRES now contains square number (or overflowed num)
         
@@ -200,4 +202,6 @@ MULTIPLY_WITH_OVERFLOW_DETECTION:
             ret               # Return from multiplication                 
 
 OVERFLOW_HANDLING:
-    # Handle overflow: Was machen wir hier am besten?            
+    # Terminate Programm 
+    # Andere Möglichkeiten: Endlosschleife, Nummer überspringen
+    hlt
