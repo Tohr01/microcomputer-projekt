@@ -2,13 +2,14 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use work.opcodes_constants.ALL;
+use work.memPkg.all;
 
 entity CONTROL_UNIT is
     port (
         clk       : in std_logic;
         rst       : in std_logic;
         start     : in std_logic;
-        instruction: in unsigned(15 downto 0);
+        -- instruction: in unsigned(15 downto 0);
         done      : out std_logic
     );
 end CONTROL_UNIT;
@@ -16,13 +17,17 @@ end CONTROL_UNIT;
 architecture Behavioral of Control_Unit is
     constant REGISTER_BITS : natural := 3;
     constant DATA_WIDTH     : natural := 16;
+    constant RAM_ADDR_WIDTH : natural := 10;
+    constant RAM_DATA_WIDTH : natural := 16;
 
-    type state_type is (IDLE, INSTRUCTION_FETCH, INSTRUCTION_DECODE, OPERAND_FETCH_A, OPERAND_FETCH_B, WAIT_FOR_OPERAND_A, WAIT_FOR_OPERAND_B, EXECUTE, RESULT_STORE, NEXT_INSTRUCTION);
+    type state_type is (IDLE, INSTRUCTION_FETCH, WAIT_FOR_INSTRUCTION, INSTRUCTION_DECODE, OPERAND_FETCH_A, OPERAND_FETCH_B, WAIT_FOR_OPERAND_A, WAIT_FOR_OPERAND_B, EXECUTE, RESULT_STORE, NEXT_INSTRUCTION);
     signal current_state, next_state : state_type;
+    signal instruction: unsigned(15 downto 0);
     signal opcode   : unsigned(4 downto 0);
     signal A_reg    : unsigned(2 downto 0);
     signal B_reg    : unsigned(2 downto 0);
     signal immediate: unsigned(4 downto 0);
+    signal program_counter: std_logic_vector(RAM_ADDR_WIDTH-1 downto 0) := (others => '0');
 
     -- ALU signals
     signal A, B: signed(15 downto 0);
@@ -31,11 +36,18 @@ architecture Behavioral of Control_Unit is
     signal carry_internal: std_logic;
 
     -- RegisterBank signals
-    signal write_en            : std_logic := '0';
-    signal read_addr           : unsigned(REGISTER_BITS-1 downto 0) := (others => '0');
-    signal write_addr          : unsigned(REGISTER_BITS-1 downto 0) := (others => '0');
-    signal data_in             : signed(DATA_WIDTH-1 downto 0) := (others => '0');
-    signal data_out_internal   : signed(DATA_WIDTH-1 downto 0) := (others => '0');
+    signal register_write_en            : std_logic := '0';
+    signal register_read_addr           : unsigned(REGISTER_BITS-1 downto 0) := (others => '0');
+    signal register_write_addr          : unsigned(REGISTER_BITS-1 downto 0) := (others => '0');
+    signal register_data_in             : signed(DATA_WIDTH-1 downto 0) := (others => '0');
+    signal register_data_out_internal   : signed(DATA_WIDTH-1 downto 0) := (others => '0');
+
+    -- RAM signals
+    signal ram_not_write_en        : std_logic := '1';
+    signal ram_io_addr         : std_logic_vector(RAM_ADDR_WIDTH-1 downto 0) := (others => '0');
+    signal ram_data_in         : std_logic_vector(RAM_DATA_WIDTH-1 downto 0) := (others => '0');
+    signal ram_data_out        : std_logic_vector(RAM_DATA_WIDTH-1 downto 0) := (others => '0');
+    signal ram_file_io         : fileIoT := none;
 
     component ALU is
         generic (
@@ -61,6 +73,22 @@ architecture Behavioral of Control_Unit is
         );
     end component;
 
+    component ramIO is 
+        generic (
+            addrWd: integer range 2 to 16 := RAM_ADDR_WIDTH;
+            dataWd: integer range 2 to 32 := RAM_DATA_WIDTH;
+            fileId: string := "ram.dat"
+        );
+        port (
+            -- nCS: in std_logic;
+            nWE: in std_logic;
+            addr: in std_logic_vector(RAM_ADDR_WIDTH-1 downto 0);
+            dataI: in std_logic_vector(RAM_DATA_WIDTH-1 downto 0);
+            dataO: out std_logic_vector(RAM_DATA_WIDTH-1 downto 0);
+            fileIO: in fileIoT
+        );
+    end component;
+
 begin
 
     U1: ALU
@@ -79,11 +107,25 @@ begin
         port map (
             clk => clk,
             rst => rst,
-            write_en => write_en,
-            read_addr => read_addr,
-            write_addr => write_addr,
-            data_in => data_in,
-            data_out => data_out_internal
+            write_en => register_write_en,
+            read_addr => register_read_addr,
+            write_addr => register_write_addr,
+            data_in => register_data_in,
+            data_out => register_data_out_internal
+        );
+
+    U3: ramIO
+        generic map (
+            addrWd => RAM_ADDR_WIDTH,
+            dataWd => RAM_DATA_WIDTH,
+            fileId => "ram.dat"
+        )
+        port map (
+            nWE => ram_not_write_en,
+            addr => ram_io_addr,
+            dataI => ram_data_in,
+            dataO => ram_data_out,
+            fileIO => ram_file_io
         );
 
     process(clk, rst)
@@ -91,6 +133,7 @@ begin
         -- on reset, we go back to IDLE state and reset signals to default values
         -- -> since current_state changed to IDLE, the second process will be triggered
         if rst = '1' then
+            ram_file_io <= load, none after 5 ns;
             current_state <= IDLE;
         -- on rising edge of clock, we update the current state
         -- -> since current_state changed, the second process will be triggered
@@ -115,6 +158,11 @@ begin
                 end if;
             when INSTRUCTION_FETCH =>
                 -- fetch instruction from random access memory
+                ram_not_write_en <= '1';
+                ram_io_addr <= program_counter;
+                next_state <= WAIT_FOR_INSTRUCTION;
+            when WAIT_FOR_INSTRUCTION =>
+                instruction <= unsigned(ram_data_out);
                 next_state <= INSTRUCTION_DECODE;
             when INSTRUCTION_DECODE =>
                 opcode <= unsigned(instruction(15 downto 11));
@@ -123,11 +171,11 @@ begin
                 immediate <= unsigned(instruction(4 downto 0));
                 next_state <= OPERAND_FETCH_A;
             when OPERAND_FETCH_A =>
-                write_en <= '0';
-                read_addr <= A_reg;
+                register_write_en <= '0';
+                register_read_addr <= A_reg;
                 next_state <= WAIT_FOR_OPERAND_A;
             when WAIT_FOR_OPERAND_A =>
-                A <= data_out_internal;
+                A <= register_data_out_internal;
                 if opcode = ADD_IMMEDIATE_OP then
                     B <= signed("00000000000" & immediate);
                     next_state <= EXECUTE;
@@ -135,10 +183,10 @@ begin
                     next_state <= OPERAND_FETCH_B;
                 end if;
             when OPERAND_FETCH_B =>
-                read_addr <= B_reg;
+                register_read_addr <= B_reg;
                 next_state <= WAIT_FOR_OPERAND_B;
             when WAIT_FOR_OPERAND_B =>
-                B <= data_out_internal;
+                B <= register_data_out_internal;
                 next_state <= EXECUTE;
             when EXECUTE =>
                 if opcode = ADD_IMMEDIATE_OP then
@@ -148,11 +196,12 @@ begin
                 end if;
                 next_state <= RESULT_STORE;
             when RESULT_STORE =>
-                write_en <= '1';
-                write_addr <= A_reg;
-                data_in <= res_internal;
+                register_write_en <= '1';
+                register_write_addr <= A_reg;
+                register_data_in <= res_internal;
                 -- TODO: Handle carryout
                 -- carry_internal;
+                program_counter <= std_logic_vector(unsigned(program_counter) + 1);
                 next_state <= IDLE;
             when others =>
                 next_state <= IDLE;
