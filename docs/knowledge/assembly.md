@@ -10,7 +10,7 @@ Constants:
 - `$C1` Stores amounts of numbers for the sieve algorithm
 - `$C2` Stores starting address of numbering sequence for algorithm
 - `$C3` Stores max number 2 + $C1
-- `$C4` Stores last valid address calculated by (numbers to write) + (starting address) - 1
+- `$C4` Stores last valid address calculated by (numbers to write) + (starting address) 
 
 Sieve:
 current address
@@ -27,11 +27,10 @@ Multiplication
 - `$MULLEFT` Stores multiplicand
 - `$MULRIGHT` Stores multiplier
 - `$MULRES` Stores the result
-- `$MULOV` Stores 1 if multiplication overflowed else 0
+- `$OVERFLOW` Stores 1 if multiplication overflowed else 0
 
 Misc:
 - Compare register
-- Carryout register
 
 ## Subroutine explanation
 ### MULTIPLY
