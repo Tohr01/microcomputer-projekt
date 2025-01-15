@@ -1,8 +1,19 @@
 # TODO HANDLE CONSTANTS TO BIG
 ##### CONSTANTS #####
 movi $0, 0      # CONSTANT: Stores number zero
-movi $C1, 30000  # CONSTANT: Amount of numbers we have to check corresponds to 30000 as we only have 5 bit for representation
-movi $C2, 1000   # CONSTANT: Starting address of numbering sequence for algorithm
+
+movi $1, 1      # CONSTANT: Stores number one
+
+movi $C1, 29
+lsh $C1, 5
+addi $C1, 9
+lsh $C1, 5
+addi $C1, 16    # CONSTANT: Amount of numbers we have to check corresponds to 30000
+
+movi $C2, 31
+lsh $C2, 5
+addi $C2, 8     # CONSTANT: Starting address of numbering sequence for algorithm (= 1000)
+
 mov $C3, $C1
 addi $C3, 2     # CONSTANT: Stores max number
 mov $C4, $C1
@@ -21,7 +32,7 @@ SIEVE_OF_ERATOSTHENES:
     # SIEVE_LOOP
     #   square = current_number * current_number
     # Check for overflow
-    # cmp $OVERFLOW, 1
+    # cmp $OVERFLOW, $1
     # je OVERFLOW_HANDLING 
 
     #   is_prime = current_number == 0
@@ -53,7 +64,7 @@ SIEVE_OF_ERATOSTHENES:
         mov $MULLEFT, $CNUM
         mov $MULRIGHT, $CNUM 
         call MULTIPLY # Calculate square
-        cmp $OVERFLOW, 1
+        cmp $OVERFLOW, $1
         je OVERFLOW_HANDLING 
 
         # $MULRES now contains square number (or overflowed num)
@@ -67,13 +78,13 @@ SIEVE_OF_ERATOSTHENES:
 
         mov $SADDR, $C2
         subi $SADDR, 2
-        addi $SADDR, $MULRES
+        add $SADDR, $MULRES
 
         # Strike address is not at memory address of square number
 
         STRIKE_MULTIPLES:
             store $0, $SADDR   # Strike number / address
-            addi $SADDR, $CNUM # Next multiple address 
+            add $SADDR, $CNUM # Next multiple address
 
             # TODO Handle overflow
             # Handle address out of bounds
@@ -137,14 +148,13 @@ MULTIPLY:
     #   right = right >> 1
 
     movi $MULRES, 0 # set result to 0
-    movi $R2, 1 # Store one for comparison
     MULTIPLY_LOOP:
         cmp $MULRIGHT, $0 # Compare multiplier with 0
         je MULTIPLY_EXIT # Multiplication finished
 
         mov $R1, $MULRIGHT  # Copy data from MULRIGHT register to R1 register
         andi $R1, 1         # If R1 is 1 then val in MULRIGHT is odd
-        cmp $R1, $R2        # Check if value in R1 == 1 (value in R2) Esentially if MULRIGHT is odd 
+        cmp $R1, $1         # Check if value in R1 == 1 (value in R2) Esentially if MULRIGHT is odd
         
         je MULTIPLY_ADD_TO_RESULT # Perform Result = Result + left step
         
@@ -164,7 +174,14 @@ MULTIPLY_WITH_OVERFLOW_DETECTION:
     movi $MULRES, 0      # Set result to 0
     movi $OVERFLOW, 0    # Initialize overflow flag to 0
     movi $R2, 1          # Store one for comparison
-    movi $MAX_VALUE, 65535 # Max value for 16-bit (2^16 -1)?
+
+    movi $MAX_VALUE, 31
+    lsh $MAX_VALUE, 5
+    addi $MAX_VALUE, 31
+    lsh $MAX_VALUE, 5
+    addi $MAX_VALUE, 31
+    lsh $MAX_VALUE, 5
+    addi $MAX_VALUE, 1 # Max value for 16-bit (2^16 -1)? (= 65535)
 
     MULTIPLY_LOOP:
         cmp $MULRIGHT, $0    # Compare multiplier with 0
