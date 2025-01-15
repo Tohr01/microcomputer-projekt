@@ -40,10 +40,11 @@ Misc:
 
 ## Assembler important information
 Processing steps:
-1. Remove all `\n`
-2. Remove single line comments
-2. Capture all subroutines and loops and note address
-3. Normal assembly steps
+1. Strip lines
+2. Remove all `\n`
+3. Remove single line comments
+4. Capture all subroutines and loops and note address
+5. Normal assembly steps
 
 
 ## New instructions

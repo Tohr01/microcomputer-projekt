@@ -204,4 +204,4 @@ MULTIPLY_WITH_OVERFLOW_DETECTION:
 OVERFLOW_HANDLING:
     # Terminate Programm 
     # Andere Möglichkeiten: Endlosschleife, Nummer überspringen
-    hlt
+    jmp NOOP_LOOP
