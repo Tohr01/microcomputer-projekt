@@ -5,14 +5,13 @@ import sys
 from typing import Optional
 
 from asm_config import Instruction, InstructionSet
-from patterns import LINE_PATTERN, SUBROUTINE_LOOP_PATTERN
+from software.asm_config.patterns import LINE_PATTERN, SUBROUTINE_LOOP_PATTERN
 
 COMMENT_PREFIX = '#'
 
 logger = logging.getLogger('assembler')
 logger.setLevel(logging.DEBUG)
 stream_handler = logging.StreamHandler(sys.stdout)
-stream_handler.setLevel(logging.DEBUG)
 
 formatter = logging.Formatter('[%(name)s] - [%(levelname)s] - %(message)s')
 stream_handler.setFormatter(formatter)
@@ -37,28 +36,35 @@ class Line:
     def __repr__(self):
         return f'{self.instruction.instruction_name} {self.parameters = } {self.comment = } {self.jump_target_names = }'
 
-def assemble(filepath: str):
-    file_handle = open(file, 'r')
+def assemble(filepath: str, enable_debug: Optional[bool] = False):
+    file_handle = open(filepath, 'r')
     raw_asm = file_handle.read()
     file_handle.close()
     # Split by new line
     asm_lines = raw_asm.split('\n')
     # Strip lines
     asm_lines = strip_lines(asm_lines)
-    logger.debug('Stripped whitespaces from lines')
+    logger.info('Stripped whitespaces from lines')
     # Remove empty lines
     asm_line_count = len(asm_lines)
     asm_lines = remove_empty_lines(asm_lines)
-    logger.debug(f'Removed empty {asm_line_count - len(asm_lines)} lines')
+    logger.info(f'Removed empty {asm_line_count - len(asm_lines)} lines')
     # Remove comment lines only
     asm_line_count = len(asm_lines)
     asm_lines = remove_comment_lines(asm_lines)
-    logger.debug(f'Removed {asm_line_count - len(asm_lines)} comment only lines')
+    logger.info(f'Removed {asm_line_count - len(asm_lines)} comment only lines')
     # Separate inline comments from instructions
     asm_lines = separate_instructions_and_comments(asm_lines)
+    logger.info('Seperated instructions and comments into different tuples')
     # Parse to Line objects
     lines = parse_to_line_objs(asm_lines)
-    print('\n'.join([*map(lambda line: str(line), lines)]))
+    logger.debug('Parsed line tuples to line instances')
+    # Write debugged lines to debug-parsed.txt file
+    if enable_debug:
+        logger.debug('Writing parsed lines to debug file')
+        with open('debug-parsed.txt', 'w') as f:
+            f.write('\n'.join([*map(lambda line: str(line), lines)]))
+    
 
 
 def strip_lines(lines: list[str]) -> list[str]:
@@ -98,7 +104,6 @@ def parse_to_line_objs(lines: list[tuple[list[str], Optional[str]]]) -> list[Lin
             last_jump_target_names.append(jump_target_match.group(1))
             continue
 
-        print(line_tuple)
         line = Line(line_tuple, last_jump_target_names)
         if jump_target_match is None:
             last_jump_target_names = []
@@ -111,8 +116,15 @@ def parse_to_line_objs(lines: list[tuple[list[str], Optional[str]]]) -> list[Lin
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('file', help='The file to be assembled')
+    parser.add_argument('-d', '--debug', help='Start the assembler in debug mode', action='store_true')
     args = parser.parse_args()
 
     file = args.file
+    debug = args.debug
+    if debug:
+        logger.setLevel(logging.DEBUG)
+    else:
+        logger.setLevel(logging.INFO)
+
     assert os.path.exists(file) and not os.path.isdir(file), 'File does not exist'
-    assemble(file)
+    assemble(file, enable_debug=debug)
