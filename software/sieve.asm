@@ -78,7 +78,7 @@ SIEVE_OF_ERATOSTHENES:
             # TODO Handle overflow
             # Handle address out of bounds
             cmp $SADDR, $C4
-            jg NOT_PRIME # If strke address > max valid address finished with strike
+            jg SIEVE_LOOP_NEXT_ITER # If strke address > max valid address finished with strike
 
             jmp STRIKE_MULTIPLES
 
