@@ -79,10 +79,10 @@ begin
     ID_Stage: process(clk)
     begin
         if rising_edge(clk) then
-            opcode <= unsigned(instruction(15 downto 11));
-            A_reg <= unsigned(instruction(10 downto 8));
-            B_reg <= unsigned(instruction(7 downto 5));
-            immediate <= unsigned(instruction(4 downto 0));
+            opcode_0 <= unsigned(instruction(15 downto 11));
+            A_reg_0 <= unsigned(instruction(10 downto 8));
+            B_reg_0 <= unsigned(instruction(7 downto 5));
+            immediate_0 <= unsigned(instruction(4 downto 0));
         end if;
     end process;
 
