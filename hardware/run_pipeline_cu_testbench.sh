@@ -13,7 +13,7 @@ echo "Deleting old contents of work dir"
 rm "$WORK_DIR/*"
 
 echo "Started ghdl analyse step"
-ghdl -a -fsynopsys --workdir=$WORK_DIR memPkg.vhd ramIO.vhd registerbank.vhd pipeline_cu.vhd pipeline_cu_testbench.vhd
+ghdl -a -fsynopsys --workdir=$WORK_DIR memPkg.vhd opcodes_constants.vhd alu.vhd ramIO.vhd registerbank.vhd pipeline_cu.vhd pipeline_cu_testbench.vhd
 echo "Started ghdl elaborate step" 
 ghdl -e -fsynopsys --workdir=$WORK_DIR Control_Unit_tb
 echo "Started ghdl run step"

@@ -20,4 +20,5 @@ package opcodes_constants is
     constant LSH_OP : integer := 16;
     constant RSH_OP : integer := 17;
     constant BITTEST_OP : integer := 18;
+    constant NOP_OP : integer := 19;
 end package opcodes_constants;

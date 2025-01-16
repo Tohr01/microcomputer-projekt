@@ -20,7 +20,7 @@ architecture Behavioral of Pipeline_Control_Unit is
     signal program_counter: std_logic_vector(RAM_ADDR_WIDTH-1 downto 0) := (others => '0');
 
     signal instruction: unsigned(15 downto 0) := (others => '0');
-    signal opcode_0, opcode_1, opcode_2   : unsigned(4 downto 0);
+    signal opcode_0, opcode_1, opcode_2, opcode_3   : unsigned(4 downto 0);
     signal A_reg_0, A_reg_1, A_reg_2, A_reg_3 : unsigned(2 downto 0) := (others => '0');
     signal B_reg_0    : unsigned(2 downto 0);
     signal immediate_0, immediate_1: unsigned(4 downto 0);
@@ -192,6 +192,7 @@ begin
     E_Stage: process(clk)
     begin
         if rising_edge(clk) then
+            opcode_3 <= opcode_2;
             A_reg_3 <= A_reg_2;
             A <= A_0;
             B <= B_0;
@@ -209,10 +210,12 @@ begin
     RS_Stage: process(clk)
     begin
         if rising_edge(clk) then
-            if not is_x(std_logic_vector(A_reg_3)) then
-                register_write_addr <= A_reg_3;
+            if is_x(std_logic_vector(opcode_3)) or opcode_3 /= NOP_OP then
+                if not is_x(std_logic_vector(A_reg_3)) then
+                    register_write_addr <= A_reg_3;
+                end if;
+                register_data_in <= res_internal;
             end if;
-            register_data_in <= res_internal;
         end if;
     end process;
 
