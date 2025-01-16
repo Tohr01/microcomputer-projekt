@@ -135,10 +135,11 @@ begin
         if rst = '1' then
             ram_file_io <= load, none after 5 ns;
             program_counter <= (others => '0');
+            ram_io_addr <= (others => '0');
         elsif rising_edge(clk) then
             ram_not_write_en <= '1';
-            ram_io_addr <= program_counter;
             instruction <= unsigned(ram_data_out);
+            ram_io_addr <= std_logic_vector(unsigned(program_counter) + 1);
             program_counter <= std_logic_vector(unsigned(program_counter) + 1);
         end if;
     end process;
