@@ -107,6 +107,8 @@ end entity de0Board;
 --------------------------------------------------------------------------------
 architecture wrapper of de0Board is
 
+
+gpio0(0) <= 	
   component fifo64 is
   port(	aclr		: in  std_logic;
 	clock		: in  std_logic ;
@@ -190,7 +192,15 @@ architecture wrapper of de0Board is
   signal aclr		: std_logic;
   signal rdReq		: std_logic;
   signal empty		: std_logic;
+
+
+-- 
 begin
+
+	
+	--hier Prozess für die weitergabe des Werts einfügen
+
+	
   -- disable unused hardware
   ---------------------------------------------------------------------------
   dramCsN	<= '1';
