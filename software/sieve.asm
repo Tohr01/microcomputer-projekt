@@ -136,41 +136,7 @@ FILL_RAM:
 # Writes to MULLEFT, MULRIGHT, MULRES, R1, R2 registers
 # TODO HANDLE overflowed
 #
-#    @TIZIO HIER OVERFLOW HANDLEN. mach sonst wenn das overflowed erstmal in nen $OVERFLOW register
-#    Setz das auf 1 wenn overflow und sonst auf 0
-# 
 MULTIPLY:
-    # Result = 0
-    # While right > 0:
-    #   If right is odd:
-    #       Result = Result + left
-    #   left = left << 1
-    #   right = right >> 1
-
-    movi $MULRES, 0 # set result to 0
-    MULTIPLY_LOOP:
-        cmp $MULRIGHT, $0 # Compare multiplier with 0
-        je MULTIPLY_EXIT # Multiplication finished
-
-        mov $R1, $MULRIGHT  # Copy data from MULRIGHT register to R1 register
-        andi $R1, 1         # If R1 is 1 then val in MULRIGHT is odd
-        cmp $R1, $1         # Check if value in R1 == 1 (value in R2) Esentially if MULRIGHT is odd
-        
-        je MULTIPLY_ADD_TO_RESULT # Perform Result = Result + left step
-        
-        MULTIPLY_SHIFT:
-            lsh $MULLEFT, 1 # $MULLEFT = $MULLEFT << 1
-            rsh $MULRIGHT, 1 # $MULRIGHT = $MULRIGHT >> 1
-            jmp MULTIPLY_LOOP
-
-        MULTIPLY_ADD_TO_RESULT:
-            add $MULRES, $MULLEFT
-            jmp MULTIPLY_SHIFT
-
-        MULTIPLY_EXIT:
-            ret
-
-MULTIPLY_WITH_OVERFLOW_DETECTION:
     movi $MULRES, 0      # Set result to 0
     movi $OVERFLOW, 0    # Initialize overflow flag to 0
     movi $R2, 1          # Store one for comparison
