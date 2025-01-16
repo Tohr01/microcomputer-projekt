@@ -78,7 +78,7 @@ port (	clk50		: in	std_logic;		-- 50 MHz external clock
 
 --	-- GPIO-0	--------------------------------------------------------
 --	--	top	DE0-UserManual			=> page 18
---	gpio0		: inout	std_logic_vector(33 downto 0);
+	gpio0		: inout	std_logic_vector(33 downto 0);
 --	gpio0In		: in	std_logic_vector( 1 downto 0);
 
 --	-- GPIO-1	--------------------------------------------------------
@@ -118,7 +118,7 @@ begin
   pllI: pllClk  port map (clk50, clk,  clkN, open, open);	-- 2 MHz clock
 --pllI: pllClk  port map (clk50, open, open, clk,  clkN);	-- 1 MHz clock
 
-  dataMemI: ram10x32 port map (dAddr, clkN, dDataO, dWE, dDataI);
+  dataMemI: ram10x32 port map (gpio0(15 downto 0), clkN, dDataO, dWE, dDataI);
 
   instMemI: rom10x32 port map (iAddr, clkN, iData);
 
