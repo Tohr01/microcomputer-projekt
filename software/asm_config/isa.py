@@ -27,3 +27,9 @@ class InstructionSet:
     @staticmethod
     def get_instruction(instruction_name: str) -> Instruction:
         return InstructionSet.instructions[instruction_name]
+
+def format_for_vhdl():
+    for instruction_name, instruction in InstructionSet.instructions.items():
+        print(f'constant {instruction_name.upper()}_OP : integer := {int(instruction.instruction_code, 2)}')
+
+format_for_vhdl()

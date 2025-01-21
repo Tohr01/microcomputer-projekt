@@ -1,4 +1,5 @@
 # TODO HANDLE CONSTANTS TO BIG
+# TODO @HARDWARE handle constants registers
 ##### CONSTANTS #####
 movi $0, 0      # CONSTANT: Stores number zero
 
@@ -19,10 +20,65 @@ addi $C3, 2     # CONSTANT: Stores max number
 mov $C4, $C1
 add $C4, $C2
 subi $C4, 1     # CONSTANT: Stores last valid address calculated by (numbers to write) + (starting address) - 1
+
+movi $MAX_VALUE, 31
+lsh $MAX_VALUE, 5
+addi $MAX_VALUE, 31
+lsh $MAX_VALUE, 5
+addi $MAX_VALUE, 31
+lsh $MAX_VALUE, 5
+addi $MAX_VALUE, 1 # Max value for 16-bit (2^16 -1)? (= 65535)
+
 ### END CONSTANTS ###
 
 # Fill ram with continous seq of numbers
-call FILL_RAM
+# Will fill RAM starting at address C2 starting at number 2 until number 2 + $C1 - 1
+# Valid addresses are $C2 until $C2 + $C1 - 1 = $C4
+# Check if R1 > C1
+# If yes 
+#   return
+# If no write 
+#    R3 to MEM-ADDR R4
+#    INCR R0
+#    INCR R1
+#    INCR R2
+
+movi $R0, 0 # Iterator
+movi $R1, 2 # Starting number [RS]
+mov $R2, $C2 # Starting address [EX]
+
+nop
+nop
+nop
+
+FILL_RAM_LOOP:
+    cmp $R0, $C1 # Compare iterator with max amount of numbers
+    
+    nop
+    nop
+
+    je SIEVE_OF_ERATOSTHENES # If iterator equal to max amount of numbers return
+
+    nop
+    nop
+    nop
+    nop
+
+    store $R1, $R2 # Store number
+
+    nop # [RS]
+    nop # [EX]
+
+    incr $R0 # Increment iterator # [WFO]
+    incr $R1 # Increment number to write # [RS]
+    incr $R2 # Increment address to write to [EX]
+
+    jmp FILL_RAM_LOOP # [WFO]
+
+    nop # [OPF]
+    nop # [ID]
+    nop # [IF]
+
 
 # TODO Handle end of program
 
@@ -54,16 +110,89 @@ SIEVE_OF_ERATOSTHENES:
     #       or striked_number, mask (strike)
 
     mov $CADDR, $C2 # Store starting address in CADDR register
+
+    nop # [RS]
+    nop # [EX]
+
     SIEVE_LOOP:
-        load $CNUM, $CADDR # Load number at $CADDR address from RAM in current num register
+        load $CNUM, $CADDR # Load number at $CADDR address from RAM in current num register [WFO]
+        
+        nop
 
         # If $CNUM is 0 => not prime
         cmp $CNUM, $0
+
+        nop
+        nop
+
         je SIEVE_LOOP_NEXT_ITER
 
+        nop
+        nop
+        nop
+        nop
+
+        ##### MULTIPLY #####
+        # Calculate square
         mov $MULLEFT, $CNUM
         mov $MULRIGHT, $CNUM 
-        call MULTIPLY # Calculate square
+
+        # Requires MULLEFT and MULRIGHT register to be set to multiplicand and multiplier respectivly
+        # Writes to MULLEFT, MULRIGHT, MULRES, R1, R2 registers
+        # TODO HANDLE overflowed
+        #
+        movi $MULRES, 0      # Set result to 0
+        movi $OVERFLOW, 0    # Initialize overflow flag to 0
+        movi $R2, 1          # Store one for comparison
+
+
+        MULTIPLY_LOOP:
+            cmp $MULRIGHT, $0    # Compare multiplier with 0
+            
+            nop
+            nop
+
+            je MULTIPLY_EXIT     # Exit if finished
+
+            nop
+            nop
+            nop
+            nop
+
+            mov $R1, $MULRIGHT   # Copy data from MULRIGHT to R1
+            andi $R1, 1          # Check if MULRIGHT is odd
+            cmp $R1, $R2         # Compare to 1 (odd check)
+
+            je MULTIPLY_ADD_TO_RESULT # If odd, add left to result
+
+            MULTIPLY_SHIFT:
+                lsh $MULLEFT, 1  # $MULLEFT = $MULLEFT << 1
+                rsh $MULRIGHT, 1 # $MULRIGHT = $MULRIGHT >> 1
+
+                # Check for overflow during shift
+                cmp $MULLEFT, $MAX_VALUE
+                jg MULTIPLY_OVERFLOW # If MULLEFT exceeds max value, set overflow
+
+                jmp MULTIPLY_LOOP
+
+            MULTIPLY_ADD_TO_RESULT:
+                add $MULRES, $MULLEFT # Add left to result
+                # Check for overflow during addition
+                cmp $MULRES, $MAX_VALUE
+                jg MULTIPLY_OVERFLOW # If MULRES exceeds max value, set overflow
+
+                jmp MULTIPLY_SHIFT
+
+            MULTIPLY_OVERFLOW:
+                movi $OVERFLOW, 1 # Set overflow flag
+                ret               # Exit multiplication
+
+                ret               # Return from multiplication       
+
+        ### END MULTIPLY ###
+
+
+        MULTIPLY_EXIT:
         cmp $OVERFLOW, $1
         je OVERFLOW_HANDLING 
 
@@ -102,87 +231,7 @@ SIEVE_OF_ERATOSTHENES:
 NOOP_LOOP:
     nop
     jmp NOOP_LOOP
-
-FILL_RAM:
-    # Will fill RAM starting at address C2 starting at number 2 until number 2 + $C1 - 1
-    # Valid addresses are $C2 until $C2 + $C1 - 1 = $C4
-    # Check if R1 > C1
-    # If yes 
-    #   return
-    # If no write 
-    #    R3 to MEM-ADDR R4
-    #    INCR R0
-    #    INCR R1
-    #    INCR R2
-
-    movi $R0, 0 # Iterator
-    movi $R1, 2 # Starting number
-    mov $R2, $C2 # Starting address
-    
-    FILL_RAM_LOOP:
-        cmp $R0, $C1 # Compare iterator with max amount of numbers
-        je FILL_RAM_EXIT # If iterator equal to max amount of numbers return
-
-        store $R1, $R2 # Store number
-        incr $R0 # Increment iterator
-        incr $R1 # Increment number to write
-        incr $R2 # Increment address to write to
-        jmp FILL_RAM_LOOP
-
-        FILL_RAM_EXIT:
-            ret
-
-# Requires MULLEFT and MULRIGHT register to be set to multiplicand and multiplier respectivly
-# Writes to MULLEFT, MULRIGHT, MULRES, R1, R2 registers
-# TODO HANDLE overflowed
-#
-MULTIPLY:
-    movi $MULRES, 0      # Set result to 0
-    movi $OVERFLOW, 0    # Initialize overflow flag to 0
-    movi $R2, 1          # Store one for comparison
-
-    movi $MAX_VALUE, 31
-    lsh $MAX_VALUE, 5
-    addi $MAX_VALUE, 31
-    lsh $MAX_VALUE, 5
-    addi $MAX_VALUE, 31
-    lsh $MAX_VALUE, 5
-    addi $MAX_VALUE, 1 # Max value for 16-bit (2^16 -1)? (= 65535)
-
-    MULTIPLY_LOOP:
-        cmp $MULRIGHT, $0    # Compare multiplier with 0
-        je MULTIPLY_EXIT     # Exit if finished
-
-        mov $R1, $MULRIGHT   # Copy data from MULRIGHT to R1
-        andi $R1, 1          # Check if MULRIGHT is odd
-        cmp $R1, $R2         # Compare to 1 (odd check)
-
-        je MULTIPLY_ADD_TO_RESULT # If odd, add left to result
-
-        MULTIPLY_SHIFT:
-            lsh $MULLEFT, 1  # $MULLEFT = $MULLEFT << 1
-            rsh $MULRIGHT, 1 # $MULRIGHT = $MULRIGHT >> 1
-
-            # Check for overflow during shift
-            cmp $MULLEFT, $MAX_VALUE
-            jg MULTIPLY_OVERFLOW # If MULLEFT exceeds max value, set overflow
-
-            jmp MULTIPLY_LOOP
-
-        MULTIPLY_ADD_TO_RESULT:
-            add $MULRES, $MULLEFT # Add left to result
-            # Check for overflow during addition
-            cmp $MULRES, $MAX_VALUE
-            jg MULTIPLY_OVERFLOW # If MULRES exceeds max value, set overflow
-
-            jmp MULTIPLY_SHIFT
-
-        MULTIPLY_OVERFLOW:
-            movi $OVERFLOW, 1 # Set overflow flag
-            ret               # Exit multiplication
-
-        MULTIPLY_EXIT:
-            ret               # Return from multiplication                 
+          
 
 OVERFLOW_HANDLING:
     # Terminate Programm 

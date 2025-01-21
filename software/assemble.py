@@ -3,7 +3,7 @@ import logging
 import os
 from typing import Optional
 
-from asm_config.isa import InstructionSet, Instruction
+from asm_config.isa import InstructionSet, Instruction, format_for_vhdl
 from asm_config.patterns import LINE_PATTERN, SUBROUTINE_LOOP_PATTERN, JUMP_PATTERN
 from logger import logger, change_log_level
 
@@ -162,7 +162,7 @@ def compile_instructions(lines: list[Line], include_comment: bool = False) -> li
         binary_instruction, comment = line.instruction.parse(line.parameters, line.comment, include_comment)
         if include_comment:
             binary_instruction += comment
-        binary_instructions.append(binary_instruction)
+        binary_instructions.append(f'{i} ' + binary_instruction)
     return binary_instructions
 
 
