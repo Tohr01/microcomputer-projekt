@@ -31,7 +31,7 @@ addi $MAX_VALUE, 1 # Max value for 16-bit (2^16 -1)? (= 65535)
 
 ### END CONSTANTS ###
 
-# Fill ram with continous seq of numbers
+# Fill ram with continuous sequence of numbers
 # Will fill RAM starting at address C2 starting at number 2 until number 2 + $C1 - 1
 # Valid addresses are $C2 until $C2 + $C1 - 1 = $C4
 # Check if R1 > C1
@@ -70,8 +70,11 @@ FILL_RAM_LOOP:
     nop # [EX]
 
     incr $R0 # Increment iterator # [WFO]
+    nop
     incr $R1 # Increment number to write # [RS]
+    nop
     incr $R2 # Increment address to write to [EX]
+    nop
 
     jmp FILL_RAM_LOOP # [WFO]
 
@@ -118,6 +121,7 @@ SIEVE_OF_ERATOSTHENES:
         load $CNUM, $CADDR # Load number at $CADDR address from RAM in current num register [WFO]
         
         nop
+        nop
 
         # If $CNUM is 0 => not prime
         cmp $CNUM, $0
@@ -137,7 +141,7 @@ SIEVE_OF_ERATOSTHENES:
         mov $MULLEFT, $CNUM
         mov $MULRIGHT, $CNUM 
 
-        # Requires MULLEFT and MULRIGHT register to be set to multiplicand and multiplier respectivly
+        # Requires MULLEFT and MULRIGHT register to be set to multiplicand and multiplier respectively
         # Writes to MULLEFT, MULRIGHT, MULRES, R1, R2 registers
         # TODO HANDLE overflowed
         #
@@ -163,6 +167,9 @@ SIEVE_OF_ERATOSTHENES:
             andi $R1, 1          # Check if MULRIGHT is odd
             cmp $R1, $R2         # Compare to 1 (odd check)
 
+            nop
+            nop
+
             je MULTIPLY_ADD_TO_RESULT # If odd, add left to result
 
             MULTIPLY_SHIFT:
@@ -173,6 +180,7 @@ SIEVE_OF_ERATOSTHENES:
                 cmp $MULLEFT, $MAX_VALUE
                 jg MULTIPLY_OVERFLOW # If MULLEFT exceeds max value, set overflow
 
+                nop
                 jmp MULTIPLY_LOOP
 
             MULTIPLY_ADD_TO_RESULT:
@@ -181,6 +189,7 @@ SIEVE_OF_ERATOSTHENES:
                 cmp $MULRES, $MAX_VALUE
                 jg MULTIPLY_OVERFLOW # If MULRES exceeds max value, set overflow
 
+                nop
                 jmp MULTIPLY_SHIFT
 
             MULTIPLY_OVERFLOW:
@@ -194,11 +203,13 @@ SIEVE_OF_ERATOSTHENES:
 
         MULTIPLY_EXIT:
         cmp $OVERFLOW, $1
+        nop # Delay slot for cmp to complete
         je OVERFLOW_HANDLING 
 
         # $MULRES now contains square number (or overflowed num)
         
         cmp $MULRES, $C3
+        nop
         # If square > $C3 finished
         jg NOOP_LOOP
         # HANDLE OVERFLOW HERE Check sth like overflow register
@@ -218,7 +229,8 @@ SIEVE_OF_ERATOSTHENES:
             # TODO Handle overflow
             # Handle address out of bounds
             cmp $SADDR, $C4
-            jg SIEVE_LOOP_NEXT_ITER # If strke address > max valid address finished with strike
+            nop 
+            jg SIEVE_LOOP_NEXT_ITER # If strike address > max valid address finished with strike
 
             jmp STRIKE_MULTIPLES
 
@@ -234,6 +246,6 @@ NOOP_LOOP:
           
 
 OVERFLOW_HANDLING:
-    # Terminate Programm 
-    # Andere Möglichkeiten: Endlosschleife, Nummer überspringen
+    # Terminate Program 
+    # hlt
     jmp NOOP_LOOP
