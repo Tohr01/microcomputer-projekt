@@ -46,6 +46,11 @@ def assemble(filepath: str, enable_debug: Optional[bool] = False, include_commen
     asm_line_count = len(asm_lines)
     asm_lines = remove_comment_lines(asm_lines)
     logger.info(f'Removed {asm_line_count - len(asm_lines)} comment only lines')
+    # Write cleaned asm file to debug-cleaned-asm.txt file
+    if enable_debug:
+        logger.debug('Writing cleaned asm to debug file')
+        with open('debug-cleaned-asm.txt', 'w') as f:
+            f.write('\n'.join(asm_lines))
     # Separate inline comments from instructions
     asm_lines = separate_instructions_and_comments(asm_lines)
     logger.info('Seperated instructions and comments into different tuples')
