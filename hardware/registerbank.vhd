@@ -4,7 +4,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity RegisterBank is
     generic (
-        constant REGISTER_BITS : natural := 3;
+        constant REGISTER_BITS : natural := 5;
         constant DATA_WIDTH     : natural := 16
     );
     port (
@@ -21,7 +21,7 @@ end RegisterBank;
 
 architecture Behavioral of RegisterBank is
     type reg_array is array (0 to REGISTER_BITS-1) of signed(DATA_WIDTH-1 downto 0);
-    signal registers : reg_array := (others => (others => '0'));
+    signal registers : reg_array := (others => (others => '0')); -- init values here
 
 begin
     -- Read
@@ -38,7 +38,7 @@ begin
     begin
         if rising_edge(clk) then
             if rst = '1' then
-                registers <= (others => (others => '0'));
+                registers <= (others => (others => '0')); -- init values here
             else
                 registers(to_integer(write_addr)) <= data_in;
             end if;

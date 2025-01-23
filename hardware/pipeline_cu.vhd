@@ -12,7 +12,7 @@ entity PIPELINE_CONTROL_UNIT is
 end PIPELINE_CONTROL_UNIT;
 
 architecture Behavioral of Pipeline_Control_Unit is
-    constant REGISTER_BITS : natural := 3;
+    constant REGISTER_BITS : natural := 5;
     constant DATA_WIDTH     : natural := 16;
     constant RAM_ADDR_WIDTH : natural := 10;
     constant RAM_DATA_WIDTH : natural := 16;
