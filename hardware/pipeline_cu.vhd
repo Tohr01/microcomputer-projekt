@@ -23,9 +23,7 @@ architecture Behavioral of Pipeline_Control_Unit is
     signal opcode_0, opcode_1, opcode_2, opcode_3   : unsigned(4 downto 0);
     signal A_reg_0, A_reg_1, A_reg_2, A_reg_3 : unsigned(2 downto 0) := (others => '0');
     signal B_reg_0    : unsigned(2 downto 0);
-    signal immediate_0, immediate_1: unsigned(4 downto 0);
-
-    signal A_0, B_0 : signed(15 downto 0);
+    signal immediate_0, immediate_1, immediate_2: unsigned(4 downto 0);
 
     -- ALU signals
     signal A, B: signed(15 downto 0);
@@ -162,11 +160,13 @@ begin
             opcode_1 <= opcode_0;
             A_reg_1 <= A_reg_0;
             immediate_1 <= immediate_0;
-            if not is_x(std_logic_vector(A_reg_0)) then
-                register_read_addr_A <= A_reg_0;
-            end if;
-            if not is_x(std_logic_vector(B_reg_0)) then
-                register_read_addr_B <= B_reg_0;
+            if is_x(std_logic_vector(opcode_0)) or opcode_0 /= NOP_OP then -- don't do anything if opcode is NOP
+                if not is_x(std_logic_vector(A_reg_0)) then
+                    register_read_addr_A <= A_reg_0;
+                end if;
+                if not is_x(std_logic_vector(B_reg_0)) then
+                    register_read_addr_B <= B_reg_0;
+                end if;
             end if;
         end if;
     end process;
@@ -177,14 +177,7 @@ begin
         if rising_edge(clk) then
             opcode_2 <= opcode_1;
             A_reg_2 <= A_reg_1;
-            A_0 <= register_data_out_A_internal;
-            if not is_x(std_logic_vector(opcode_1)) then
-                if opcode_1 = ADD_IMMEDIATE_OP then
-                    B_0 <= signed("00000000000" & immediate_1);
-                else
-                        B_0 <= register_data_out_B_internal;
-                end if;
-            end if;
+            immediate_2 <= immediate_1;
         end if;
     end process;
 
@@ -194,13 +187,16 @@ begin
         if rising_edge(clk) then
             opcode_3 <= opcode_2;
             A_reg_3 <= A_reg_2;
-            A <= A_0;
-            B <= B_0;
-            if not is_x(std_logic_vector(opcode_2)) then
-                if opcode_2 = ADD_IMMEDIATE_OP then
-                    I <= ADD_OP;
-                else 
-                    I <= to_integer(opcode_2);
+            A <= register_data_out_A_internal;
+            if is_x(std_logic_vector(opcode_2)) or opcode_2 /= NOP_OP then
+                if not is_x(std_logic_vector(opcode_2)) then
+                    if opcode_2 = ADD_IMMEDIATE_OP then
+                        B <= signed("00000000000" & immediate_2);
+                        I <= ADD_OP;
+                    else
+                        B <= register_data_out_B_internal;
+                        I <= to_integer(opcode_2);
+                    end if;
                 end if;
             end if;
         end if;
