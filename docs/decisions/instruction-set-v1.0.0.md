@@ -8,8 +8,8 @@ Bit-Darstellung 16 Bit Befehl:
 | NOP         | `000000`            | `no operation`                                |✅|
 | ADD         | `000010`            | `R1 = R1 + R2`                                |✅|
 | ADDI       | `000011`          | `R1 = R1 + IMMEDIATE`                            |✅|
-| SUBI       | `000100`          | `R1 = R1 - IMMEDIATE`                            |1|
-| INCR      | `000101`          | `R1 = R1 + 1`                                     |1|
+| SUBI       | `000100`          | `R1 = R1 - IMMEDIATE`                            |✅|
+| INCR      | `000101`          | `R1 = R1 + 1`                                     |✅|
 | ANDI      | `000110`          | `R1 = R1 AND IMMEDIATE`                           |1|
 | LSH     | `000111`            | `R1 = R2 << N` (Links-Shift)                      |1|
 | RSH      | `001000`            | `R1 = R2 >> N` (Rechts-Shift)                    |1|
