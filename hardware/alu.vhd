@@ -42,7 +42,7 @@ begin
                 res <= A - Imm;    
                 carryout_alu <= overflow_detection_addition(A, IMM);
             when ANDI =>
-                A and Imm;
+                res <= A and Imm;
             when MOV => 
                 res <= B;
             when MOVI =>
