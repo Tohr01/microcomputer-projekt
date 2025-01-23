@@ -179,7 +179,7 @@ begin
                 A <= register_data_out_internal;
                 if opcode = ADD_IMMEDIATE_OP then
                     B <= signed("00000000000" & immediate);
-                    next_state <= EXECUTE;
+                    next_state <= EXECUTE;   
                 else
                     next_state <= OPERAND_FETCH_B;
                 end if;
