@@ -171,12 +171,6 @@ begin
                 B_reg <= unsigned(instruction(7 downto 5));
                 immediate <= unsigned(instruction(4 downto 0));
                 next_state <= OPERAND_FETCH_A;
-                case opcode is
-                    when JMP_OP | JG_OP | JE_OP =>
-                        next_state <= JUMP;
-                    when others =>
-                        next_state <= OPERAND_FETCH_A;
-                end case;
             when OPERAND_FETCH_A =>
                 register_write_en <= '0';
                 register_read_addr <= A_reg;
@@ -185,10 +179,7 @@ begin
                 A <= register_data_out_internal;
                 if opcode = ADD_IMMEDIATE_OP then
                     B <= signed("00000000000" & immediate);
-                    next_state <= EXECUTE;
-                elsif opcode = SUB_IMMEDIATE_OP then
-                    B <= signed("00000000000" & immediate);
-                    next_state <= EXECUTE;    
+                    next_state <= EXECUTE;   
                 else
                     next_state <= OPERAND_FETCH_B;
                 end if;
