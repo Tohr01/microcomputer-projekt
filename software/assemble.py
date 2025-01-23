@@ -12,6 +12,34 @@ COMMENT_PREFIX = '#'
 
 
 def assemble(filepath: str, enable_debug: Optional[bool] = False, include_comment: Optional[bool] = False, simulate: Optional[bool] = False):
+    """
+    Assembles an assembly language file into binary instructions.
+
+    Args:
+        filepath (str): The path to the assembly file to be assembled.
+        enable_debug (Optional[bool]): If True, enables debug logging and writes intermediate files for debugging. Defaults to False.
+        include_comment (Optional[bool]): If True, includes comments in the binary output. Defaults to False.
+        simulate (Optional[bool]): If True, runs a simulation of the assembled code. Defaults to False.
+
+    Returns:
+        None
+
+    The function performs the following steps:
+    1. Reads the assembly file.
+    2. Strips whitespace from lines.
+    3. Removes empty lines.
+    4. Removes comment-only lines.
+    5. Writes the cleaned assembly to a debug file if debugging is enabled.
+    6. Separates inline comments from instructions.
+    7. Parses the lines into Line objects.
+    8. Writes the parsed lines to a debug file if debugging is enabled.
+    9. Parses jump target locations.
+    10. Replaces jump target names with indices.
+    11. Writes the parsed lines with jump target indices to a debug file if debugging is enabled.
+    12. Runs a simulation if requested.
+    13. Compiles the instructions to binary.
+    14. Writes the binary instructions to a file.
+    """
     file_handle = open(filepath, 'r')
     raw_asm = file_handle.read()
     file_handle.close()
