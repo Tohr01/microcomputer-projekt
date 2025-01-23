@@ -20,7 +20,7 @@ entity RegisterBank is
 end RegisterBank;
 
 architecture Behavioral of RegisterBank is
-    type reg_array is array (0 to REGISTER_BITS-1) of signed(DATA_WIDTH-1 downto 0);
+    type reg_array is array (0 to 2**REGISTER_BITS) of signed(DATA_WIDTH-1 downto 0);
     signal registers : reg_array := (others => (others => '0'));
 
 begin

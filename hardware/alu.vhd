@@ -3,10 +3,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.all;
 use work.opcodes_constants.ALL;
 
-entity ALU is 
-    generic (
-        constant N: natural := 1
-    );   
+entity ALU is  
     port(
         -- inputs:
         A, B        : in signed(15 downto 0); -- Operants
@@ -61,8 +58,8 @@ begin
                 else
                     res <= x"0000"; 
                 end if;
-            when LSH => res <= signed(unsigned(A) sll N); 
-            when RSH => res <= signed(unsigned(A) srl N); 
+            when LSH => res <= signed(unsigned(A) sll to_integer(unsigned(Imm))); 
+            when RSH => res <= signed(unsigned(A) srl to_integer(unsigned(Imm))); 
             when others => res <= x"0000"; -- Default case
         end case;
     end process;

@@ -51,9 +51,6 @@ architecture Behavioral of Control_Unit is
     signal ram_file_io         : fileIoT := none;
 
     component ALU is
-        generic (
-            constant N: natural := 1
-        );
         port(
             A, B        : in signed(15 downto 0);
             I           : in integer;
