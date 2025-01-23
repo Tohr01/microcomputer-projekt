@@ -11,9 +11,9 @@ def calc_instruction_chains_high_number(number: int, target_register: str):
         if i == 0:
             print(f'movi {target_register}, {int(bin_number_chunk, 2)}')
         else:
-            print(f'lsh {target_register}, {len(bin_number_chunks[i - 1])}')
+            print(f'lsh {target_register}, {len(bin_number_chunk)}')
             print(f'addi {target_register}, {int(bin_number_chunk, 2)}')
 
 
-calc_instruction_chains_high_number(65535, '$MAX_VALUE')
-
+calc_instruction_chains_high_number(2**16-1, '$MAX_VALUE')
+print((((((31 << 5) + 31) << 5) + 31) << 1) + 1)

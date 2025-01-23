@@ -8,7 +8,7 @@ class InstructionSet:
         'add': Instruction('add', '000010', ['r', 'r'], [5, 5]),
         'addi': Instruction('addi', '000011', ['r', 'i'], [5, 5]),
         'subi': Instruction('subi', '000100', ['r', 'i'], [5, 5]),
-        'incr': Instruction('incr', '000101', [], []),
+        'incr': Instruction('incr', '000101', ['r'], [5]),
         'andi': Instruction('andi', '000110', ['r', 'i'], [5, 5]),
         'lsh': Instruction('lsh', '000111', ['r', 'i'], [5, 5]),
         'rsh': Instruction('rsh', '001000', ['r', 'i'], [5, 5]),
@@ -31,5 +31,3 @@ class InstructionSet:
 def format_for_vhdl():
     for instruction_name, instruction in InstructionSet.instructions.items():
         print(f'constant {instruction_name.upper()}_OP : integer := {int(instruction.instruction_code, 2)}')
-
-format_for_vhdl()

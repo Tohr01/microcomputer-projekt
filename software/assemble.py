@@ -3,33 +3,15 @@ import logging
 import os
 from typing import Optional
 
-from asm_config.isa import InstructionSet, Instruction, format_for_vhdl
+from simulator import Simulator
+from line import Line
 from asm_config.patterns import LINE_PATTERN, SUBROUTINE_LOOP_PATTERN, JUMP_PATTERN
 from logger import logger, change_log_level
 
 COMMENT_PREFIX = '#'
 
 
-class Line:
-    instruction: Instruction
-    parameters: list[str]
-    comment: Optional[str]
-    jump_target_names: Optional[list[str]]
-
-    def __init__(self, line_tuple: tuple[list[str], Optional[str]], jump_target_names: Optional[list[str]] = None):
-        assert len(line_tuple) >= 1, 'Line tuple must have at least one elements'
-        instruction_list = line_tuple[0]
-        assert len(instruction_list) >= 1, 'Instruction list must have at least one element'
-        self.instruction = InstructionSet.get_instruction(instruction_list[0])
-        self.parameters = instruction_list[1:]
-        self.comment = line_tuple[1]
-        self.jump_target_names = None or jump_target_names
-
-    def __repr__(self):
-        return f'{self.instruction.instruction_name} {self.parameters = } {self.comment = } {self.jump_target_names = } {self.instruction.is_jump = }'
-
-
-def assemble(filepath: str, enable_debug: Optional[bool] = False, include_comment: Optional[bool] = False):
+def assemble(filepath: str, enable_debug: Optional[bool] = False, include_comment: Optional[bool] = False, simulate: Optional[bool] = False):
     file_handle = open(filepath, 'r')
     raw_asm = file_handle.read()
     file_handle.close()
@@ -75,6 +57,12 @@ def assemble(filepath: str, enable_debug: Optional[bool] = False, include_commen
         logger.debug('Writing parsed lines with jump target indices to debug file')
         with open('debug-parsed-lines-w-jumps.txt', 'w') as f:
             f.write('\n'.join([*map(lambda line: str(line), lines)]))
+    # If user wants to run simulation run
+    if simulate:
+        logger.debug('Running simulation ...')
+        simulator = Simulator(debug=enable_debug)
+        simulator.run_simulation(lines)
+
     # Compile instructions to binary
     binary_instructions = compile_instructions(lines, include_comment)
     logger.info('Compiled instructions to binary')
@@ -176,15 +164,17 @@ if __name__ == '__main__':
     parser.add_argument('file', help='The file to be assembled')
     parser.add_argument('-d', '--debug', help='Start the assembler in debug mode', action='store_true')
     parser.add_argument('-c', '--comment', help='Include comment next to lines in assembled file', action='store_true')
+    parser.add_argument('-s', '--simulate', help='Whether to run simulation', action='store_true')
     args = parser.parse_args()
 
     file = args.file
     debug = args.debug
     include_comment = args.comment
+    simulate = args.simulate
     if debug:
         change_log_level(logging.DEBUG)
     else:
         change_log_level(logging.INFO)
 
     assert os.path.exists(file) and not os.path.isdir(file), 'File does not exist'
-    assemble(file, enable_debug=debug, include_comment=include_comment)
+    assemble(file, enable_debug=debug, include_comment=include_comment, simulate=simulate)

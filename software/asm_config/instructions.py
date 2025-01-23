@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional, Union
 
-from .patterns import REGISTER_PATTERN, IMMEDIATE_PATTERN
+from .patterns import get_register_name, get_immediate_num
 from .registers import REGISTER_BANK
 from .util import to_binary_string
 from logger import logger
@@ -41,25 +41,22 @@ class Instruction:
             parameter_type = self.instruction_format[idx]
             try:
                 parameter = parameters[idx]
+                op_max_bits = self.instruction_format_lengths[idx]
             except IndexError:
                 raise IndexError(f'Missing parameter {parameter_type} in parameter array {parameters} at index {idx}')
             logger.debug(f'Parsing parameter {parameter} of type {parameter_type} at index {idx}')
             if parameter_type == 'R':
                 # Expecting register
-                register_match = REGISTER_PATTERN.match(parameter)
-                assert register_match is not None, f'{parameter} is not a valid register'
-                register_name = register_match.group(1)
+                register_name = get_register_name(parameter)
                 register_code = REGISTER_BANK.get_register(register_name)
-                assert len(register_code) == self.instruction_format_lengths[idx], f'{register_name} is not {self.instruction_format_lengths[idx]} bits long'
+                assert len(register_code) == op_max_bits, f'{register_name} is not {op_max_bits} bits long'
                 logger.debug(f'Converted register name {parameter} to register code {register_code}')
                 bits_left -= len(register_code)
                 binary_instruction_arr.insert(1, register_code)
             elif parameter_type == 'I':
                 # Expecting immediate
-                immediate_match = IMMEDIATE_PATTERN.match(parameter)
-                assert immediate_match is not None, f'{parameter} is not a valid immediate'
-                immediate_int = int(immediate_match.group(1))
-                immediate_byte_str = to_binary_string(immediate_int, width=self.instruction_format_lengths[idx])
+                immediate_int = get_immediate_num(parameter, op_max_bits)
+                immediate_byte_str = to_binary_string(immediate_int, width=op_max_bits)
                 logger.debug(f'Converted immediate {parameter} to immediate byte string {immediate_byte_str}')
                 assert len(immediate_byte_str) <= bits_left, f'{immediate_int} is too high for {bits_left}'
                 bits_left -= len(immediate_byte_str)
