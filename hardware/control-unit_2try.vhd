@@ -20,7 +20,7 @@ architecture Behavioral of Control_Unit is
     constant RAM_ADDR_WIDTH : natural := 10;
     constant RAM_DATA_WIDTH : natural := 16;
 
-    type state_type is (IDLE, INSTRUCTION_FETCH, WAIT_FOR_INSTRUCTION, INSTRUCTION_DECODE, OPERAND_FETCH_A, OPERAND_FETCH_B, WAIT_FOR_OPERAND_A, WAIT_FOR_OPERAND_B, EXECUTE, RESULT_STORE, NEXT_INSTRUCTION);
+    type state_type is (IDLE, INSTRUCTION_FETCH, WAIT_FOR_INSTRUCTION, INSTRUCTION_DECODE, OPERAND_FETCH_A, OPERAND_FETCH_B, WAIT_FOR_OPERAND_A, WAIT_FOR_OPERAND_B, EXECUTE, RESULT_STORE, NEXT_INSTRUCTION, JUMP);
     signal current_state, next_state : state_type;
     signal instruction: unsigned(15 downto 0);
     signal opcode   : unsigned(4 downto 0);
@@ -170,6 +170,12 @@ begin
                 B_reg <= unsigned(instruction(7 downto 5));
                 immediate <= unsigned(instruction(4 downto 0));
                 next_state <= OPERAND_FETCH_A;
+                case opcode is
+                    when JMP_OP | JG_OP | JE_OP =>
+                        next_state <= JUMP;
+                    when others =>
+                        next_state <= OPERAND_FETCH_A;
+                end case;
             when OPERAND_FETCH_A =>
                 register_write_en <= '0';
                 register_read_addr <= A_reg;
@@ -179,6 +185,9 @@ begin
                 if opcode = ADD_IMMEDIATE_OP then
                     B <= signed("00000000000" & immediate);
                     next_state <= EXECUTE;
+                elsif opcode = SUB_IMMEDIATE_OP then
+                    B <= signed("00000000000" & immediate);
+                    next_state <= EXECUTE;    
                 else
                     next_state <= OPERAND_FETCH_B;
                 end if;
