@@ -2,6 +2,7 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
 use work.opcodes_constants.ALL;
+use work.statesPkg.ALL;
 use work.memPkg.all;
 
 entity CONTROL_UNIT is
@@ -10,6 +11,7 @@ entity CONTROL_UNIT is
         rst       : in std_logic;
         start     : in std_logic;
         -- instruction: in unsigned(15 downto 0);
+        state     : out integer;
         done      : out std_logic
     );
 end CONTROL_UNIT;
@@ -20,8 +22,7 @@ architecture Behavioral of Control_Unit is
     constant RAM_ADDR_WIDTH : natural := 10;
     constant RAM_DATA_WIDTH : natural := 16;
 
-    type state_type is (IDLE, INSTRUCTION_FETCH, WAIT_FOR_INSTRUCTION, INSTRUCTION_DECODE, OPERAND_FETCH_A, OPERAND_FETCH_B, WAIT_FOR_OPERAND_A, WAIT_FOR_OPERAND_B, EXECUTE, RESULT_STORE, NEXT_INSTRUCTION, JUMP);
-    signal current_state, next_state : state_type;
+    signal current_state, next_state : integer;
     signal instruction: unsigned(15 downto 0);
     signal opcode   : unsigned(4 downto 0);
     signal A_reg    : unsigned(2 downto 0);
@@ -216,5 +217,7 @@ begin
                 next_state <= IDLE;
         end case;
     end process;
+
+    state <= current_state;
 
 end Behavioral;

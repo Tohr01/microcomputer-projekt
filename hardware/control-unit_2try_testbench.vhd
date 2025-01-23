@@ -1,6 +1,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.ALL;
+use work.statesPkg.ALL;
 
 entity Control_Unit_tb is
 end Control_Unit_tb;
@@ -10,6 +11,7 @@ architecture Behavioral of Control_Unit_tb is
     signal clk       : std_logic := '0';
     signal rst       : std_logic := '1';
     signal start     : std_logic := '0';
+    signal state_internal     : integer;
     signal done_internal      : std_logic;
 
     component Control_Unit is
@@ -17,6 +19,7 @@ architecture Behavioral of Control_Unit_tb is
             clk       : in std_logic;
             rst       : in std_logic;
             start     : in std_logic;
+            state     : out integer;
             done      : out std_logic
         );
     end component;
@@ -28,6 +31,7 @@ begin
             clk => clk,
             rst => rst,
             start => start,
+            state => state_internal,
             done => done_internal
         );
 
