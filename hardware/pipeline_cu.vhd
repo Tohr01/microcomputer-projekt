@@ -12,7 +12,7 @@ entity PIPELINE_CONTROL_UNIT is
 end PIPELINE_CONTROL_UNIT;
 
 architecture Behavioral of Pipeline_Control_Unit is
-    constant REGISTER_BITS : natural := 3;
+    constant REGISTER_BITS : natural := 5;
     constant DATA_WIDTH     : natural := 16;
     constant RAM_ADDR_WIDTH : natural := 10;
     constant RAM_DATA_WIDTH : natural := 16;
@@ -21,9 +21,8 @@ architecture Behavioral of Pipeline_Control_Unit is
 
     signal instruction: unsigned(15 downto 0) := (others => '0');
     signal opcode_0, opcode_1, opcode_2, opcode_3   : unsigned(4 downto 0);
-    signal A_reg_0, A_reg_1, A_reg_2, A_reg_3 : unsigned(2 downto 0) := (others => '0');
-    signal B_reg_0    : unsigned(2 downto 0);
-    signal immediate_0, immediate_1, immediate_2: unsigned(4 downto 0);
+    signal A_reg_0, A_reg_1, A_reg_2, A_reg_3 : unsigned(REGISTER_BITS-1 downto 0) := (others => '0');
+    signal B_reg_0, B_reg_1, B_reg_2    : unsigned(REGISTER_BITS-1 downto 0);
 
     -- ALU signals
     signal A, B: signed(15 downto 0);
@@ -149,10 +148,9 @@ begin
     ID_Stage: process(clk)
     begin
         if rising_edge(clk) then
-            opcode_0 <= unsigned(instruction(15 downto 11));
-            A_reg_0 <= unsigned(instruction(10 downto 8));
-            B_reg_0 <= unsigned(instruction(7 downto 5));
-            immediate_0 <= unsigned(instruction(4 downto 0));
+            opcode_0 <= unsigned(instruction(15 downto 10));
+            A_reg_0  <= unsigned(instruction(9 downto 5));
+            B_reg_0  <= unsigned(instruction(4 downto 0));
         end if;
     end process;
 
@@ -162,8 +160,8 @@ begin
         if rising_edge(clk) then
             opcode_1 <= opcode_0;
             A_reg_1 <= A_reg_0;
-            immediate_1 <= immediate_0;
-            if is_x(std_logic_vector(opcode_0)) or opcode_0 /= NOP then -- don't do anything if opcode is NOP
+            B_reg_1 <= B_reg_0;
+            if is_x(std_logic_vector(opcode_0)) or opcode_0 /= NOP then 
                 if not is_x(std_logic_vector(A_reg_0)) then
                     register_read_addr_A <= A_reg_0;
                 end if;
@@ -180,7 +178,7 @@ begin
         if rising_edge(clk) then
             opcode_2 <= opcode_1;
             A_reg_2 <= A_reg_1;
-            immediate_2 <= immediate_1;
+            B_reg_2 <= B_reg_1;
         end if;
     end process;
 
@@ -193,8 +191,8 @@ begin
             if is_x(std_logic_vector(opcode_2)) or opcode_2 /= NOP then
                 A <= register_data_out_A_internal;
                 B <= register_data_out_B_internal;
+                Imm <= signed("00000000000" & B_reg_2);
                 I <= to_integer(opcode_2);
-                Imm <= signed("00000000000" & immediate_2);
             end if;
         end if;
     end process;

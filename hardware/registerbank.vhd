@@ -4,7 +4,7 @@ use IEEE.NUMERIC_STD.ALL;
 
 entity RegisterBank is
     generic (
-        constant REGISTER_BITS : natural := 3;
+        constant REGISTER_BITS : natural := 5;
         constant DATA_WIDTH     : natural := 16
     );
     port (

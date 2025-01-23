@@ -38,6 +38,9 @@ begin
             when ADD => 
                 res <= A + B; 
                 carryout_alu <= overflow_detection_addition(A, B);
+            when ADDI =>
+                res <= A + Imm; 
+                carryout_alu <= overflow_detection_addition(A, Imm);
             when SUBI => 
                 res <= A - Imm;    
                 carryout_alu <= overflow_detection_addition(A, IMM);
