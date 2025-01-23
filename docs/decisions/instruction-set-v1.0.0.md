@@ -13,8 +13,8 @@ Bit-Darstellung 16 Bit Befehl:
 | ANDI      | `000110`          | `R1 = R1 AND 5-Bit-Immediate`                     |✅|
 | LSH     | `000111`            | `R1 = R2 << 5-Bit-Immediate` (Links-Shift)        |✅|
 | RSH      | `001000`            | `R1 = R2 >> 5-Bit-Immediate` (Rechts-Shift)      |✅|
-| MOV      | `001001`          | `R1 = R2`                                          |1|
-| MOVI      | `001010`          | `R1 = 5-Bit-Immediate`                            |1|
+| MOV      | `001001`          | `R1 = R2`                                          |✅|
+| MOVI      | `001010`          | `R1 = 5-Bit-Immediate`                            |✅|
 | STORE      | `001011`          | `RAM[R2] = R1`                                   |1|
 | LOAD_OPCODE      | `001100`          | `R1 = RAM[R2]`                             |1|
 | CALL      | `001101`          | tbd                                               |3|
