@@ -28,6 +28,7 @@ architecture Behavioral of Pipeline_Control_Unit is
     -- ALU signals
     signal A, B: signed(15 downto 0);
     signal I: integer;
+    signal Imm: signed(15 downto 0);
     signal res_internal: signed(15 downto 0);
     signal carry_internal: std_logic;
 
@@ -53,6 +54,7 @@ architecture Behavioral of Pipeline_Control_Unit is
         port(
             A, B        : in signed(15 downto 0);
             I           : in integer;
+            Imm         : in signed(15 downto 0);
             out_alu     : out signed(15 downto 0);
             carryout_alu: out std_logic
         );
@@ -97,6 +99,7 @@ begin
             A => A,
             B => B,
             I => I,
+            Imm => Imm,
             out_alu => res_internal,
             carryout_alu => carry_internal
         );
@@ -160,7 +163,7 @@ begin
             opcode_1 <= opcode_0;
             A_reg_1 <= A_reg_0;
             immediate_1 <= immediate_0;
-            if is_x(std_logic_vector(opcode_0)) or opcode_0 /= NOP_OP then -- don't do anything if opcode is NOP
+            if is_x(std_logic_vector(opcode_0)) or opcode_0 /= NOP then -- don't do anything if opcode is NOP
                 if not is_x(std_logic_vector(A_reg_0)) then
                     register_read_addr_A <= A_reg_0;
                 end if;
@@ -187,17 +190,11 @@ begin
         if rising_edge(clk) then
             opcode_3 <= opcode_2;
             A_reg_3 <= A_reg_2;
-            A <= register_data_out_A_internal;
-            if is_x(std_logic_vector(opcode_2)) or opcode_2 /= NOP_OP then
-                if not is_x(std_logic_vector(opcode_2)) then
-                    if opcode_2 = ADD_IMMEDIATE_OP then
-                        B <= signed("00000000000" & immediate_2);
-                        I <= ADD_OP;
-                    else
-                        B <= register_data_out_B_internal;
-                        I <= to_integer(opcode_2);
-                    end if;
-                end if;
+            if is_x(std_logic_vector(opcode_2)) or opcode_2 /= NOP then
+                A <= register_data_out_A_internal;
+                B <= register_data_out_B_internal;
+                I <= to_integer(opcode_2);
+                Imm <= signed("00000000000" & immediate_2);
             end if;
         end if;
     end process;
@@ -206,7 +203,7 @@ begin
     RS_Stage: process(clk)
     begin
         if rising_edge(clk) then
-            if is_x(std_logic_vector(opcode_3)) or opcode_3 /= NOP_OP then
+            if is_x(std_logic_vector(opcode_3)) or opcode_3 /= NOP then
                 if not is_x(std_logic_vector(A_reg_3)) then
                     register_write_addr <= A_reg_3;
                 end if;
