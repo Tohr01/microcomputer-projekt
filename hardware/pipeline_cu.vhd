@@ -16,8 +16,11 @@ architecture Behavioral of Pipeline_Control_Unit is
     constant DATA_WIDTH     : natural := 16;
     constant RAM_ADDR_WIDTH : natural := 10;
     constant RAM_DATA_WIDTH : natural := 16;
+    constant CMP_REG_ADDR   : unsigned := "00000";
 
     signal program_counter: std_logic_vector(RAM_ADDR_WIDTH-1 downto 0) := (others => '0');
+    signal jump_program_counter: std_logic_vector(RAM_ADDR_WIDTH-1 downto 0) := (others => 'U');
+    signal use_cond_jump: std_logic := '0';
 
     signal instruction: unsigned(15 downto 0) := (others => '0');
     signal opcode_0, opcode_1, opcode_2, opcode_3   : unsigned(5 downto 0);
@@ -139,8 +142,16 @@ begin
             ram_addr_out_1 <= (others => '0');
         elsif rising_edge(clk) then
             instruction <= unsigned(ram_data_out_1);
-            ram_addr_out_1 <= std_logic_vector(unsigned(program_counter) + 1);
-            program_counter <= std_logic_vector(unsigned(program_counter) + 1);
+            if use_cond_jump = '1' then
+                ram_addr_out_1 <= jump_program_counter;
+                program_counter <= jump_program_counter;
+            elsif not is_x(std_logic_vector(instruction)) and to_integer(unsigned(instruction(15 downto 10))) = JMP then
+                ram_addr_out_1 <= std_logic_vector(unsigned(instruction(9 downto 0)));
+                program_counter <=  std_logic_vector(unsigned(instruction(9 downto 0)));
+            else
+                ram_addr_out_1 <= std_logic_vector(unsigned(program_counter) + 1);
+                program_counter <= std_logic_vector(unsigned(program_counter) + 1);
+            end if;
         end if;
     end process;
 
@@ -161,12 +172,16 @@ begin
             opcode_1 <= opcode_0;
             A_reg_1 <= A_reg_0;
             B_reg_1 <= B_reg_0;
-            if is_x(std_logic_vector(opcode_0)) or opcode_0 /= NOP then 
-                if not is_x(std_logic_vector(A_reg_0)) then
-                    register_read_addr_A <= A_reg_0;
-                end if;
-                if not is_x(std_logic_vector(B_reg_0)) then
-                    register_read_addr_B <= B_reg_0;
+            if not is_x(std_logic_vector(opcode_0)) then
+                if opcode_0 /= NOP and opcode_0 /= JE and opcode_0 /= JG then 
+                    if not is_x(std_logic_vector(A_reg_0)) then
+                        register_read_addr_A <= A_reg_0;
+                    end if;
+                    if not is_x(std_logic_vector(B_reg_0)) then
+                        register_read_addr_B <= B_reg_0;
+                    end if;
+                elsif opcode_0 = JE or opcode_0 = JE then
+                    register_read_addr_A <= CMP_REG_ADDR;
                 end if;
             end if;
         end if;
@@ -189,11 +204,17 @@ begin
             opcode_3 <= opcode_2;
             A_reg_3 <= A_reg_2;
             B_reg_3 <= B_reg_2;
-            if not is_x(std_logic_vector(opcode_2)) and opcode_2 /= NOP then
-                A <= register_data_out_A_internal;
-                B <= register_data_out_B_internal;
-                Imm <= signed("00000000000" & B_reg_2);
-                I <= to_integer(opcode_2);
+            if not is_x(std_logic_vector(opcode_2)) then
+                if opcode_2 /= NOP and opcode_2 /= JE and opcode_2 /= JG then
+                    A <= register_data_out_A_internal;
+                    B <= register_data_out_B_internal;
+                    Imm <= signed("00000000000" & B_reg_2);
+                    I <= to_integer(opcode_2);
+                elsif opcode_2 = JE and register_data_out_A_internal = x"0001" then
+                    jump_program_counter <= std_logic_vector(A_reg_2 & B_reg_2);
+                elsif opcode_2 = JG and register_data_out_A_internal = x"0002" then
+                    jump_program_counter <= std_logic_vector(A_reg_2 & B_reg_2);
+                end if;
             end if;
         end if;
     end process;
@@ -212,8 +233,15 @@ begin
                         ram_addr_out_2 <= std_logic_vector("00000" & B_reg_3);
                         register_write_addr <= A_reg_3;
                         register_data_in <= signed(ram_data_out_2);
+                    when CMP =>
+                        register_write_addr <= CMP_REG_ADDR;
+                        register_data_in <= res_internal;
                     when NOP =>
                         -- do nothing
+                    when JE =>
+                        use_cond_jump <= '1';
+                    when JG =>
+                        use_cond_jump <= '1';
                     when others =>
                         register_write_addr <= A_reg_3;
                         register_data_in <= res_internal;
@@ -221,5 +249,4 @@ begin
             end if;
         end if;
     end process;
-
 end Behavioral;

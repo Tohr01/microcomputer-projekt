@@ -19,7 +19,7 @@ Bit-Darstellung 16 Bit Befehl:
 | LOAD_OPCODE      | `001100`          | `R1 = RAM[R2]`                             |✅|
 | CALL      | `001101`          | tbd                                               |3|
 | RET      | `001110`          | tbd                                                |3|
-| CMP      | `001111`          | CMP_REG = Vergleiche `R1` and `R2` (Gleichheit: 1; Gößer als `R2`: 2; sonst: 0)  |1|
-| JMP      | `010000`          | `program_counter = 10Bit-Immediate)`                                             |1|
-| JG      | `010001`          | `if CMP_REG == 2, program_counter = 10Bit-Immediate; else NOP`                    |1|
-| JE      | `010010`          | `if CMP_REG == 1, program_counter = 10Bit-Immediate; else NOP`                    |1|
+| CMP      | `001111`          | CMP_REG = Vergleiche `R1` and `R2` (Gleichheit: 1; Gößer als `R2`: 2; sonst: 0)  |✅|
+| JMP      | `010000`          | `program_counter = 10Bit-Immediate)`                                             |✅|
+| JG      | `010001`          | `if CMP_REG == 2, program_counter = 10Bit-Immediate; else NOP`                    |✅|
+| JE      | `010010`          | `if CMP_REG == 1, program_counter = 10Bit-Immediate; else NOP`                    |✅|
