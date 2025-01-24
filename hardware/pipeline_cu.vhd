@@ -22,7 +22,7 @@ architecture Behavioral of Pipeline_Control_Unit is
     signal instruction: unsigned(15 downto 0) := (others => '0');
     signal opcode_0, opcode_1, opcode_2, opcode_3   : unsigned(5 downto 0);
     signal A_reg_0, A_reg_1, A_reg_2, A_reg_3 : unsigned(REGISTER_BITS-1 downto 0) := (others => '0');
-    signal B_reg_0, B_reg_1, B_reg_2    : unsigned(REGISTER_BITS-1 downto 0);
+    signal B_reg_0, B_reg_1, B_reg_2, B_reg_3    : unsigned(REGISTER_BITS-1 downto 0);
 
     -- ALU signals
     signal A, B: signed(15 downto 0);
@@ -41,9 +41,10 @@ architecture Behavioral of Pipeline_Control_Unit is
     
     -- RAM signals
     signal ram_not_write_en        : std_logic := '1';
-    signal ram_io_addr         : std_logic_vector(RAM_ADDR_WIDTH-1 downto 0) := (others => '0');
+    signal ram_addr_in         : std_logic_vector(RAM_ADDR_WIDTH-1 downto 0) := (others => '0');
+    signal ram_addr_out_1, ram_addr_out_2        : std_logic_vector(RAM_ADDR_WIDTH-1 downto 0) := (others => '0');
     signal ram_data_in         : std_logic_vector(RAM_DATA_WIDTH-1 downto 0) := (others => '0');
-    signal ram_data_out        : std_logic_vector(RAM_DATA_WIDTH-1 downto 0) := (others => '0');
+    signal ram_data_out_1, ram_data_out_2        : std_logic_vector(RAM_DATA_WIDTH-1 downto 0) := (others => '0');
     signal ram_file_io         : fileIoT := none;
 
     component ALU is
@@ -78,9 +79,12 @@ architecture Behavioral of Pipeline_Control_Unit is
         port (
             -- nCS: in std_logic;
             nWE: in std_logic;
-            addr: in std_logic_vector(RAM_ADDR_WIDTH-1 downto 0);
+            addrI: in std_logic_vector(RAM_ADDR_WIDTH-1 downto 0);
+            addrO_1: in std_logic_vector(RAM_ADDR_WIDTH-1 downto 0);
+            addrO_2: in std_logic_vector(RAM_ADDR_WIDTH-1 downto 0);
             dataI: in std_logic_vector(RAM_DATA_WIDTH-1 downto 0);
-            dataO: out std_logic_vector(RAM_DATA_WIDTH-1 downto 0);
+            dataO_1: out std_logic_vector(RAM_DATA_WIDTH-1 downto 0);
+            dataO_2: out std_logic_vector(RAM_DATA_WIDTH-1 downto 0);
             fileIO: in fileIoT
         );
     end component;
@@ -117,9 +121,12 @@ begin
         )
         port map (
             nWE => ram_not_write_en,
-            addr => ram_io_addr,
+            addrI => ram_addr_in,
+            addrO_1 => ram_addr_out_1,
+            addrO_2 => ram_addr_out_2,
             dataI => ram_data_in,
-            dataO => ram_data_out,
+            dataO_1 => ram_data_out_1,
+            dataO_2 => ram_data_out_2,
             fileIO => ram_file_io
         );
 
@@ -129,11 +136,10 @@ begin
         if rst = '1' then
             ram_file_io <= load, none after 5 ns;
             program_counter <= (others => '0');
-            ram_io_addr <= (others => '0');
+            ram_addr_out_1 <= (others => '0');
         elsif rising_edge(clk) then
-            ram_not_write_en <= '1';
-            instruction <= unsigned(ram_data_out);
-            ram_io_addr <= std_logic_vector(unsigned(program_counter) + 1);
+            instruction <= unsigned(ram_data_out_1);
+            ram_addr_out_1 <= std_logic_vector(unsigned(program_counter) + 1);
             program_counter <= std_logic_vector(unsigned(program_counter) + 1);
         end if;
     end process;
@@ -182,6 +188,7 @@ begin
         if rising_edge(clk) then
             opcode_3 <= opcode_2;
             A_reg_3 <= A_reg_2;
+            B_reg_3 <= B_reg_2;
             if not is_x(std_logic_vector(opcode_2)) and opcode_2 /= NOP then
                 A <= register_data_out_A_internal;
                 B <= register_data_out_B_internal;
@@ -195,11 +202,22 @@ begin
     RS_Stage: process(clk)
     begin
         if rising_edge(clk) then
-            if is_x(std_logic_vector(opcode_3)) or opcode_3 /= NOP then
-                if not is_x(std_logic_vector(A_reg_3)) then
-                    register_write_addr <= A_reg_3;
-                end if;
-                register_data_in <= res_internal;
+            if not is_x(std_logic_vector(opcode_3)) then
+                case to_integer(opcode_3) is
+                    when STORE =>
+                        ram_not_write_en <= '0', '1' after 5 ns;
+                        ram_addr_in <= std_logic_vector("00000" & B_reg_3);
+                        ram_data_in <= std_logic_vector(A);
+                    when LOAD_OPCODE =>
+                        ram_addr_out_2 <= std_logic_vector("00000" & B_reg_3);
+                        register_write_addr <= A_reg_3;
+                        register_data_in <= signed(ram_data_out_2);
+                    when NOP =>
+                        -- do nothing
+                    when others =>
+                        register_write_addr <= A_reg_3;
+                        register_data_in <= res_internal;
+                end case;
             end if;
         end if;
     end process;

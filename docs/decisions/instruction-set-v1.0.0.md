@@ -15,8 +15,8 @@ Bit-Darstellung 16 Bit Befehl:
 | RSH      | `001000`            | `R1 = R2 >> 5-Bit-Immediate` (Rechts-Shift)      |✅|
 | MOV      | `001001`          | `R1 = R2`                                          |✅|
 | MOVI      | `001010`          | `R1 = 5-Bit-Immediate`                            |✅|
-| STORE      | `001011`          | `RAM[R2] = R1`                                   |1|
-| LOAD_OPCODE      | `001100`          | `R1 = RAM[R2]`                             |1|
+| STORE      | `001011`          | `RAM[R2] = R1`                                   |✅|
+| LOAD_OPCODE      | `001100`          | `R1 = RAM[R2]`                             |✅|
 | CALL      | `001101`          | tbd                                               |3|
 | RET      | `001110`          | tbd                                                |3|
 | CMP      | `001111`          | CMP_REG = Vergleiche `R1` and `R2` (Gleichheit: 1; Gößer als `R2`: 2; sonst: 0)  |1|
