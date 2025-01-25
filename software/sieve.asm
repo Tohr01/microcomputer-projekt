@@ -16,7 +16,8 @@ lsh $C2, 5
 addi $C2, 8     # CONSTANT: Starting address of numbering sequence for algorithm (= 1000)
 
 mov $C3, $C1
-addi $C3, 2     # CONSTANT: Stores max number
+addi $C3, 1     # CONSTANT: Stores max number (calculated by numbers to write + 1)
+
 mov $C4, $C1
 add $C4, $C2
 subi $C4, 1     # CONSTANT: Stores last valid address calculated by (numbers to write) + (starting address) - 1
@@ -26,7 +27,7 @@ lsh $MAX_VALUE, 5
 addi $MAX_VALUE, 31
 lsh $MAX_VALUE, 5
 addi $MAX_VALUE, 31
-lsh $MAX_VALUE, 5
+lsh $MAX_VALUE, 1
 addi $MAX_VALUE, 1 # Max value for 16-bit (2^16 -1)? (= 65535)
 
 ### END CONSTANTS ###
@@ -147,8 +148,6 @@ SIEVE_OF_ERATOSTHENES:
         #
         movi $MULRES, 0      # Set result to 0
         movi $OVERFLOW, 0    # Initialize overflow flag to 0
-        movi $R2, 1          # Store one for comparison
-
 
         MULTIPLY_LOOP:
             cmp $MULRIGHT, $0    # Compare multiplier with 0
@@ -165,7 +164,7 @@ SIEVE_OF_ERATOSTHENES:
 
             mov $R1, $MULRIGHT   # Copy data from MULRIGHT to R1
             andi $R1, 1          # Check if MULRIGHT is odd
-            cmp $R1, $R2         # Compare to 1 (odd check)
+            cmp $R1, $1        # Compare to 1 (odd check)
 
             nop
             nop
@@ -194,9 +193,7 @@ SIEVE_OF_ERATOSTHENES:
 
             MULTIPLY_OVERFLOW:
                 movi $OVERFLOW, 1 # Set overflow flag
-                ret               # Exit multiplication
-
-                ret               # Return from multiplication       
+                jmp MULTIPLY_EXIT
 
         ### END MULTIPLY ###
 
@@ -247,5 +244,4 @@ NOOP_LOOP:
 
 OVERFLOW_HANDLING:
     # Terminate Program 
-    # hlt
     jmp NOOP_LOOP

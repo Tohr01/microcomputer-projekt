@@ -9,9 +9,9 @@ class Simulator:
     memory: dict[int, int] # 16 bit : 16 bit
     registers_bank: dict[int, int] # 16 bit : 16 bit
 
-    debug_mode: bool
+    prompt_debug: bool
 
-    def __init__(self, pc_init: int = 0, memory_init: dict[int, int] = {}, register_init: dict[int, int] = {}, debug: bool = False):
+    def __init__(self, pc_init: int = 0, memory_init: dict[int, int] = {}, register_init: dict[int, int] = {}, prompt_debug: bool = False):
         self.pc = pc_init
         self.memory = {}
         self.memory.update(memory_init)
@@ -19,11 +19,11 @@ class Simulator:
         self.registers_bank = {}
         for reg_name in REGISTER_BANK.REGISTERS.keys():
             self.registers_bank[reg_name] = 0
+        self.registers_bank.update(register_init)
         # Add special registers
         # Compare register
         self.registers_bank['CMP'] = 0
-
-        self.debug_mode = debug
+        self.prompt_debug = prompt_debug
 
     def run_simulation(self, lines: list[Line]):
         # Load program in memory
@@ -35,19 +35,22 @@ class Simulator:
         while True:
             line = self.memory[self.pc]
             stop_program = self.execute_instruction(line)
-
-            self.validate_register_bank()
-            if self.debug_mode:
+            
+            self.cut_overflows_in_reg_bank()
+            if self.prompt_debug:
                 input('Press enter to continue: ')
 
-            self.dump_mem()
-            self.dump_registers()
-            
+                self.dump_mem()
+                self.dump_registers()
+
             if stop_program:
                 break
             if self.pc not in self.memory:
                 logger.warning(f'Program counter is out of bounds: {self.pc}. Stopping program')
                 break
+
+        self.dump_mem()
+        self.dump_registers()
 
     def execute_instruction(self, line: Line) -> bool:
         instruction_name = line.instruction.instruction_name
@@ -139,9 +142,15 @@ class Simulator:
 
         self.pc += 1
 
-    def validate_register_bank(self):
+    def cut_overflows_in_reg_bank(self):
         for reg_key, reg_content in self.registers_bank.items():
-            assert 0 <= reg_content <= 2**16 - 1, f'Register {reg_key} has value {reg_content} which is not in range [0, 2^16 - 1]'
+            reg_content_bin = format(reg_content, 'b')
+            if len(reg_content_bin) > 16:
+                logger.warning(f'Overflow detected in register {reg_key}. Cutting overflow')
+                logger.debug(f'Old value: {reg_content} = {format(reg_content, 'b')}')
+                new_value = int(reg_content_bin[-16:], 2)
+                logger.debug(f'New value: {new_value} = {format(new_value, 'b')}')
+                self.registers_bank[reg_key] = new_value
 
     def dump_mem(self):
         mem_csv_handle = open('memory_dump.csv', 'w')

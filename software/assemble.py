@@ -11,7 +11,7 @@ from logger import logger, change_log_level
 COMMENT_PREFIX = '#'
 
 
-def assemble(filepath: str, enable_debug: Optional[bool] = False, include_comment: Optional[bool] = False, simulate: Optional[bool] = False):
+def assemble(filepath: str, enable_debug: Optional[bool] = False, include_comment: Optional[bool] = False, simulate: Optional[bool] = False, simulator_args: dict = {}):
     """
     Assembles an assembly language file into binary instructions.
 
@@ -88,7 +88,7 @@ def assemble(filepath: str, enable_debug: Optional[bool] = False, include_commen
     # If user wants to run simulation run
     if simulate:
         logger.debug('Running simulation ...')
-        simulator = Simulator(debug=enable_debug)
+        simulator = Simulator(**simulator_args)
         simulator.run_simulation(lines)
 
     # Compile instructions to binary
@@ -193,16 +193,26 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--debug', help='Start the assembler in debug mode', action='store_true')
     parser.add_argument('-c', '--comment', help='Include comment next to lines in assembled file', action='store_true')
     parser.add_argument('-s', '--simulate', help='Whether to run simulation', action='store_true')
+    parser.add_argument('-p', '--prompt-debug', help='Whether to run simulation in prompt debug mode', action='store_true')
+
     args = parser.parse_args()
 
     file = args.file
     debug = args.debug
     include_comment = args.comment
     simulate = args.simulate
+
+    simulator_args = {
+        'pc_init': 0,
+        'memory_init': {},
+        'register_init': {},
+        'prompt_debug': args.prompt_debug
+    }
+
     if debug:
         change_log_level(logging.DEBUG)
     else:
         change_log_level(logging.INFO)
 
     assert os.path.exists(file) and not os.path.isdir(file), 'File does not exist'
-    assemble(file, enable_debug=debug, include_comment=include_comment, simulate=simulate)
+    assemble(file, enable_debug=debug, include_comment=include_comment, simulate=simulate, simulator_args=simulator_args)
