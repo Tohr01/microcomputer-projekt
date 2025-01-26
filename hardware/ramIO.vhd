@@ -30,9 +30,12 @@ generic (	addrWd	: integer range 2 to 16	:= 8;	-- #address bits
 		fileId	: string  := "memory.dat");	-- filename
 port (--	nCS	: in    std_logic;		-- not Chip   Select
 		nWE	: in    std_logic;		-- not Write  Enable
-	        addr	: in    std_logic_vector(addrWd-1 downto 0);
+	        addrI	: in    std_logic_vector(addrWd-1 downto 0);
+			addrO_1   : in    std_logic_vector(addrWd-1 downto 0);
+			addrO_2   : in    std_logic_vector(addrWd-1 downto 0);
 	        dataI	: in	std_logic_vector(dataWd-1 downto 0);
-	        dataO	: out	std_logic_vector(dataWd-1 downto 0);
+	        dataO_1	: out	std_logic_vector(dataWd-1 downto 0);
+			dataO_2	: out	std_logic_vector(dataWd-1 downto 0);
 	        fileIO	: in	fileIoT	:= none);
 end entity ramIO;
 
@@ -43,8 +46,8 @@ begin
 
   -- mem		simulation model
   ----------------------------------------------------------------------------
---memP: process (nCS, nWE, addr, dataI, fileIO) is
-  memP: process (nWE, addr, dataI, fileIO) is
+--memP: process (nCS, nWE, addrI, addrO_1, addrO_2, dataI, fileIO) is
+  memP: process (nWE, addrI, addrO_1, addrO_2, dataI, fileIO) is
     constant	addrHi		: natural	:= (2**addrWd)-1;
 
     subtype	memEleT		is std_logic_vector(dataWd-1 downto 0);
@@ -107,8 +110,16 @@ begin
 			  report "ramIO: nWE - X value"
 			  severity warning;
     end if;
-    if addr'event then	assert not Is_X(addr)
-			  report "ramIO: addr - X value"
+    if addrI'event then	assert not Is_X(addrI)
+			  report "ramIO: addrI - X value"
+			  severity warning;
+    end if;
+	if addrO_1'event then	assert not Is_X(addrO_1)
+			  report "ramIO: addrO_1 - X value"
+			  severity warning;
+    end if;
+	if addrO_2'event then	assert not Is_X(addrO_2)
+			  report "ramIO: addrO_2 - X value"
 			  severity warning;
     end if;
     if dataI'event then	assert not Is_X(dataI)
@@ -119,12 +130,13 @@ begin
     -- here starts the real work...
     ------------------------------------------------------------------------
 --  if nCS = '0'	then				-- chip select
-      if nWE = '0'	then				-- +write cycle
-	memory(to_integer(unsigned(addr))) := dataI;
-	dataO <= dataI;
-      else						-- +read cycle
-	dataO <= memory(to_integer(unsigned(addr)));
-      end if;	-- nWE = ...
+    if nWE = '0' then				-- +write cycle
+		memory(to_integer(unsigned(addrI))) := dataI;
+		dataO_2 <= dataI;
+    end if;	-- nWE = ...
+	-- +read cycle
+	dataO_1 <= memory(to_integer(unsigned(addrO_1)));
+	dataO_2 <= memory(to_integer(unsigned(addrO_2)));
 --  end if;	-- nCS = '0'
 
   end process memP;

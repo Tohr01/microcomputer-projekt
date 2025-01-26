@@ -20,7 +20,7 @@ entity RegisterBank is
 end RegisterBank;
 
 architecture Behavioral of RegisterBank is
-    type reg_array is array (0 to REGISTER_BITS-1) of signed(DATA_WIDTH-1 downto 0);
+    type reg_array is array (0 to 2**REGISTER_BITS) of signed(DATA_WIDTH-1 downto 0);
     signal registers : reg_array := (
         14 => "1111111111111111",  -- Max value for 16-bit (2^16 -1) (= 65535)
         15 => "0111010100110000",  -- Amount of numbers we have to check corresponds to 30000
