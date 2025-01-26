@@ -24,10 +24,10 @@ architecture Behavioral of RegisterBank is
     type reg_array is array (0 to 2**REGISTER_BITS) of signed(DATA_WIDTH-1 downto 0);
     signal registers : reg_array := (
         14 => "0000000000000000",  -- Carry flag
-        15 => "0111010100110000",  -- Amount of numbers we have to check corresponds to 30000
+        15 => "0000000000011110",  -- Amount of numbers we have to check corresponds to 30
         16 => "0000001111101000",  -- Starting address of numbering sequence for algorithm (= 1000)
-        17 => "0111010100110010",  -- Stores max number (in this case 30002)
-        18 => "0111100100010111",  -- Stores last valid address (in this case 30999)
+        17 => "0000000000011111",  -- Stores max number (in this case 31)
+        18 => "0000010000000101",  -- Stores last valid address (in this case 1029)
         others => (others => '0')
     );
 

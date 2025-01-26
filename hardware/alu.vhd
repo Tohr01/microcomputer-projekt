@@ -58,8 +58,20 @@ begin
                 else
                     res <= x"0000"; 
                 end if;
-            when LSH => res <= signed(unsigned(A) sll to_integer(unsigned(Imm))); 
-            when RSH => res <= signed(unsigned(A) srl to_integer(unsigned(Imm))); 
+            when LSH => 
+                res <= signed(unsigned(A) sll to_integer(unsigned(Imm)));
+                if (A(15 downto 16-to_integer(Imm)) /= (A(15 downto 16-to_integer(Imm))'range => '0')) then
+                    carryout_alu <= '1';
+                else
+                    carryout_alu <= '0';
+                end if;
+            when RSH => 
+                res <= signed(unsigned(A) srl to_integer(unsigned(Imm)));
+                if (A(to_integer(Imm)-1 downto 0) /= (A(15 downto 16-to_integer(Imm))'range => '0')) then
+                    carryout_alu <= '1';
+                else 
+                    carryout_alu <= '0';
+                end if;
             when others => res <= x"0000"; -- Default case
         end case;
     end process;

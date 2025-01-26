@@ -14,12 +14,12 @@ end PIPELINE_CONTROL_UNIT;
 architecture Behavioral of Pipeline_Control_Unit is
     constant REGISTER_BITS : natural := 5;
     constant DATA_WIDTH     : natural := 16;
-    constant RAM_ADDR_WIDTH : natural := 10;
+    constant RAM_ADDR_WIDTH : natural := 16;
     constant RAM_DATA_WIDTH : natural := 16;
     constant CMP_REG_ADDR   : unsigned := "00000";
 
     signal program_counter: std_logic_vector(RAM_ADDR_WIDTH-1 downto 0) := (others => '0');
-    signal jump_program_counter_0, jump_program_counter_1: std_logic_vector(RAM_ADDR_WIDTH-1 downto 0) := (others => 'U');
+    signal jump_program_counter_0, jump_program_counter_1: std_logic_vector(9 downto 0) := (others => 'U');
 
     signal instruction: unsigned(15 downto 0) := (others => '0');
     signal opcode_0, opcode_1, opcode_2, opcode_3   : unsigned(5 downto 0);
@@ -144,12 +144,15 @@ begin
             ram_addr_out_1 <= (others => '0');
         elsif rising_edge(clk) then
             instruction <= unsigned(ram_data_out_1);
-            if not is_x(jump_program_counter_1) then
-                ram_addr_out_1 <= jump_program_counter_1;
-                program_counter <= jump_program_counter_1;
+            if to_integer(unsigned(instruction(15 downto 10))) = 19 then
+                report "dump";
+                ram_file_io <= dump, none after 5 ns;
+            elsif not is_x(jump_program_counter_1) then
+                ram_addr_out_1 <= "000000" & jump_program_counter_1;
+                program_counter <= "000000" & jump_program_counter_1;
             elsif not is_x(std_logic_vector(instruction)) and to_integer(unsigned(instruction(15 downto 10))) = JMP then
-                ram_addr_out_1 <= std_logic_vector(unsigned(instruction(9 downto 0)));
-                program_counter <=  std_logic_vector(unsigned(instruction(9 downto 0)));
+                ram_addr_out_1 <= std_logic_vector(unsigned("000000" & instruction(9 downto 0)));
+                program_counter <=  std_logic_vector(unsigned("000000" & instruction(9 downto 0)));
             else
                 ram_addr_out_1 <= std_logic_vector(unsigned(program_counter) + 1);
                 program_counter <= std_logic_vector(unsigned(program_counter) + 1);
@@ -236,10 +239,10 @@ begin
                 case to_integer(opcode_3) is
                     when STORE =>
                         ram_not_write_en <= '0', '1' after 5 ns;
-                        ram_addr_in <= std_logic_vector("00000" & B_reg_3);
+                        ram_addr_in <= std_logic_vector(B);
                         ram_data_in <= std_logic_vector(A);
                     when LOAD_OPCODE =>
-                        ram_addr_out_2 <= std_logic_vector("00000" & B_reg_3);
+                        ram_addr_out_2 <= std_logic_vector(B);
                         register_write_addr <= A_reg_3;
                         register_data_in <= signed(ram_data_out_2);
                     when CMP =>
