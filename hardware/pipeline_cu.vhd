@@ -38,6 +38,7 @@ architecture Behavioral of Pipeline_Control_Unit is
     signal register_read_addr_B           : unsigned(REGISTER_BITS-1 downto 0) := (others => '0');
     signal register_write_addr          : unsigned(REGISTER_BITS-1 downto 0) := (others => '0');
     signal register_data_in             : signed(DATA_WIDTH-1 downto 0) := (others => '0');
+    signal register_carryout_in         : std_logic;
     signal register_data_out_A_internal   : signed(DATA_WIDTH-1 downto 0) := (others => '0');
     signal register_data_out_B_internal   : signed(DATA_WIDTH-1 downto 0) := (others => '0');
     
@@ -67,6 +68,7 @@ architecture Behavioral of Pipeline_Control_Unit is
             read_addr_B: in unsigned(REGISTER_BITS-1 downto 0);
             write_addr: in unsigned(REGISTER_BITS-1 downto 0);
             data_in  : in signed(DATA_WIDTH-1 downto 0);
+            carryout_in: in std_logic;
             data_out_A : out signed(DATA_WIDTH-1 downto 0);
             data_out_B : out signed(DATA_WIDTH-1 downto 0)
         );
@@ -111,6 +113,7 @@ begin
             read_addr_B => register_read_addr_B,
             write_addr => register_write_addr,
             data_in => register_data_in,
+            carryout_in => register_carryout_in,
             data_out_A => register_data_out_A_internal,
             data_out_B => register_data_out_B_internal
         );
@@ -253,6 +256,7 @@ begin
                     when others =>
                         register_write_addr <= A_reg_3;
                         register_data_in <= res_internal;
+                        register_carryout_in <= carry_internal;
                 end case;
             end if;
         end if;

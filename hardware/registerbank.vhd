@@ -14,6 +14,7 @@ entity RegisterBank is
         read_addr_B  : in  unsigned(REGISTER_BITS-1 downto 0);
         write_addr : in  unsigned(REGISTER_BITS-1 downto 0);
         data_in    : in  signed(DATA_WIDTH-1 downto 0);
+        carryout_in : in  std_logic;
         data_out_A   : out signed(DATA_WIDTH-1 downto 0);
         data_out_B   : out signed(DATA_WIDTH-1 downto 0)
     );
@@ -22,7 +23,7 @@ end RegisterBank;
 architecture Behavioral of RegisterBank is
     type reg_array is array (0 to 2**REGISTER_BITS) of signed(DATA_WIDTH-1 downto 0);
     signal registers : reg_array := (
-        14 => "1111111111111111",  -- Max value for 16-bit (2^16 -1) (= 65535)
+        14 => "0000000000000000",  -- Carry flag
         15 => "0111010100110000",  -- Amount of numbers we have to check corresponds to 30000
         16 => "0000001111101000",  -- Starting address of numbering sequence for algorithm (= 1000)
         17 => "0111010100110010",  -- Stores max number (in this case 30002)
@@ -46,15 +47,20 @@ begin
         if rising_edge(clk) then
             if rst = '1' then
                 registers <= (
-                    14 => "1111111111111111",  -- Max value for 16-bit (2^16 -1) (= 65535)
-                    15 => "0111010100110000",  -- Amount of numbers we have to check corresponds to 30000
-                    16 => "0000001111101000",  -- Starting address of numbering sequence for algorithm (= 1000)
-                    17 => "0111010100110010",  -- Stores max number (in this case 30002)
-                    18 => "0111100100010111",  -- Stores last valid address (in this case 30999)
+                    14 => "0000000000000000",
+                    15 => "0111010100110000",
+                    16 => "0000001111101000",
+                    17 => "0111010100110010",
+                    18 => "0111100100010111",
                     others => (others => '0')
                 );
             else
                 registers(to_integer(write_addr)) <= data_in;
+                if carryout_in = '1' then
+                    registers(14) <= "0000000000000001";
+                else
+                    registers(14) <= "0000000000000000";
+                end if;
             end if;
         end if;
     end process;
