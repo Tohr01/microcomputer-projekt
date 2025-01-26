@@ -21,7 +21,14 @@ end RegisterBank;
 
 architecture Behavioral of RegisterBank is
     type reg_array is array (0 to 2**REGISTER_BITS) of signed(DATA_WIDTH-1 downto 0);
-    signal registers : reg_array := (others => (others => '0'));
+    signal registers : reg_array := (
+        14 => "1111111111111111",  -- Max value for 16-bit (2^16 -1) (= 65535)
+        15 => "0111010100110000",  -- Amount of numbers we have to check corresponds to 30000
+        16 => "0000001111101000",  -- Starting address of numbering sequence for algorithm (= 1000)
+        17 => "0111010100110010",  -- Stores max number (in this case 30002)
+        18 => "0111100100010111",  -- Stores last valid address (in this case 30999)
+        others => (others => '0')
+    );
 
 begin
     -- Read
@@ -38,7 +45,14 @@ begin
     begin
         if rising_edge(clk) then
             if rst = '1' then
-                registers <= (others => (others => '0'));
+                registers <= (
+                    14 => "1111111111111111",  -- Max value for 16-bit (2^16 -1) (= 65535)
+                    15 => "0111010100110000",  -- Amount of numbers we have to check corresponds to 30000
+                    16 => "0000001111101000",  -- Starting address of numbering sequence for algorithm (= 1000)
+                    17 => "0111010100110010",  -- Stores max number (in this case 30002)
+                    18 => "0111100100010111",  -- Stores last valid address (in this case 30999)
+                    others => (others => '0')
+                );
             else
                 registers(to_integer(write_addr)) <= data_in;
             end if;
