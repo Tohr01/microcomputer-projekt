@@ -14,7 +14,7 @@ package opcodes_constants is
     constant MOV : integer := 9;
     constant MOVI : integer := 10;
     constant STORE : integer := 11;
-    constant LOAD : integer := 12;
+    constant LOAD_OPCODE : integer := 12;
     constant CALL : integer := 13;
     constant RET : integer := 14;
     constant CMP : integer := 15;

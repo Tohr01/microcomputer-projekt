@@ -3,10 +3,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.NUMERIC_STD.all;
 use work.opcodes_constants.ALL;
 
-entity ALU is 
-    generic (
-        constant N: natural := 1
-    );   
+entity ALU is  
     port(
         -- inputs:
         A, B        : in signed(15 downto 0); -- Operants
@@ -38,6 +35,9 @@ begin
             when ADD => 
                 res <= A + B; 
                 carryout_alu <= overflow_detection_addition(A, B);
+            when ADDI =>
+                res <= A + Imm; 
+                carryout_alu <= overflow_detection_addition(A, Imm);
             when SUBI => 
                 res <= A - Imm;    
                 carryout_alu <= overflow_detection_addition(A, IMM);
@@ -58,8 +58,20 @@ begin
                 else
                     res <= x"0000"; 
                 end if;
-            when LSH => res <= signed(unsigned(A) sll N); 
-            when RSH => res <= signed(unsigned(A) srl N); 
+            when LSH => 
+                res <= signed(unsigned(A) sll to_integer(unsigned(Imm)));
+                if (A(15 downto 16-to_integer(Imm)) /= (A(15 downto 16-to_integer(Imm))'range => '0')) then
+                    carryout_alu <= '1';
+                else
+                    carryout_alu <= '0';
+                end if;
+            when RSH => 
+                res <= signed(unsigned(A) srl to_integer(unsigned(Imm)));
+                -- if (A(to_integer(Imm)-1 downto 0) /= (A(15 downto 16-to_integer(Imm))'range => '0')) then
+                --     carryout_alu <= '1';
+                -- else 
+                --     carryout_alu <= '0';
+                -- end if;
             when others => res <= x"0000"; -- Default case
         end case;
     end process;

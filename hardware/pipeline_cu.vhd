@@ -12,22 +12,24 @@ entity PIPELINE_CONTROL_UNIT is
 end PIPELINE_CONTROL_UNIT;
 
 architecture Behavioral of Pipeline_Control_Unit is
-    constant REGISTER_BITS : natural := 3;
+    constant REGISTER_BITS : natural := 5;
     constant DATA_WIDTH     : natural := 16;
-    constant RAM_ADDR_WIDTH : natural := 10;
+    constant RAM_ADDR_WIDTH : natural := 16;
     constant RAM_DATA_WIDTH : natural := 16;
+    constant CMP_REG_ADDR   : unsigned := "00000";
 
     signal program_counter: std_logic_vector(RAM_ADDR_WIDTH-1 downto 0) := (others => '0');
+    signal jump_program_counter_0, jump_program_counter_1: std_logic_vector(9 downto 0) := (others => 'U');
 
     signal instruction: unsigned(15 downto 0) := (others => '0');
-    signal opcode_0, opcode_1, opcode_2, opcode_3   : unsigned(4 downto 0);
-    signal A_reg_0, A_reg_1, A_reg_2, A_reg_3 : unsigned(2 downto 0) := (others => '0');
-    signal B_reg_0    : unsigned(2 downto 0);
-    signal immediate_0, immediate_1, immediate_2: unsigned(4 downto 0);
+    signal opcode_0, opcode_1, opcode_2, opcode_3   : unsigned(5 downto 0);
+    signal A_reg_0, A_reg_1, A_reg_2, A_reg_3 : unsigned(REGISTER_BITS-1 downto 0) := (others => '0');
+    signal B_reg_0, B_reg_1, B_reg_2, B_reg_3    : unsigned(REGISTER_BITS-1 downto 0);
 
     -- ALU signals
     signal A, B: signed(15 downto 0);
     signal I: integer;
+    signal Imm: signed(15 downto 0);
     signal res_internal: signed(15 downto 0);
     signal carry_internal: std_logic;
 
@@ -36,23 +38,23 @@ architecture Behavioral of Pipeline_Control_Unit is
     signal register_read_addr_B           : unsigned(REGISTER_BITS-1 downto 0) := (others => '0');
     signal register_write_addr          : unsigned(REGISTER_BITS-1 downto 0) := (others => '0');
     signal register_data_in             : signed(DATA_WIDTH-1 downto 0) := (others => '0');
+    signal register_carryout_in         : std_logic;
     signal register_data_out_A_internal   : signed(DATA_WIDTH-1 downto 0) := (others => '0');
     signal register_data_out_B_internal   : signed(DATA_WIDTH-1 downto 0) := (others => '0');
     
     -- RAM signals
     signal ram_not_write_en        : std_logic := '1';
-    signal ram_io_addr         : std_logic_vector(RAM_ADDR_WIDTH-1 downto 0) := (others => '0');
+    signal ram_addr_in         : std_logic_vector(RAM_ADDR_WIDTH-1 downto 0) := (others => '0');
+    signal ram_addr_out_1, ram_addr_out_2        : std_logic_vector(RAM_ADDR_WIDTH-1 downto 0) := (others => '0');
     signal ram_data_in         : std_logic_vector(RAM_DATA_WIDTH-1 downto 0) := (others => '0');
-    signal ram_data_out        : std_logic_vector(RAM_DATA_WIDTH-1 downto 0) := (others => '0');
+    signal ram_data_out_1, ram_data_out_2        : std_logic_vector(RAM_DATA_WIDTH-1 downto 0) := (others => '0');
     signal ram_file_io         : fileIoT := none;
 
     component ALU is
-        generic (
-            constant N: natural := 1
-        );
         port(
             A, B        : in signed(15 downto 0);
             I           : in integer;
+            Imm         : in signed(15 downto 0);
             out_alu     : out signed(15 downto 0);
             carryout_alu: out std_logic
         );
@@ -66,6 +68,7 @@ architecture Behavioral of Pipeline_Control_Unit is
             read_addr_B: in unsigned(REGISTER_BITS-1 downto 0);
             write_addr: in unsigned(REGISTER_BITS-1 downto 0);
             data_in  : in signed(DATA_WIDTH-1 downto 0);
+            carryout_in: in std_logic;
             data_out_A : out signed(DATA_WIDTH-1 downto 0);
             data_out_B : out signed(DATA_WIDTH-1 downto 0)
         );
@@ -80,9 +83,12 @@ architecture Behavioral of Pipeline_Control_Unit is
         port (
             -- nCS: in std_logic;
             nWE: in std_logic;
-            addr: in std_logic_vector(RAM_ADDR_WIDTH-1 downto 0);
+            addrI: in std_logic_vector(RAM_ADDR_WIDTH-1 downto 0);
+            addrO_1: in std_logic_vector(RAM_ADDR_WIDTH-1 downto 0);
+            addrO_2: in std_logic_vector(RAM_ADDR_WIDTH-1 downto 0);
             dataI: in std_logic_vector(RAM_DATA_WIDTH-1 downto 0);
-            dataO: out std_logic_vector(RAM_DATA_WIDTH-1 downto 0);
+            dataO_1: out std_logic_vector(RAM_DATA_WIDTH-1 downto 0);
+            dataO_2: out std_logic_vector(RAM_DATA_WIDTH-1 downto 0);
             fileIO: in fileIoT
         );
     end component;
@@ -90,13 +96,11 @@ architecture Behavioral of Pipeline_Control_Unit is
 begin
 
     U1: ALU
-        generic map (
-            N => 1
-        )
         port map (
             A => A,
             B => B,
             I => I,
+            Imm => Imm,
             out_alu => res_internal,
             carryout_alu => carry_internal
         );
@@ -109,6 +113,7 @@ begin
             read_addr_B => register_read_addr_B,
             write_addr => register_write_addr,
             data_in => register_data_in,
+            carryout_in => register_carryout_in,
             data_out_A => register_data_out_A_internal,
             data_out_B => register_data_out_B_internal
         );
@@ -121,9 +126,12 @@ begin
         )
         port map (
             nWE => ram_not_write_en,
-            addr => ram_io_addr,
+            addrI => ram_addr_in,
+            addrO_1 => ram_addr_out_1,
+            addrO_2 => ram_addr_out_2,
             dataI => ram_data_in,
-            dataO => ram_data_out,
+            dataO_1 => ram_data_out_1,
+            dataO_2 => ram_data_out_2,
             fileIO => ram_file_io
         );
 
@@ -133,12 +141,22 @@ begin
         if rst = '1' then
             ram_file_io <= load, none after 5 ns;
             program_counter <= (others => '0');
-            ram_io_addr <= (others => '0');
+            ram_addr_out_1 <= (others => '0');
         elsif rising_edge(clk) then
-            ram_not_write_en <= '1';
-            instruction <= unsigned(ram_data_out);
-            ram_io_addr <= std_logic_vector(unsigned(program_counter) + 1);
-            program_counter <= std_logic_vector(unsigned(program_counter) + 1);
+            instruction <= unsigned(ram_data_out_1);
+            if to_integer(unsigned(instruction(15 downto 10))) = 19 then
+                report "dump";
+                ram_file_io <= dump, none after 5 ns;
+            elsif not is_x(jump_program_counter_1) then
+                ram_addr_out_1 <= "000000" & jump_program_counter_1;
+                program_counter <= "000000" & jump_program_counter_1;
+            elsif not is_x(std_logic_vector(instruction)) and to_integer(unsigned(instruction(15 downto 10))) = JMP then
+                ram_addr_out_1 <= std_logic_vector(unsigned("000000" & instruction(9 downto 0)));
+                program_counter <=  std_logic_vector(unsigned("000000" & instruction(9 downto 0)));
+            else
+                ram_addr_out_1 <= std_logic_vector(unsigned(program_counter) + 1);
+                program_counter <= std_logic_vector(unsigned(program_counter) + 1);
+            end if;
         end if;
     end process;
 
@@ -146,10 +164,9 @@ begin
     ID_Stage: process(clk)
     begin
         if rising_edge(clk) then
-            opcode_0 <= unsigned(instruction(15 downto 11));
-            A_reg_0 <= unsigned(instruction(10 downto 8));
-            B_reg_0 <= unsigned(instruction(7 downto 5));
-            immediate_0 <= unsigned(instruction(4 downto 0));
+            opcode_0 <= unsigned(instruction(15 downto 10));
+            A_reg_0  <= unsigned(instruction(9 downto 5));
+            B_reg_0  <= unsigned(instruction(4 downto 0));
         end if;
     end process;
 
@@ -159,13 +176,17 @@ begin
         if rising_edge(clk) then
             opcode_1 <= opcode_0;
             A_reg_1 <= A_reg_0;
-            immediate_1 <= immediate_0;
-            if is_x(std_logic_vector(opcode_0)) or opcode_0 /= NOP_OP then -- don't do anything if opcode is NOP
-                if not is_x(std_logic_vector(A_reg_0)) then
-                    register_read_addr_A <= A_reg_0;
-                end if;
-                if not is_x(std_logic_vector(B_reg_0)) then
-                    register_read_addr_B <= B_reg_0;
+            B_reg_1 <= B_reg_0;
+            if not is_x(std_logic_vector(opcode_0)) then
+                if opcode_0 /= NOP and opcode_0 /= JE and opcode_0 /= JG and opcode_0 /= JMP then 
+                    if not is_x(std_logic_vector(A_reg_0)) then
+                        register_read_addr_A <= A_reg_0;
+                    end if;
+                    if not is_x(std_logic_vector(B_reg_0)) then
+                        register_read_addr_B <= B_reg_0;
+                    end if;
+                elsif opcode_0 = JE or opcode_0 = JG then
+                    register_read_addr_A <= CMP_REG_ADDR;
                 end if;
             end if;
         end if;
@@ -177,7 +198,7 @@ begin
         if rising_edge(clk) then
             opcode_2 <= opcode_1;
             A_reg_2 <= A_reg_1;
-            immediate_2 <= immediate_1;
+            B_reg_2 <= B_reg_1;
         end if;
     end process;
 
@@ -187,17 +208,27 @@ begin
         if rising_edge(clk) then
             opcode_3 <= opcode_2;
             A_reg_3 <= A_reg_2;
-            A <= register_data_out_A_internal;
-            if is_x(std_logic_vector(opcode_2)) or opcode_2 /= NOP_OP then
-                if not is_x(std_logic_vector(opcode_2)) then
-                    if opcode_2 = ADD_IMMEDIATE_OP then
-                        B <= signed("00000000000" & immediate_2);
-                        I <= ADD_OP;
-                    else
+            B_reg_3 <= B_reg_2;
+            if not is_x(std_logic_vector(opcode_2)) then
+                case to_integer(opcode_2) is
+                    when NOP =>
+                        jump_program_counter_0 <= (others => 'U');
+                    when JE =>
+                        if register_data_out_A_internal = x"0001" then
+                            jump_program_counter_0 <= std_logic_vector(A_reg_2 & B_reg_2);
+                        end if;
+                    when JG =>
+                        if register_data_out_A_internal = x"0002" then
+                            jump_program_counter_0 <= std_logic_vector(A_reg_2 & B_reg_2);
+                        end if;
+                    when LOAD_OPCODE =>
+                        ram_addr_out_2 <= std_logic_vector(register_data_out_B_internal);
+                    when others =>
+                        A <= register_data_out_A_internal;
                         B <= register_data_out_B_internal;
+                        Imm <= signed("00000000000" & B_reg_2);
                         I <= to_integer(opcode_2);
-                    end if;
-                end if;
+                end case;
             end if;
         end if;
     end process;
@@ -206,13 +237,32 @@ begin
     RS_Stage: process(clk)
     begin
         if rising_edge(clk) then
-            if is_x(std_logic_vector(opcode_3)) or opcode_3 /= NOP_OP then
-                if not is_x(std_logic_vector(A_reg_3)) then
-                    register_write_addr <= A_reg_3;
-                end if;
-                register_data_in <= res_internal;
+            if not is_x(std_logic_vector(opcode_3)) then
+                case to_integer(opcode_3) is
+                    when STORE =>
+                        ram_not_write_en <= '0', '1' after 5 ns;
+                        ram_addr_in <= std_logic_vector(B);
+                        ram_data_in <= std_logic_vector(A);
+                    when LOAD_OPCODE =>
+                        register_write_addr <= A_reg_3;
+                        register_data_in <= signed(ram_data_out_2);
+                    when CMP =>
+                        register_write_addr <= CMP_REG_ADDR;
+                        register_data_in <= res_internal;
+                    when NOP =>
+                        jump_program_counter_1 <= jump_program_counter_0;
+                    when JE =>
+                        jump_program_counter_1 <= jump_program_counter_0;
+                    when JG =>
+                        jump_program_counter_1 <= jump_program_counter_0;
+                    when JMP =>
+                        -- do nothing
+                    when others =>
+                        register_write_addr <= A_reg_3;
+                        register_data_in <= res_internal;
+                        register_carryout_in <= carry_internal;
+                end case;
             end if;
         end if;
     end process;
-
 end Behavioral;

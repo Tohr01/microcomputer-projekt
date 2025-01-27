@@ -28,7 +28,7 @@ begin
     -- Taktprozess
     clk_process: process
     begin
-        while now < 1 ms loop
+        while now < 100 ms loop
             clk <= '0';
             wait for 10 ns;
             clk <= '1';
