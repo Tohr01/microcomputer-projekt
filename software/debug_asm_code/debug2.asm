@@ -93,10 +93,6 @@ SIEVE_OF_ERATOSTHENES:
     #       or striked_number, mask (strike)
 
     mov $CADDR, $C2 # Store starting address in CADDR register
-    
-    nop
-    nop
-    nop
 
     SIEVE_LOOP:
         load $CNUM, $CADDR # Load number at $CADDR address from RAM in current num register [WFO]
@@ -306,7 +302,7 @@ SIEVE_OF_ERATOSTHENES:
 
         STRIKE_MULTIPLES:
             store $0, $SADDR   # Strike number / address
-            add $SADDR, $CNUM  # Next multiple address
+            add $SADDR, $CNUM # Next multiple address
             
             nop
             nop
@@ -366,10 +362,4 @@ SIEVE_OF_ERATOSTHENES:
 
 
 NOOP_LOOP:
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
     dump_mem

@@ -2,6 +2,7 @@ from asm_config.registers import REGISTER_BANK
 from asm_config.patterns import get_register_name, get_immediate_num
 from line import Line
 from logger import logger
+from pprint import pprint
 class Simulator:
     # NOTE: CMP register: 0 is equal, 1 is > and 2 is <
 
@@ -64,11 +65,27 @@ class Simulator:
         elif instruction_name == 'add':
             rl = get_register_name(line.parameters[0])
             rr = get_register_name(line.parameters[1])
-            self.registers_bank[rl] += self.registers_bank[rr]
+            result = self.registers_bank[rl] + self.registers_bank[rr]
+            if result > 0xFFFF:  # Check for 16-bit overflow
+                logger.warning(f'Overflow detected in register {rl} + {rr}. Cutting overflow')
+                self.registers_bank['OVERFLOW'] = 1
+                result &= 0xFFFF  # Keep only the lower 16 bits
+            else:
+                self.registers_bank['OVERFLOW'] = 0
+            self.registers_bank[rl] = result
         elif instruction_name == 'addi':
             rl = get_register_name(line.parameters[0])
             ir = get_immediate_num(line.parameters[1], line.instruction.instruction_format_lengths[1])
-            self.registers_bank[rl] += ir
+            result = self.registers_bank[rl] + ir
+            self.dump_mem()
+            print(f'{self.registers_bank[rl]} + {ir} = {result}')
+            if result > 0xFFFF:  # Check for 16-bit overflow
+                logger.warning(f'Overflow detected in register {rl} + {ir}. Cutting overflow')
+                self.registers_bank['OVERFLOW'] = 1
+                result &= 0xFFFF  # Keep only the lower 16 bits
+            else:
+                self.registers_bank['OVERFLOW'] = 0
+            self.registers_bank[rl] = result
         elif instruction_name == 'subi':
             rl = get_register_name(line.parameters[0])
             ir = get_immediate_num(line.parameters[1], line.instruction.instruction_format_lengths[1])
@@ -83,7 +100,14 @@ class Simulator:
         elif instruction_name == 'lsh':
             rl = get_register_name(line.parameters[0])
             ir = get_immediate_num(line.parameters[1], line.instruction.instruction_format_lengths[1])
-            self.registers_bank[rl] <<= ir
+            result = self.registers_bank[rl] << ir
+            if result > 0xFFFF:  # Check for 16-bit overflow
+                logger.warning(f'Overflow detected in register {rl} << {ir}. Cutting overflow')
+                self.registers_bank['OVERFLOW'] = 1
+                result &= 0xFFFF  # Keep only the lower 16 bits
+            else:
+                self.registers_bank['OVERFLOW'] = 0
+            self.registers_bank[rl] = result
         elif instruction_name == 'rsh':
             rl = get_register_name(line.parameters[0])
             ir = get_immediate_num(line.parameters[1], line.instruction.instruction_format_lengths[1])
@@ -144,12 +168,11 @@ class Simulator:
 
     def cut_overflows_in_reg_bank(self):
         for reg_key, reg_content in self.registers_bank.items():
-            reg_content_bin = format(reg_content, 'b')
-            if len(reg_content_bin) > 16:
+            if reg_content > 0xFFFF:
                 logger.warning(f'Overflow detected in register {reg_key}. Cutting overflow')
-                logger.debug(f'Old value: {reg_content} = {format(reg_content, 'b')}')
-                new_value = int(reg_content_bin[-16:], 2)
-                logger.debug(f'New value: {new_value} = {format(new_value, 'b')}')
+                logger.debug(f'Old value: {reg_content} = {format(reg_content, "b")}')
+                new_value = reg_content & 0xFFFF
+                logger.debug(f'New value: {new_value} = {format(new_value, "b")}')
                 self.registers_bank[reg_key] = new_value
 
     def dump_mem(self):

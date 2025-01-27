@@ -1,0 +1,23 @@
+0 0010101001100000 ; [movi $0,0] COMMENT: CONSTANT: Stores number zero
+1 0010101010000001 ; [movi $1,1] COMMENT: CONSTANT: Stores number one
+2 0010101101100000 ; [movi $R0,0] COMMENT: Iterator
+3 0010101110000010 ; [movi $R1,2] COMMENT: Starting number [RS]
+4 0010011110110000 ; [mov $R2,$C2] COMMENT: Starting address [EX]
+5 0000000000000000 ; [nop ]
+6 0011111101101111 ; [cmp $R0,$C1] COMMENT: Compare iterator with max amount of numbers
+7 0000000000000000 ; [nop ]
+8 0000000000000000 ; [nop ]
+9 0000000000000000 ; [nop ]
+10 0100100000010110 ; [je 22] COMMENT:  ;;; Line jumps to NO
+11 0000000000000000 ; [nop ]
+12 0000000000000000 ; [nop ]
+13 0000000000000000 ; [nop ]
+14 0000000000000000 ; [nop ]
+15 0000000000000000 ; [nop ]
+16 0000000000000000 ; [nop ]
+17 0010111110011101 ; [store $R1,$R2] COMMENT: Store number
+18 0000111101100001 ; [addi $R0,1] COMMENT: Increment iterator
+19 0000111110000001 ; [addi $R1,1] COMMENT: Increment number to write
+20 0000111110100001 ; [addi $R2,1] COMMENT: Increment address to write to
+21 0100000000000110 ; [jmp 6] COMMENT:  ;;; Line jumps to FILL_RAM_LOOP
+22 0000010000000000 ; [hlt ]

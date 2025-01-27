@@ -8,7 +8,7 @@ class InstructionSet:
         'add': Instruction('add', '000010', ['r', 'r'], [5, 5]),
         'addi': Instruction('addi', '000011', ['r', 'i'], [5, 5]),
         'subi': Instruction('subi', '000100', ['r', 'i'], [5, 5]),
-        'incr': Instruction('incr', '000101', ['r'], [5]),
+        # 'incr': Instruction('incr', '000101', ['r'], [5]), depreacted
         'andi': Instruction('andi', '000110', ['r', 'i'], [5, 5]),
         'lsh': Instruction('lsh', '000111', ['r', 'i'], [5, 5]),
         'rsh': Instruction('rsh', '001000', ['r', 'i'], [5, 5]),
@@ -21,7 +21,8 @@ class InstructionSet:
         'cmp': Instruction('cmp', '001111', ['r', 'r'], [5, 5]),
         'jmp': Instruction('jmp', '010000', ['i'], [10], True),
         'jg': Instruction('jg', '010001', ['i'], [10], True),
-        'je': Instruction('je', '010010', ['i'], [10], True)
+        'je': Instruction('je', '010010', ['i'], [10], True),
+        'dump_mem': Instruction('dump_mem', '010011', [], []),
     }
 
     @staticmethod

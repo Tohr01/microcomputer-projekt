@@ -1,22 +1,21 @@
 class REGISTER_BANK:
     REGISTERS = {
-        "MAX_VALUE": 14,
+        "OVERFLOW": 14,
         "C1": 15,
         "C2": 16,
         "C3": 17,
         "C4": 18,
         "0": 19,
         "1": 20,
-        "OVERFLOW": 21,
-        "CADDR": 22,
-        "CNUM": 23,
-        "MULLEFT": 24,
-        "MULRIGHT": 25,
-        "MULRES": 26,
-        "SADDR": 27,
-        "R0": 28,
-        "R1": 29,
-        "R2": 30
+        "CADDR": 21,
+        "CNUM": 22,
+        "MULLEFT": 23,
+        "MULRIGHT": 24,
+        "MULRES": 25,
+        "SADDR": 26,
+        "R0": 27,
+        "R1": 28,
+        "R2": 29
     }
 
     @classmethod

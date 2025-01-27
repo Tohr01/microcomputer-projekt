@@ -1,15 +1,26 @@
+# TODO HANDLE CONSTANTS TO BIG
+# TODO @HARDWARE handle constants registers
 ##### CONSTANTS #####
 movi $0, 0      # CONSTANT: Stores number zero
 
 movi $1, 1      # CONSTANT: Stores number one
 
-# $C1 CONSTANT: Amount of numbers we have to check corresponds to 30000
+movi $C1, 29
+lsh $C1, 5
+addi $C1, 9
+lsh $C1, 5
+addi $C1, 16    # CONSTANT: Amount of numbers we have to check corresponds to 30000
 
-# $C2 CONSTANT: Starting address of numbering sequence for algorithm (= 1000)
+movi $C2, 31
+lsh $C2, 5
+addi $C2, 8     # CONSTANT: Starting address of numbering sequence for algorithm (= 1000)
 
-# $C3 CONSTANT: Stores max number (calculated by numbers to write + 1)
+mov $C3, $C1
+addi $C3, 1     # CONSTANT: Stores max number (calculated by numbers to write + 1)
 
-# $C4 CONSTANT: Stores last valid address calculated by (numbers to write) + (starting address) - 1
+mov $C4, $C1
+add $C4, $C2
+subi $C4, 1     # CONSTANT: Stores last valid address calculated by (numbers to write) + (starting address) - 1
 
 ### END CONSTANTS ###
 
@@ -33,37 +44,24 @@ nop
 
 FILL_RAM_LOOP:
     cmp $R0, $C1 # Compare iterator with max amount of numbers
-    
     nop 
     nop 
     nop 
-
     je SIEVE_OF_ERATOSTHENES # If iterator equal to max amount of numbers return
-
     nop 
     nop 
     nop 
-    nop 
-    nop 
-    nop 
-
     store $R1, $R2 # Store number
-    
-    # Needs nop???
 
-    addi $R0, 1 # Increment iterator
-    addi $R1, 1 # Increment number to write 
-    addi $R2, 1 # Increment address to write to
+    incr $R0 # Increment iterator # [WFO]
+    incr $R1 # Increment number to write # [RS]
+    incr $R2 # Increment address to write to [EX]
 
-    jmp FILL_RAM_LOOP
+    jmp FILL_RAM_LOOP # [WFO]
 
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
 
+
+# TODO Handle end of program
 
 SIEVE_OF_ERATOSTHENES:
     # current_address = $C2
@@ -72,7 +70,7 @@ SIEVE_OF_ERATOSTHENES:
     #   square = current_number * current_number
     # Check for overflow
     # cmp $OVERFLOW, $1
-    # je NOOP_LOOP 
+    # je OVERFLOW_HANDLING 
 
     #   is_prime = current_number == 0
     #   if is_prime != 0 (current_number is prime)
@@ -93,33 +91,15 @@ SIEVE_OF_ERATOSTHENES:
     #       or striked_number, mask (strike)
 
     mov $CADDR, $C2 # Store starting address in CADDR register
-    
-    nop
-    nop
-    nop
+
 
     SIEVE_LOOP:
         load $CNUM, $CADDR # Load number at $CADDR address from RAM in current num register [WFO]
         
-        nop
-        nop
-        nop
-        
         # If $CNUM is 0 => not prime
         cmp $CNUM, $0
-        
-        nop
-        nop
-        nop
 
         je SIEVE_LOOP_NEXT_ITER
-
-        nop
-        nop
-        nop
-        nop
-        nop
-        nop
 
         ##### MULTIPLY #####
         # Requires MULLEFT and MULRIGHT register to be set to multiplicand and multiplier respectively
@@ -127,138 +107,41 @@ SIEVE_OF_ERATOSTHENES:
         # TODO HANDLE overflowed
         
         # Calculate square
-        mov $MULLEFT, $CNUM    
+        mov $MULLEFT, $CNUM
         mov $MULRIGHT, $CNUM 
         movi $MULRES, 0          # Set result to 0
 
-        nop
-        nop
-
         MULTIPLY_LOOP:
             cmp $MULRIGHT, $0    # Compare multiplier with 0
-            
-            nop
-            nop
-            nop
 
             je MULTIPLY_EXIT     # Exit if finished
 
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-
             mov $R1, $MULRIGHT   # Copy data from MULRIGHT to R1
-            
-            nop
-            nop
-            nop
-            
             andi $R1, 1          # Check if MULRIGHT is odd
-            
-            nop
-            nop
-            nop
-            
             cmp $R1, $1          # Compare to 1 (odd check)
-            
-            nop
-            nop
-            nop
 
             je MULTIPLY_ADD_TO_RESULT # If odd, add left to result
 
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-
             MULTIPLY_SHIFT:
-                rsh $MULRIGHT, 1 # $MULRIGHT = $MULRIGHT >> 1
-                
-                nop
-                nop
-                nop
-
-                cmp $MULRIGHT, $0 # Check if multiplicand is 0
-
-                nop
-                nop
-                nop
-
-                je MULTIPLY_EXIT
-
-                nop
-                nop
-                nop
-                nop
-                nop
-                nop
-               
                 lsh $MULLEFT, 1  # $MULLEFT = $MULLEFT << 1
-
-                nop
-                nop
-                nop
+                rsh $MULRIGHT, 1 # $MULRIGHT = $MULRIGHT >> 1
 
                 # Check for overflow during shift
                 cmp $OVERFLOW, $1
+                je OVERFLOW_HANDLING # OVERFLOW register == 1
 
-                nop
-                nop
-                nop
-
-                je NOOP_LOOP # OVERFLOW register == 1
-
-                nop
-                nop
-                nop
-                nop
-                nop
-                nop
-
-                jmp MULTIPLY_LOOP    
-                nop
-                nop
-                nop
-                nop
-                nop
-                nop
+                jmp MULTIPLY_LOOP
 
             MULTIPLY_ADD_TO_RESULT:
                 add $MULRES, $MULLEFT # Add left to result
-                
-                nop
-                nop
-                nop
-
                 # Check for overflow during addition
                 cmp $OVERFLOW, $1
-                
-                nop
-                nop
-                nop
-
-                je NOOP_LOOP # If MULRES exceeds max value, set overflow
-                
-                nop
-                nop
-                nop
-                nop
-                nop
-                nop
+                je OVERFLOW_HANDLING # If MULRES exceeds max value, set overflow
 
                 jmp MULTIPLY_SHIFT
-                nop
-                nop
-                nop
-                nop
-                nop
-                nop
+
+            MULTIPLY_OVERFLOW:
+                jmp MULTIPLY_EXIT
 
         ### END MULTIPLY ###
 
@@ -266,110 +149,43 @@ SIEVE_OF_ERATOSTHENES:
         MULTIPLY_EXIT:
             # $MULRES now contains square number (or overflowed num)
             cmp $MULRES, $C3
-            
-            nop
-            nop
-            nop
-
             # If square > $C3 finished
             jg NOOP_LOOP
-            
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-
+            # HANDLE OVERFLOW HERE Check sth like overflow register
 
         # Location of square in memory is equal to Startaddress - 2 + square
         mov $SADDR, $C2
-        
-        nop
-        nop
-        nop
-
         subi $SADDR, 2
-        
-        nop
-        nop
-        nop
-        
         add $SADDR, $MULRES
 
-        nop
-        nop
-        nop
 
         # Strike address is now at memory address of square number
         # !!! Potential out of bounds?
 
         STRIKE_MULTIPLES:
             store $0, $SADDR   # Strike number / address
-            add $SADDR, $CNUM  # Next multiple address
-            
-            nop
-            nop
-            nop
+            add $SADDR, $CNUM # Next multiple address
 
             cmp $OVERFLOW, $1 # Check for overflow if saddr + cnum >= 2^16
-            
-            nop
-            nop
-            nop
-
             je SIEVE_LOOP_NEXT_ITER # Handle address out of bounds due to overflow
 
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
-
             cmp $SADDR, $C4         # Check if stike address > last valid address
-
-            nop
-            nop
-            nop
-
             jg SIEVE_LOOP_NEXT_ITER 
-            
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
 
             jmp STRIKE_MULTIPLES
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
 
         
         SIEVE_LOOP_NEXT_ITER:
-            addi $CADDR, 1
-            nop
-            nop
+            incr $CADDR
             jmp SIEVE_LOOP
-            
-            nop
-            nop
-            nop
-            nop
-            nop
-            nop
 
 
 NOOP_LOOP:
     nop
-    nop
-    nop
-    nop
-    nop
-    nop
-    dump_mem
+    hlt
+    jmp NOOP_LOOP
+          
+
+OVERFLOW_HANDLING:
+    # Terminate Program 
+    jmp NOOP_LOOP

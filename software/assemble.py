@@ -205,7 +205,7 @@ if __name__ == '__main__':
     simulator_args = {
         'pc_init': 0,
         'memory_init': {},
-        'register_init': {},
+        'register_init': {'C1': 10, 'C2': 1000, 'C3': 11, 'C4': 1009},
         'prompt_debug': args.prompt_debug
     }
 
