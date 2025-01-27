@@ -1,0 +1,9 @@
+v 3
+file . ".\hardware\alu_testbench.vhd" "20241212131852.000" "20241212142231.742":
+  entity tb_alu at 1( 0) + 0 on 14;
+  architecture behavior of tb_alu at 9( 140) + 0 on 15;
+file . ".\hardware\opcodes_constants.vhd" "20241205160108.000" "20241212142223.628":
+  package opcodes_constants at 1( 0) + 0 on 11;
+file . ".\hardware\alu.vhd" "20241205160108.000" "20241212142229.261":
+  entity alu at 1( 0) + 0 on 12;
+  architecture behavioral of alu at 19( 461) + 0 on 13;
