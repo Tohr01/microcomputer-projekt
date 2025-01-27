@@ -221,6 +221,8 @@ begin
                         if register_data_out_A_internal = x"0002" then
                             jump_program_counter_0 <= std_logic_vector(A_reg_2 & B_reg_2);
                         end if;
+                    when LOAD_OPCODE =>
+                        ram_addr_out_2 <= std_logic_vector(register_data_out_B_internal);
                     when others =>
                         A <= register_data_out_A_internal;
                         B <= register_data_out_B_internal;
@@ -242,7 +244,6 @@ begin
                         ram_addr_in <= std_logic_vector(B);
                         ram_data_in <= std_logic_vector(A);
                     when LOAD_OPCODE =>
-                        ram_addr_out_2 <= std_logic_vector(B);
                         register_write_addr <= A_reg_3;
                         register_data_in <= signed(ram_data_out_2);
                     when CMP =>
