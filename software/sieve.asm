@@ -124,7 +124,6 @@ SIEVE_OF_ERATOSTHENES:
         ##### MULTIPLY #####
         # Requires MULLEFT and MULRIGHT register to be set to multiplicand and multiplier respectively
         # Writes to MULLEFT, MULRIGHT, MULRES, R1, R2 registers
-        # TODO HANDLE overflowed
         
         # Calculate square
         mov $MULLEFT, $CNUM    
@@ -302,7 +301,6 @@ SIEVE_OF_ERATOSTHENES:
         nop
 
         # Strike address is now at memory address of square number
-        # !!! Potential out of bounds?
 
         STRIKE_MULTIPLES:
             store $0, $SADDR   # Strike number / address
