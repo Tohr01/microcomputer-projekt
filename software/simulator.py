@@ -2,7 +2,6 @@ from asm_config.registers import REGISTER_BANK
 from asm_config.patterns import get_register_name, get_immediate_num
 from line import Line
 from logger import logger
-from pprint import pprint
 class Simulator:
     # NOTE: CMP register: 0 is equal, 1 is > and 2 is <
 
@@ -78,7 +77,6 @@ class Simulator:
             ir = get_immediate_num(line.parameters[1], line.instruction.instruction_format_lengths[1])
             result = self.registers_bank[rl] + ir
             self.dump_mem()
-            print(f'{self.registers_bank[rl]} + {ir} = {result}')
             if result > 0xFFFF:  # Check for 16-bit overflow
                 logger.warning(f'Overflow detected in register {rl} + {ir}. Cutting overflow')
                 self.registers_bank['OVERFLOW'] = 1
@@ -90,9 +88,6 @@ class Simulator:
             rl = get_register_name(line.parameters[0])
             ir = get_immediate_num(line.parameters[1], line.instruction.instruction_format_lengths[1])
             self.registers_bank[rl] -= ir
-        elif instruction_name == 'incr':
-            rl = get_register_name(line.parameters[0])
-            self.registers_bank[rl] += 1
         elif instruction_name == 'andi':
             rl = get_register_name(line.parameters[0])
             ir = get_immediate_num(line.parameters[1], line.instruction.instruction_format_lengths[1])
@@ -160,6 +155,8 @@ class Simulator:
                 logger.debug(f'Jumping (jump equal) to memory address {ir}')
                 self.pc = ir
                 return False
+        elif instruction_name == 'dump_mem':
+            self.dump_mem()
         else:
             raise ValueError(f'Instruction {instruction_name} not implemented')
 
@@ -179,7 +176,8 @@ class Simulator:
         mem_csv_handle = open('memory_dump.csv', 'w')
         mem_csv_handle.write('Address,Value\n')
         for address, value in self.memory.items():
-            mem_csv_handle.write(f'{address},{value}\n')
+            str_value = self._escape_seperator_symbols(str(value))
+            mem_csv_handle.write(f'{address},{str_value}\n')
         mem_csv_handle.close()
 
     def dump_registers(self):
@@ -188,3 +186,7 @@ class Simulator:
         for reg_name, reg_content in self.registers_bank.items():
             reg_csv_handle.write(f'{reg_name},{reg_content}\n')
         reg_csv_handle.close()
+
+    @classmethod
+    def _escape_seperator_symbols(cls, string: str) -> str:
+        return string.replace(',', '",')

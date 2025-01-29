@@ -15,30 +15,24 @@ def assemble(filepath: str, enable_debug: Optional[bool] = False, include_commen
     """
     Assembles an assembly language file into binary instructions.
 
-    Args:
-        filepath (str): The path to the assembly file to be assembled.
-        enable_debug (Optional[bool]): If True, enables debug logging and writes intermediate files for debugging. Defaults to False.
-        include_comment (Optional[bool]): If True, includes comments in the binary output. Defaults to False.
-        simulate (Optional[bool]): If True, runs a simulation of the assembled code. Defaults to False.
+    1. Read the assembly file.
+    2. Strip whitespace from each line.
+    3. Remove empty lines.
+    4. Remove lines that contain only comments.
+    5. Separate instructions and inline comments.
+    6. Parse lines into `Line` objects.
+    7. Identify and record jump target locations.
+    8. Replace jump target names with their corresponding indices.
+    9. Optionally run a simulation of the assembled code.
+    10. Compile instructions into binary format.
+    11. Write the binary instructions to a file.
 
-    Returns:
-        None
-
-    The function performs the following steps:
-    1. Reads the assembly file.
-    2. Strips whitespace from lines.
-    3. Removes empty lines.
-    4. Removes comment-only lines.
-    5. Writes the cleaned assembly to a debug file if debugging is enabled.
-    6. Separates inline comments from instructions.
-    7. Parses the lines into Line objects.
-    8. Writes the parsed lines to a debug file if debugging is enabled.
-    9. Parses jump target locations.
-    10. Replaces jump target names with indices.
-    11. Writes the parsed lines with jump target indices to a debug file if debugging is enabled.
-    12. Runs a simulation if requested.
-    13. Compiles the instructions to binary.
-    14. Writes the binary instructions to a file.
+    :param filepath (str): The path to the assembly file to be compiled to binary.
+    :param enable_debug (Optional[bool]): If True, enables debug logging and writes intermediate files for debugging. Defaults to False.
+    :param include_comment (Optional[bool]): If True, includes comments in the binary output. Defaults to False.
+    :param simulate (Optional[bool]): If True, runs a simulation of the assembled code. Defaults to False.
+    :param simulator_args (dict): Arguments to be passed to the simulator if simulation is enabled. Defaults to an empty dictionary.
+   
     """
     file_handle = open(filepath, 'r')
     raw_asm = file_handle.read()
@@ -172,7 +166,7 @@ def replace_jump_target_names_with_indices(lines: list[Line], jump_target_indice
             line.parameters[0] = str(jump_target_indices[jump_target_name])
             if line.comment is None:
                 line.comment = ''
-            line.comment = f' ;;; Line jumps to {jump_target_name}'
+            line.comment = f' --- Line jumps to {jump_target_name}'
     return lines
 
 
@@ -205,7 +199,7 @@ if __name__ == '__main__':
     simulator_args = {
         'pc_init': 0,
         'memory_init': {},
-        'register_init': {'C1': 10, 'C2': 1000, 'C3': 11, 'C4': 1009},
+        'register_init': {'C1': 1000, 'C2': 1000, 'C3': 1001, 'C4': 1999},
         'prompt_debug': args.prompt_debug
     }
 
