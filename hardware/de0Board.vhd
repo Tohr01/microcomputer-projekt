@@ -98,17 +98,15 @@ port (	clk50		: in	std_logic;		-- 50 MHz external clock
 --	gpio2		: inout	std_logic_vector(12 downto 0);
 --	gpio2In		: in	std_logic_vector( 2 downto 0));
 
-	gpio0(1)(15 downto 0)	: in	std_logic;	-- 
-	gpio0(2)(15 downto 0)	: out	std_logic);	-- crossed Rx	= gpio1(8)
+	gpio0(1)	: in	std_logic(15 downto 0);	-- 
+	gpio0(2)	: out	std_logic)(15 downto 0);	-- crossed Rx	= gpio1(8)
 end entity de0Board;
 
 
 -- architecture	----------------------------------------------------------------
 --------------------------------------------------------------------------------
 architecture wrapper of de0Board is
-
-
-gpio0(0) <= 	
+	
   component fifo64 is
   port(	aclr		: in  std_logic;
 	clock		: in  std_logic ;
