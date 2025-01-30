@@ -98,8 +98,8 @@ port (	clk50		: in	std_logic;		-- 50 MHz external clock
 --	gpio2		: inout	std_logic_vector(12 downto 0);
 --	gpio2In		: in	std_logic_vector( 2 downto 0));
 
-	gpio0(1)	: in	std_logic(15 downto 0);		-- Leitung belegt Ja/Nein ggfs. auch BIT Datentyp
-	gpio0(2)	: out	std_logic)(15 downto 0);	-- Datenübertragung über SerTx
+-- gpio0(1)	: in	std_logic(15 downto 0);		-- Leitung belegt Ja/Nein ggfs. auch BIT Datentyp
+--	gpio0(2)	: out	std_logic)(15 downto 0);	-- Datenübertragung über SerTx
 end entity de0Board;
 
 
@@ -213,7 +213,7 @@ begin
 		baudRate	=> baudG)
   port map    (	clk		=> clk50,
 		rstN		=> key(1),
-		rx		=> rx,		--gpio1(9),	-- crossed Tx
+		rx		=> gpio0(0),		--gpio1(9),	-- crossed Tx
 		byte		=> byteRx,
 		byteEn		=> byteRxEn);
 
@@ -225,7 +225,7 @@ begin
 		byte		=> byteTx,
 		byteReq		=> byteTxReq,
 		byteAck		=> byteTxAck,
-		tx		=> txLoc);	--gpio1(8));	-- crossed Rx
+		tx		=> gpio0(1);		-- crossed Rx --Datenleitung von FPGA zu Arduino (8 Bit)
 
   ledP: process (clk50, key(1)) is
   begin
