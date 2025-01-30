@@ -49,7 +49,7 @@ while not window_should_close():
         camera.zoom = 1
         camera.target = (0,0)
     mouse_delta = get_mouse_wheel_move()
-    new_zoom = camera.zoom + mouse_delta * 0.1
+    new_zoom = camera.zoom + mouse_delta * 0.05
     if new_zoom <= 0:
         new_zoom = 0.001
     camera.zoom = new_zoom
