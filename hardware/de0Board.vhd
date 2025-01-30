@@ -98,8 +98,8 @@ port (	clk50		: in	std_logic;		-- 50 MHz external clock
 --	gpio2		: inout	std_logic_vector(12 downto 0);
 --	gpio2In		: in	std_logic_vector( 2 downto 0));
 
-	gpio0(1)	: in	std_logic(15 downto 0);	-- 
-	gpio0(2)	: out	std_logic)(15 downto 0);	-- crossed Rx	= gpio1(8)
+	gpio0(1)	: in	std_logic(15 downto 0);		-- Leitung belegt Ja/Nein ggfs. auch BIT Datentyp
+	gpio0(2)	: out	std_logic)(15 downto 0);	-- Datenübertragung über SerTx
 end entity de0Board;
 
 
@@ -196,7 +196,7 @@ architecture wrapper of de0Board is
 begin
 
 	
-	--hier Prozess für die weitergabe des Werts einfügen
+	-- hier Prozess für die weitergabe des Werts einfügen
 
 	
   -- disable unused hardware
