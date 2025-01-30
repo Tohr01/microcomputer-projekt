@@ -48,8 +48,6 @@ FILL_RAM_LOOP:
     nop 
 
     store $R1, $R2 # Store number
-    
-    # Needs nop???
 
     addi $R0, 1 # Increment iterator
     addi $R1, 1 # Increment number to write 
