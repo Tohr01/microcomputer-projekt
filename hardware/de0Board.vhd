@@ -98,8 +98,8 @@ port (	clk50		: in	std_logic;		-- 50 MHz external clock
 --	gpio2		: inout	std_logic_vector(12 downto 0);
 --	gpio2In		: in	std_logic_vector( 2 downto 0));
 
-	gpio01(15 downto 0)	: in	std_logic;	-- 
-	gpio02(15 downto 0)	: out	std_logic);	-- crossed Rx	= gpio1(8)
+	gpio0(1)(15 downto 0)	: in	std_logic;	-- 
+	gpio0(2)(15 downto 0)	: out	std_logic);	-- crossed Rx	= gpio1(8)
 end entity de0Board;
 
 
