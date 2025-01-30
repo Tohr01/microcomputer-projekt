@@ -21,3 +21,4 @@ Bit-Darstellung 16 Bit Befehl:
 | JG      | `010001`          | `if CMP_REG == 2, program_counter = 10Bit-Immediate; else NOP`                    |✅|
 | JE      | `010010`          | `if CMP_REG == 1, program_counter = 10Bit-Immediate; else NOP`                    |✅|
 | DUMP      | `010011`          | `dump_mem`                  |✅|
+| VIS_LED      | `010100`          | `Visualize 8-Bit-Immediate Number on LED`                  |✅|

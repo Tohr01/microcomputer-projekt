@@ -21,4 +21,6 @@ package opcodes_constants is
     constant JMP : integer := 16;
     constant JG : integer := 17;
     constant JE : integer := 18;
+    constant DUMP : integer := 19;
+    constant VIS_LED : integer := 20;
 end package opcodes_constants;
