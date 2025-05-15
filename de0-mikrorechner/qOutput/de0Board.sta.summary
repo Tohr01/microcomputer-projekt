@@ -1,0 +1,45 @@
+------------------------------------------------------------
+Timing Analyzer Summary
+------------------------------------------------------------
+
+Type  : Setup 'clk50'
+Slack : 8.089
+TNS   : 0.000
+
+Type  : Setup 'slowClk'
+Slack : 11.812
+TNS   : 0.000
+
+Type  : Hold 'slowClk'
+Slack : 0.358
+TNS   : 0.000
+
+Type  : Hold 'clk50'
+Slack : 0.361
+TNS   : 0.000
+
+Type  : Recovery 'slowClk'
+Slack : 16.454
+TNS   : 0.000
+
+Type  : Recovery 'clk50'
+Slack : 16.723
+TNS   : 0.000
+
+Type  : Removal 'clk50'
+Slack : 2.708
+TNS   : 0.000
+
+Type  : Removal 'slowClk'
+Slack : 2.789
+TNS   : 0.000
+
+Type  : Minimum Pulse Width 'clk50'
+Slack : 9.487
+TNS   : 0.000
+
+Type  : Minimum Pulse Width 'slowClk'
+Slack : 999.715
+TNS   : 0.000
+
+------------------------------------------------------------

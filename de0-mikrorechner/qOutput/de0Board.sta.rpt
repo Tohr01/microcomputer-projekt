@@ -1,0 +1,907 @@
+Timing Analyzer report for de0Board
+Thu May 15 17:21:29 2025
+Quartus Prime Version 24.1std.0 Build 1077 03/04/2025 SC Standard Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Timing Analyzer Summary
+  3. Parallel Compilation
+  4. SDC File List
+  5. Clocks
+  6. Fmax Summary
+  7. Timing Closure Recommendations
+  8. Setup Summary
+  9. Hold Summary
+ 10. Recovery Summary
+ 11. Removal Summary
+ 12. Minimum Pulse Width Summary
+ 13. Setup: 'clk50'
+ 14. Setup: 'slowClk'
+ 15. Hold: 'slowClk'
+ 16. Hold: 'clk50'
+ 17. Recovery: 'slowClk'
+ 18. Recovery: 'clk50'
+ 19. Removal: 'clk50'
+ 20. Removal: 'slowClk'
+ 21. Metastability Summary
+ 22. Board Trace Model Assignments
+ 23. Input Transition Times
+ 24. Signal Integrity Metrics (Slow 1200mv 85c Model)
+ 25. Setup Transfers
+ 26. Hold Transfers
+ 27. Recovery Transfers
+ 28. Removal Transfers
+ 29. Report TCCS
+ 30. Report RSKM
+ 31. Unconstrained Paths Summary
+ 32. Clock Status Summary
+ 33. Timing Analyzer Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 2025  Altera Corporation. All rights reserved.
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and any partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, the Altera Quartus Prime License Agreement,
+the Altera IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Altera and sold by Altera or its authorized distributors.  Please
+refer to the Altera Software License Subscription Agreements 
+on the Quartus Prime software download page.
+
+
+
++-------------------------------------------------------------------------------------+
+; Timing Analyzer Summary                                                             ;
++-----------------------+-------------------------------------------------------------+
+; Quartus Prime Version ; Version 24.1std.0 Build 1077 03/04/2025 SC Standard Edition ;
+; Timing Analyzer       ; Legacy Timing Analyzer                                      ;
+; Revision Name         ; de0Board                                                    ;
+; Device Family         ; Cyclone IV E                                                ;
+; Device Name           ; EP4CE22F17C6                                                ;
+; Timing Models         ; Final                                                       ;
+; Delay Model           ; Slow 1200mV 85C Model                                       ;
+; Rise/Fall Delays      ; Enabled                                                     ;
++-----------------------+-------------------------------------------------------------+
+
+
++------------------------------------------+
+; Parallel Compilation                     ;
++----------------------------+-------------+
+; Processors                 ; Number      ;
++----------------------------+-------------+
+; Number detected on machine ; 6           ;
+; Maximum allowed            ; 6           ;
+;                            ;             ;
+; Average used               ; 1.03        ;
+; Maximum used               ; 4           ;
+;                            ;             ;
+; Usage by Processor         ; % Time Used ;
+;     Processor 1            ; 100.0%      ;
+;     Processor 2            ;   1.8%      ;
+;     Processor 3            ;   0.8%      ;
+;     Processor 4            ;   0.4%      ;
++----------------------------+-------------+
+
+
++---------------------------------------------------+
+; SDC File List                                     ;
++---------------+--------+--------------------------+
+; SDC File Path ; Status ; Read at                  ;
++---------------+--------+--------------------------+
+; de0Board.sdc  ; OK     ; Thu May 15 17:21:28 2025 ;
++---------------+--------+--------------------------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Clocks                                                                                                                                                                                  ;
++------------+------+----------+-----------+-------+----------+------------+-----------+-------------+-------+--------+-----------+------------+----------+--------+--------+-------------+
+; Clock Name ; Type ; Period   ; Frequency ; Rise  ; Fall     ; Duty Cycle ; Divide by ; Multiply by ; Phase ; Offset ; Edge List ; Edge Shift ; Inverted ; Master ; Source ; Targets     ;
++------------+------+----------+-----------+-------+----------+------------+-----------+-------------+-------+--------+-----------+------------+----------+--------+--------+-------------+
+; clk50      ; Base ; 20.000   ; 50.0 MHz  ; 0.000 ; 10.000   ;            ;           ;             ;       ;        ;           ;            ;          ;        ;        ; { clk50 }   ;
+; slowClk    ; Base ; 2000.000 ; 0.5 MHz   ; 0.000 ; 1000.000 ;            ;           ;             ;       ;        ;           ;            ;          ;        ;        ; { slowClk } ;
++------------+------+----------+-----------+-------+----------+------------+-----------+-------------+-------+--------+-----------+------------+----------+--------+--------+-------------+
+
+
++-----------------------------------------------------------------------------------------------------------+
+; Fmax Summary                                                                                              ;
++------------+-----------------+------------+---------------------------------------------------------------+
+; Fmax       ; Restricted Fmax ; Clock Name ; Note                                                          ;
++------------+-----------------+------------+---------------------------------------------------------------+
+; 23.4 MHz   ; 23.4 MHz        ; slowClk    ;                                                               ;
+; 383.73 MHz ; 250.0 MHz       ; clk50      ; limit due to minimum period restriction (max I/O toggle rate) ;
++------------+-----------------+------------+---------------------------------------------------------------+
+This panel reports FMAX for every clock in the design, regardless of the user-specified clock periods.  FMAX is only computed for paths where the source and destination registers or ports are driven by the same clock.  Paths of different clocks, including generated clocks, are ignored.  For paths between a clock and its inversion, FMAX is computed as if the rising and falling edges are scaled along with FMAX, such that the duty cycle (in terms of a percentage) is maintained. Altera recommends that you always use clock constraints and other slack reports for sign-off analysis.
+
+
+----------------------------------
+; Timing Closure Recommendations ;
+----------------------------------
+HTML report is unavailable in plain text report export.
+
+
++----------------------------------+
+; Setup Summary                    ;
++---------+--------+---------------+
+; Clock   ; Slack  ; End Point TNS ;
++---------+--------+---------------+
+; clk50   ; 8.089  ; 0.000         ;
+; slowClk ; 11.812 ; 0.000         ;
++---------+--------+---------------+
+
+
++---------------------------------+
+; Hold Summary                    ;
++---------+-------+---------------+
+; Clock   ; Slack ; End Point TNS ;
++---------+-------+---------------+
+; slowClk ; 0.358 ; 0.000         ;
+; clk50   ; 0.361 ; 0.000         ;
++---------+-------+---------------+
+
+
++----------------------------------+
+; Recovery Summary                 ;
++---------+--------+---------------+
+; Clock   ; Slack  ; End Point TNS ;
++---------+--------+---------------+
+; slowClk ; 16.454 ; 0.000         ;
+; clk50   ; 16.723 ; 0.000         ;
++---------+--------+---------------+
+
+
++---------------------------------+
+; Removal Summary                 ;
++---------+-------+---------------+
+; Clock   ; Slack ; End Point TNS ;
++---------+-------+---------------+
+; clk50   ; 2.708 ; 0.000         ;
+; slowClk ; 2.789 ; 0.000         ;
++---------+-------+---------------+
+
+
++-----------------------------------+
+; Minimum Pulse Width Summary       ;
++---------+---------+---------------+
+; Clock   ; Slack   ; End Point TNS ;
++---------+---------+---------------+
+; clk50   ; 9.487   ; 0.000         ;
+; slowClk ; 999.715 ; 0.000         ;
++---------+---------+---------------+
+
+
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Setup: 'clk50'                                                                                                                                                                                                                           ;
++--------+---------------------------------------+-------------------------------------------------------------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; Slack  ; From Node                             ; To Node                                                                                                           ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
++--------+---------------------------------------+-------------------------------------------------------------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; 8.089  ; key[0]                                ; rstN                                                                                                              ; slowClk      ; clk50       ; 20.000       ; 2.080      ; 3.976      ;
+; 14.574 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a43~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.033      ; 5.477      ;
+; 14.574 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a43~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.033      ; 5.477      ;
+; 14.576 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a43~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.038      ; 5.480      ;
+; 14.786 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a44~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.020      ; 5.252      ;
+; 14.786 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a44~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.020      ; 5.252      ;
+; 14.788 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a44~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.025      ; 5.255      ;
+; 14.789 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a39~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.023      ; 5.252      ;
+; 14.789 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a39~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.023      ; 5.252      ;
+; 14.791 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a39~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.028      ; 5.255      ;
+; 14.849 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a34~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.033      ; 5.202      ;
+; 14.849 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a34~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.033      ; 5.202      ;
+; 14.851 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a34~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.038      ; 5.205      ;
+; 14.856 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a13~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.014      ; 5.176      ;
+; 14.986 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a43~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.033      ; 5.065      ;
+; 14.986 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a43~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.033      ; 5.065      ;
+; 14.987 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a63~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.020      ; 5.051      ;
+; 14.987 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a63~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.020      ; 5.051      ;
+; 14.988 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a43~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.038      ; 5.068      ;
+; 14.989 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a63~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.025      ; 5.054      ;
+; 15.079 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a13~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.014      ; 4.953      ;
+; 15.103 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a38~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.025      ; 4.940      ;
+; 15.103 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a38~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.025      ; 4.940      ;
+; 15.105 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a38~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.030      ; 4.943      ;
+; 15.122 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a14~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.007      ; 4.903      ;
+; 15.142 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a47~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.023      ; 4.899      ;
+; 15.142 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a47~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.023      ; 4.899      ;
+; 15.144 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a47~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.028      ; 4.902      ;
+; 15.151 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a3~porta_we_reg        ; slowClk      ; clk50       ; 20.000       ; 0.023      ; 4.890      ;
+; 15.174 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a9~porta_we_reg        ; slowClk      ; clk50       ; 20.000       ; 0.007      ; 4.851      ;
+; 15.198 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a44~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.020      ; 4.840      ;
+; 15.198 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a44~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.020      ; 4.840      ;
+; 15.200 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a44~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.025      ; 4.843      ;
+; 15.201 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a39~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.023      ; 4.840      ;
+; 15.201 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a39~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.023      ; 4.840      ;
+; 15.203 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a39~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.028      ; 4.843      ;
+; 15.245 ; PIPELINE_CONTROL_UNIT:procI|dnWE      ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a13~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.014      ; 4.787      ;
+; 15.255 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a50~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.031      ; 4.794      ;
+; 15.255 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a50~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.031      ; 4.794      ;
+; 15.257 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a50~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.036      ; 4.797      ;
+; 15.261 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a34~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.033      ; 4.790      ;
+; 15.261 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a34~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.033      ; 4.790      ;
+; 15.263 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a34~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.038      ; 4.793      ;
+; 15.345 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a14~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.007      ; 4.680      ;
+; 15.353 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a63~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.020      ; 4.685      ;
+; 15.353 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a63~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.020      ; 4.685      ;
+; 15.355 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a63~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.025      ; 4.688      ;
+; 15.366 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a16~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.019      ; 4.671      ;
+; 15.366 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a16~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.019      ; 4.671      ;
+; 15.368 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a16~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.024      ; 4.674      ;
+; 15.372 ; PIPELINE_CONTROL_UNIT:procI|dAddr[4]  ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a4~porta_address_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.023      ; 4.669      ;
+; 15.374 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a3~porta_we_reg        ; slowClk      ; clk50       ; 20.000       ; 0.023      ; 4.667      ;
+; 15.397 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a58~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.010      ; 4.631      ;
+; 15.397 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a58~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.010      ; 4.631      ;
+; 15.397 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a9~porta_we_reg        ; slowClk      ; clk50       ; 20.000       ; 0.007      ; 4.628      ;
+; 15.399 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a58~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.015      ; 4.634      ;
+; 15.407 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a10~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.009      ; 4.620      ;
+; 15.437 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a8~porta_we_reg        ; slowClk      ; clk50       ; 20.000       ; 0.014      ; 4.595      ;
+; 15.511 ; PIPELINE_CONTROL_UNIT:procI|dnWE      ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a14~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.007      ; 4.514      ;
+; 15.512 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a1~porta_we_reg        ; slowClk      ; clk50       ; 20.000       ; 0.019      ; 4.525      ;
+; 15.512 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a1~porta_address_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.019      ; 4.525      ;
+; 15.514 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a1~porta_datain_reg0   ; slowClk      ; clk50       ; 20.000       ; 0.024      ; 4.528      ;
+; 15.514 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a36~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.023      ; 4.527      ;
+; 15.514 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a36~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.023      ; 4.527      ;
+; 15.515 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a38~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.025      ; 4.528      ;
+; 15.515 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a38~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.025      ; 4.528      ;
+; 15.516 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a36~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.028      ; 4.530      ;
+; 15.517 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a38~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.030      ; 4.531      ;
+; 15.540 ; PIPELINE_CONTROL_UNIT:procI|dnWE      ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a3~porta_we_reg        ; slowClk      ; clk50       ; 20.000       ; 0.023      ; 4.501      ;
+; 15.554 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a47~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.023      ; 4.487      ;
+; 15.554 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a47~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.023      ; 4.487      ;
+; 15.556 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a47~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.028      ; 4.490      ;
+; 15.563 ; PIPELINE_CONTROL_UNIT:procI|dnWE      ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a9~porta_we_reg        ; slowClk      ; clk50       ; 20.000       ; 0.007      ; 4.462      ;
+; 15.567 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a13~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.014      ; 4.465      ;
+; 15.569 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a13~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.019      ; 4.468      ;
+; 15.581 ; PIPELINE_CONTROL_UNIT:procI|dAddr[11] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a62~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.009      ; 4.446      ;
+; 15.621 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a50~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.031      ; 4.428      ;
+; 15.621 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a50~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.031      ; 4.428      ;
+; 15.622 ; PIPELINE_CONTROL_UNIT:procI|dAddr[11] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a29~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.012      ; 4.408      ;
+; 15.623 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a50~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.036      ; 4.431      ;
+; 15.628 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a56~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.022      ; 4.412      ;
+; 15.628 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a56~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.022      ; 4.412      ;
+; 15.630 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a56~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.027      ; 4.415      ;
+; 15.630 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a10~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.009      ; 4.397      ;
+; 15.632 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a59~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.018      ; 4.404      ;
+; 15.642 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a25~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.013      ; 4.389      ;
+; 15.642 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a25~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.013      ; 4.389      ;
+; 15.644 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a25~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.018      ; 4.392      ;
+; 15.645 ; PIPELINE_CONTROL_UNIT:procI|dAddr[11] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a58~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.010      ; 4.383      ;
+; 15.656 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a55~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.024      ; 4.386      ;
+; 15.656 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a55~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.024      ; 4.386      ;
+; 15.658 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a19~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.015      ; 4.375      ;
+; 15.658 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a19~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.015      ; 4.375      ;
+; 15.658 ; PIPELINE_CONTROL_UNIT:procI|dAddr[4]  ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a0~porta_address_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.022      ; 4.382      ;
+; 15.658 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a55~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.029      ; 4.389      ;
+; 15.660 ; PIPELINE_CONTROL_UNIT:procI|dAddr[14] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a19~porta_datain_reg0  ; slowClk      ; clk50       ; 20.000       ; 0.020      ; 4.378      ;
+; 15.660 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a8~porta_we_reg        ; slowClk      ; clk50       ; 20.000       ; 0.014      ; 4.372      ;
+; 15.663 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a16~porta_we_reg       ; slowClk      ; clk50       ; 20.000       ; 0.019      ; 4.374      ;
+; 15.663 ; PIPELINE_CONTROL_UNIT:procI|dAddr[13] ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a16~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.019      ; 4.374      ;
+; 15.664 ; PIPELINE_CONTROL_UNIT:procI|dAddr[4]  ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a48~porta_address_reg0 ; slowClk      ; clk50       ; 20.000       ; 0.021      ; 4.375      ;
++--------+---------------------------------------+-------------------------------------------------------------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+
+
++------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Setup: 'slowClk'                                                                                                                                                                                                                                           ;
++--------+-------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; Slack  ; From Node                                                                                                   ; To Node                                                       ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
++--------+-------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; 11.812 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a3~porta_we_reg  ; PIPELINE_CONTROL_UNIT:procI|register_data_in[3]               ; clk50        ; slowClk     ; 20.000       ; -0.227     ; 7.946      ;
+; 12.613 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a19~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[3]               ; clk50        ; slowClk     ; 20.000       ; -0.219     ; 7.153      ;
+; 12.692 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a23~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[7]               ; clk50        ; slowClk     ; 20.000       ; -0.232     ; 7.061      ;
+; 12.739 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a34~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[2]               ; clk50        ; slowClk     ; 20.000       ; -0.237     ; 7.009      ;
+; 12.750 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a15~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[15]              ; clk50        ; slowClk     ; 20.000       ; -0.223     ; 7.012      ;
+; 12.919 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a47~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[15]              ; clk50        ; slowClk     ; 20.000       ; -0.219     ; 6.847      ;
+; 12.948 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a36~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[4]               ; clk50        ; slowClk     ; 20.000       ; -0.227     ; 6.810      ;
+; 13.021 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a20~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[4]               ; clk50        ; slowClk     ; 20.000       ; -0.225     ; 6.739      ;
+; 13.220 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[23][5]  ; clk50        ; slowClk     ; 20.000       ; 0.088      ; 6.853      ;
+; 13.222 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[31][5]  ; clk50        ; slowClk     ; 20.000       ; 0.088      ; 6.851      ;
+; 13.247 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a56~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[8]               ; clk50        ; slowClk     ; 20.000       ; -0.227     ; 6.511      ;
+; 13.407 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a18~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[2]               ; clk50        ; slowClk     ; 20.000       ; -0.239     ; 6.339      ;
+; 13.450 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a52~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[4]               ; clk50        ; slowClk     ; 20.000       ; -0.236     ; 6.299      ;
+; 13.547 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a0~porta_we_reg  ; PIPELINE_CONTROL_UNIT:procI|register_data_in[0]               ; clk50        ; slowClk     ; 20.000       ; -0.218     ; 6.220      ;
+; 13.590 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a4~porta_we_reg  ; PIPELINE_CONTROL_UNIT:procI|register_data_in[4]               ; clk50        ; slowClk     ; 20.000       ; -0.227     ; 6.168      ;
+; 13.610 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a37~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[5]               ; clk50        ; slowClk     ; 20.000       ; -0.228     ; 6.147      ;
+; 13.631 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a22~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[6]               ; clk50        ; slowClk     ; 20.000       ; -0.239     ; 6.115      ;
+; 13.643 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[21][0]  ; clk50        ; slowClk     ; 20.000       ; 0.089      ; 6.431      ;
+; 13.648 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[20][0]  ; clk50        ; slowClk     ; 20.000       ; 0.089      ; 6.426      ;
+; 13.648 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[15][0]  ; clk50        ; slowClk     ; 20.000       ; 0.089      ; 6.426      ;
+; 13.658 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a55~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[7]               ; clk50        ; slowClk     ; 20.000       ; -0.232     ; 6.095      ;
+; 13.678 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[13][5]  ; clk50        ; slowClk     ; 20.000       ; 0.090      ; 6.397      ;
+; 13.679 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[12][5]  ; clk50        ; slowClk     ; 20.000       ; 0.090      ; 6.396      ;
+; 13.693 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a35~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[3]               ; clk50        ; slowClk     ; 20.000       ; -0.223     ; 6.069      ;
+; 13.704 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a8~porta_we_reg  ; PIPELINE_CONTROL_UNIT:procI|register_data_in[8]               ; clk50        ; slowClk     ; 20.000       ; -0.219     ; 6.062      ;
+; 13.721 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a16~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[0]               ; clk50        ; slowClk     ; 20.000       ; -0.215     ; 6.049      ;
+; 13.730 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[4][4]   ; clk50        ; slowClk     ; 20.000       ; 0.085      ; 6.340      ;
+; 13.731 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[6][4]   ; clk50        ; slowClk     ; 20.000       ; 0.085      ; 6.339      ;
+; 13.743 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a43~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[11]              ; clk50        ; slowClk     ; 20.000       ; -0.240     ; 6.002      ;
+; 13.769 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a2~porta_we_reg  ; PIPELINE_CONTROL_UNIT:procI|register_data_in[2]               ; clk50        ; slowClk     ; 20.000       ; -0.216     ; 6.000      ;
+; 13.778 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a1~porta_we_reg  ; PIPELINE_CONTROL_UNIT:procI|register_data_in[1]               ; clk50        ; slowClk     ; 20.000       ; -0.216     ; 5.991      ;
+; 13.782 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a39~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[7]               ; clk50        ; slowClk     ; 20.000       ; -0.230     ; 5.973      ;
+; 13.791 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a11~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[11]              ; clk50        ; slowClk     ; 20.000       ; -0.236     ; 5.958      ;
+; 13.813 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[0][0]   ; clk50        ; slowClk     ; 20.000       ; 0.082      ; 6.254      ;
+; 13.813 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[2][0]   ; clk50        ; slowClk     ; 20.000       ; 0.082      ; 6.254      ;
+; 13.828 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a30~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[14]              ; clk50        ; slowClk     ; 20.000       ; -0.209     ; 5.948      ;
+; 13.867 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[27][0]  ; clk50        ; slowClk     ; 20.000       ; 0.079      ; 6.197      ;
+; 13.867 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[19][0]  ; clk50        ; slowClk     ; 20.000       ; 0.079      ; 6.197      ;
+; 13.900 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a50~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[2]               ; clk50        ; slowClk     ; 20.000       ; -0.236     ; 5.849      ;
+; 13.903 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[2][4]   ; clk50        ; slowClk     ; 20.000       ; 0.086      ; 6.168      ;
+; 13.919 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a28~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[12]              ; clk50        ; slowClk     ; 20.000       ; -0.222     ; 5.844      ;
+; 13.925 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[26][5]  ; clk50        ; slowClk     ; 20.000       ; 0.088      ; 6.148      ;
+; 13.927 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[18][5]  ; clk50        ; slowClk     ; 20.000       ; 0.088      ; 6.146      ;
+; 13.932 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a33~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[1]               ; clk50        ; slowClk     ; 20.000       ; -0.218     ; 5.835      ;
+; 13.934 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[9][15]  ; clk50        ; slowClk     ; 20.000       ; 0.078      ; 6.129      ;
+; 13.956 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[12][4]  ; clk50        ; slowClk     ; 20.000       ; 0.078      ; 6.107      ;
+; 13.956 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[13][4]  ; clk50        ; slowClk     ; 20.000       ; 0.078      ; 6.107      ;
+; 13.967 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a27~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[11]              ; clk50        ; slowClk     ; 20.000       ; -0.233     ; 5.785      ;
+; 13.968 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[8][4]   ; clk50        ; slowClk     ; 20.000       ; 0.078      ; 6.095      ;
+; 13.968 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[10][4]  ; clk50        ; slowClk     ; 20.000       ; 0.078      ; 6.095      ;
+; 14.005 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[5][14]  ; clk50        ; slowClk     ; 20.000       ; 0.085      ; 6.065      ;
+; 14.006 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[7][14]  ; clk50        ; slowClk     ; 20.000       ; 0.085      ; 6.064      ;
+; 14.013 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[7][5]   ; clk50        ; slowClk     ; 20.000       ; 0.086      ; 6.058      ;
+; 14.022 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[20][14] ; clk50        ; slowClk     ; 20.000       ; 0.081      ; 6.044      ;
+; 14.023 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[16][14] ; clk50        ; slowClk     ; 20.000       ; 0.081      ; 6.043      ;
+; 14.035 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a29~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[13]              ; clk50        ; slowClk     ; 20.000       ; -0.217     ; 5.733      ;
+; 14.048 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a51~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[3]               ; clk50        ; slowClk     ; 20.000       ; -0.219     ; 5.718      ;
+; 14.063 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a62~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[14]              ; clk50        ; slowClk     ; 20.000       ; -0.213     ; 5.709      ;
+; 14.135 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[26][12] ; clk50        ; slowClk     ; 20.000       ; 0.086      ; 5.936      ;
+; 14.146 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[11][4]  ; clk50        ; slowClk     ; 20.000       ; 0.078      ; 5.917      ;
+; 14.146 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a31~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[15]              ; clk50        ; slowClk     ; 20.000       ; -0.214     ; 5.625      ;
+; 14.147 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[9][4]   ; clk50        ; slowClk     ; 20.000       ; 0.078      ; 5.916      ;
+; 14.168 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[28][0]  ; clk50        ; slowClk     ; 20.000       ; 0.077      ; 5.894      ;
+; 14.168 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[31][4]  ; clk50        ; slowClk     ; 20.000       ; 0.080      ; 5.897      ;
+; 14.169 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[24][0]  ; clk50        ; slowClk     ; 20.000       ; 0.077      ; 5.893      ;
+; 14.169 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[23][4]  ; clk50        ; slowClk     ; 20.000       ; 0.080      ; 5.896      ;
+; 14.170 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[29][0]  ; clk50        ; slowClk     ; 20.000       ; 0.089      ; 5.904      ;
+; 14.173 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a57~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[9]               ; clk50        ; slowClk     ; 20.000       ; -0.217     ; 5.595      ;
+; 14.174 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[25][0]  ; clk50        ; slowClk     ; 20.000       ; 0.089      ; 5.900      ;
+; 14.177 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a59~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[11]              ; clk50        ; slowClk     ; 20.000       ; -0.225     ; 5.583      ;
+; 14.179 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[16][0]  ; clk50        ; slowClk     ; 20.000       ; 0.081      ; 5.887      ;
+; 14.182 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[29][5]  ; clk50        ; slowClk     ; 20.000       ; 0.086      ; 5.889      ;
+; 14.182 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[25][5]  ; clk50        ; slowClk     ; 20.000       ; 0.086      ; 5.889      ;
+; 14.185 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[27][5]  ; clk50        ; slowClk     ; 20.000       ; 0.088      ; 5.888      ;
+; 14.185 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[19][5]  ; clk50        ; slowClk     ; 20.000       ; 0.088      ; 5.888      ;
+; 14.189 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[30][5]  ; clk50        ; slowClk     ; 20.000       ; 0.088      ; 5.884      ;
+; 14.189 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[22][5]  ; clk50        ; slowClk     ; 20.000       ; 0.088      ; 5.884      ;
+; 14.198 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a9~porta_we_reg  ; PIPELINE_CONTROL_UNIT:procI|register_data_in[9]               ; clk50        ; slowClk     ; 20.000       ; -0.211     ; 5.576      ;
+; 14.200 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[9][5]   ; clk50        ; slowClk     ; 20.000       ; 0.078      ; 5.863      ;
+; 14.203 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[7][0]   ; clk50        ; slowClk     ; 20.000       ; 0.085      ; 5.867      ;
+; 14.203 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[5][0]   ; clk50        ; slowClk     ; 20.000       ; 0.085      ; 5.867      ;
+; 14.207 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[21][5]  ; clk50        ; slowClk     ; 20.000       ; 0.085      ; 5.863      ;
+; 14.208 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[4][5]   ; clk50        ; slowClk     ; 20.000       ; 0.089      ; 5.866      ;
+; 14.208 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a41~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[9]               ; clk50        ; slowClk     ; 20.000       ; -0.226     ; 5.551      ;
+; 14.210 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[5][5]   ; clk50        ; slowClk     ; 20.000       ; 0.089      ; 5.864      ;
+; 14.217 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a17~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[1]               ; clk50        ; slowClk     ; 20.000       ; -0.212     ; 5.556      ;
+; 14.228 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[1][4]   ; clk50        ; slowClk     ; 20.000       ; 0.090      ; 5.847      ;
+; 14.230 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a7~porta_we_reg  ; PIPELINE_CONTROL_UNIT:procI|register_data_in[7]               ; clk50        ; slowClk     ; 20.000       ; -0.219     ; 5.536      ;
+; 14.234 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[8][0]   ; clk50        ; slowClk     ; 20.000       ; 0.081      ; 5.832      ;
+; 14.234 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[9][0]   ; clk50        ; slowClk     ; 20.000       ; 0.081      ; 5.832      ;
+; 14.246 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[27][12] ; clk50        ; slowClk     ; 20.000       ; 0.088      ; 5.827      ;
+; 14.248 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[19][12] ; clk50        ; slowClk     ; 20.000       ; 0.088      ; 5.825      ;
+; 14.271 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[6][14]  ; clk50        ; slowClk     ; 20.000       ; 0.085      ; 5.799      ;
+; 14.274 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[4][14]  ; clk50        ; slowClk     ; 20.000       ; 0.085      ; 5.796      ;
+; 14.281 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[26][0]  ; clk50        ; slowClk     ; 20.000       ; 0.088      ; 5.792      ;
+; 14.307 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[17][5]  ; clk50        ; slowClk     ; 20.000       ; 0.085      ; 5.763      ;
+; 14.319 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a45~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[13]              ; clk50        ; slowClk     ; 20.000       ; -0.219     ; 5.447      ;
+; 14.331 ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a25~porta_we_reg ; PIPELINE_CONTROL_UNIT:procI|register_data_in[9]               ; clk50        ; slowClk     ; 20.000       ; -0.218     ; 5.436      ;
+; 14.336 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[9][14]  ; clk50        ; slowClk     ; 20.000       ; 0.081      ; 5.730      ;
+; 14.338 ; rstN                                                                                                        ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|registers[8][14]  ; clk50        ; slowClk     ; 20.000       ; 0.081      ; 5.728      ;
++--------+-------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Hold: 'slowClk'                                                                                                                                                                                  ;
++-------+------------------------------------------------------------+-------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; Slack ; From Node                                                  ; To Node                                               ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
++-------+------------------------------------------------------------+-------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; 0.358 ; PIPELINE_CONTROL_UNIT:procI|register_carryout_in           ; PIPELINE_CONTROL_UNIT:procI|register_carryout_in      ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.577      ;
+; 0.373 ; PIPELINE_CONTROL_UNIT:procI|A_reg_3[0]                     ; PIPELINE_CONTROL_UNIT:procI|register_write_addr[0]    ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.592      ;
+; 0.373 ; PIPELINE_CONTROL_UNIT:procI|A_reg_1[2]                     ; PIPELINE_CONTROL_UNIT:procI|A_reg_2[2]                ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.592      ;
+; 0.373 ; PIPELINE_CONTROL_UNIT:procI|A_reg_1[1]                     ; PIPELINE_CONTROL_UNIT:procI|A_reg_2[1]                ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.592      ;
+; 0.374 ; PIPELINE_CONTROL_UNIT:procI|A_reg_3[1]                     ; PIPELINE_CONTROL_UNIT:procI|register_write_addr[1]    ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.593      ;
+; 0.375 ; PIPELINE_CONTROL_UNIT:procI|B_reg_1[3]                     ; PIPELINE_CONTROL_UNIT:procI|B_reg_2[3]                ; slowClk      ; slowClk     ; 0.000        ; 0.061      ; 0.593      ;
+; 0.375 ; PIPELINE_CONTROL_UNIT:procI|B_reg_1[0]                     ; PIPELINE_CONTROL_UNIT:procI|B_reg_2[0]                ; slowClk      ; slowClk     ; 0.000        ; 0.061      ; 0.593      ;
+; 0.376 ; PIPELINE_CONTROL_UNIT:procI|B_reg_1[4]                     ; PIPELINE_CONTROL_UNIT:procI|B_reg_2[4]                ; slowClk      ; slowClk     ; 0.000        ; 0.061      ; 0.594      ;
+; 0.379 ; PIPELINE_CONTROL_UNIT:procI|opcode_0[5]                    ; PIPELINE_CONTROL_UNIT:procI|opcode_1[5]               ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.598      ;
+; 0.381 ; PIPELINE_CONTROL_UNIT:procI|A_reg_0[3]                     ; PIPELINE_CONTROL_UNIT:procI|register_read_addr_A[3]   ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.600      ;
+; 0.381 ; PIPELINE_CONTROL_UNIT:procI|A_reg_0[0]                     ; PIPELINE_CONTROL_UNIT:procI|register_read_addr_A[0]   ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.600      ;
+; 0.381 ; PIPELINE_CONTROL_UNIT:procI|A_reg_0[3]                     ; PIPELINE_CONTROL_UNIT:procI|A_reg_1[3]                ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.600      ;
+; 0.381 ; PIPELINE_CONTROL_UNIT:procI|A_reg_0[0]                     ; PIPELINE_CONTROL_UNIT:procI|A_reg_1[0]                ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.600      ;
+; 0.382 ; PIPELINE_CONTROL_UNIT:procI|opcode_0[3]                    ; PIPELINE_CONTROL_UNIT:procI|opcode_1[3]               ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.601      ;
+; 0.389 ; PIPELINE_CONTROL_UNIT:procI|opcode_0[1]                    ; PIPELINE_CONTROL_UNIT:procI|opcode_1[1]               ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.608      ;
+; 0.394 ; PIPELINE_CONTROL_UNIT:procI|B_reg_0[3]                     ; PIPELINE_CONTROL_UNIT:procI|B_reg_1[3]                ; slowClk      ; slowClk     ; 0.000        ; 0.061      ; 0.612      ;
+; 0.394 ; PIPELINE_CONTROL_UNIT:procI|A_reg_2[4]                     ; PIPELINE_CONTROL_UNIT:procI|A_reg_3[4]                ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.613      ;
+; 0.395 ; PIPELINE_CONTROL_UNIT:procI|A_reg_2[1]                     ; PIPELINE_CONTROL_UNIT:procI|A_reg_3[1]                ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.614      ;
+; 0.396 ; PIPELINE_CONTROL_UNIT:procI|B_reg_0[1]                     ; PIPELINE_CONTROL_UNIT:procI|B_reg_1[1]                ; slowClk      ; slowClk     ; 0.000        ; 0.061      ; 0.614      ;
+; 0.401 ; PIPELINE_CONTROL_UNIT:procI|B[13]                          ; PIPELINE_CONTROL_UNIT:procI|dAddr[13]                 ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.620      ;
+; 0.401 ; PIPELINE_CONTROL_UNIT:procI|B[11]                          ; PIPELINE_CONTROL_UNIT:procI|dAddr[11]                 ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.620      ;
+; 0.408 ; PIPELINE_CONTROL_UNIT:procI|B[9]                           ; PIPELINE_CONTROL_UNIT:procI|dAddr[9]                  ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.627      ;
+; 0.479 ; PIPELINE_CONTROL_UNIT:procI|B_reg_1[1]                     ; PIPELINE_CONTROL_UNIT:procI|B_reg_2[1]                ; slowClk      ; slowClk     ; 0.000        ; 0.061      ; 0.697      ;
+; 0.497 ; PIPELINE_CONTROL_UNIT:procI|A_reg_0[4]                     ; PIPELINE_CONTROL_UNIT:procI|register_read_addr_A[4]   ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.716      ;
+; 0.499 ; PIPELINE_CONTROL_UNIT:procI|B_reg_0[0]                     ; PIPELINE_CONTROL_UNIT:procI|B_reg_1[0]                ; slowClk      ; slowClk     ; 0.000        ; 0.061      ; 0.717      ;
+; 0.500 ; PIPELINE_CONTROL_UNIT:procI|A_reg_2[0]                     ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_0[5] ; slowClk      ; slowClk     ; 0.000        ; 0.061      ; 0.718      ;
+; 0.501 ; PIPELINE_CONTROL_UNIT:procI|B_reg_0[4]                     ; PIPELINE_CONTROL_UNIT:procI|B_reg_1[4]                ; slowClk      ; slowClk     ; 0.000        ; 0.061      ; 0.719      ;
+; 0.515 ; PIPELINE_CONTROL_UNIT:procI|B[7]                           ; PIPELINE_CONTROL_UNIT:procI|dAddr[7]                  ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.734      ;
+; 0.515 ; PIPELINE_CONTROL_UNIT:procI|opcode_1[3]                    ; PIPELINE_CONTROL_UNIT:procI|opcode_2[3]               ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.734      ;
+; 0.516 ; PIPELINE_CONTROL_UNIT:procI|B_reg_1[2]                     ; PIPELINE_CONTROL_UNIT:procI|B_reg_2[2]                ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.735      ;
+; 0.517 ; PIPELINE_CONTROL_UNIT:procI|B[3]                           ; PIPELINE_CONTROL_UNIT:procI|dAddr[3]                  ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.736      ;
+; 0.519 ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_0[1]      ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_1[1] ; slowClk      ; slowClk     ; 0.000        ; 0.061      ; 0.737      ;
+; 0.519 ; PIPELINE_CONTROL_UNIT:procI|opcode_1[1]                    ; PIPELINE_CONTROL_UNIT:procI|opcode_2[1]               ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.738      ;
+; 0.520 ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_0[4]      ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_1[4] ; slowClk      ; slowClk     ; 0.000        ; 0.061      ; 0.738      ;
+; 0.535 ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_0[6]      ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_1[6] ; slowClk      ; slowClk     ; 0.000        ; 0.061      ; 0.753      ;
+; 0.537 ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_0[8]      ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_1[8] ; slowClk      ; slowClk     ; 0.000        ; 0.061      ; 0.755      ;
+; 0.537 ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_0[0]      ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_1[0] ; slowClk      ; slowClk     ; 0.000        ; 0.061      ; 0.755      ;
+; 0.573 ; PIPELINE_CONTROL_UNIT:procI|B[1]                           ; PIPELINE_CONTROL_UNIT:procI|dAddr[1]                  ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.792      ;
+; 0.577 ; PIPELINE_CONTROL_UNIT:procI|A_reg_2[3]                     ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_0[8] ; slowClk      ; slowClk     ; 0.000        ; 0.061      ; 0.795      ;
+; 0.616 ; PIPELINE_CONTROL_UNIT:procI|A_reg_3[4]                     ; PIPELINE_CONTROL_UNIT:procI|register_write_addr[4]    ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.835      ;
+; 0.625 ; PIPELINE_CONTROL_UNIT:procI|B[5]                           ; PIPELINE_CONTROL_UNIT:procI|dAddr[5]                  ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.844      ;
+; 0.633 ; PIPELINE_CONTROL_UNIT:procI|B[12]                          ; PIPELINE_CONTROL_UNIT:procI|dAddr[12]                 ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.852      ;
+; 0.655 ; PIPELINE_CONTROL_UNIT:procI|opcode_1[2]                    ; PIPELINE_CONTROL_UNIT:procI|opcode_2[2]               ; slowClk      ; slowClk     ; 0.000        ; 0.063      ; 0.875      ;
+; 0.657 ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_0[5]      ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_1[5] ; slowClk      ; slowClk     ; 0.000        ; 0.061      ; 0.875      ;
+; 0.657 ; PIPELINE_CONTROL_UNIT:procI|opcode_0[4]                    ; PIPELINE_CONTROL_UNIT:procI|opcode_1[4]               ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.876      ;
+; 0.660 ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_0[9]      ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_1[9] ; slowClk      ; slowClk     ; 0.000        ; 0.061      ; 0.878      ;
+; 0.667 ; PIPELINE_CONTROL_UNIT:procI|opcode_2[5]                    ; PIPELINE_CONTROL_UNIT:procI|opcode_3[5]               ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.886      ;
+; 0.672 ; PIPELINE_CONTROL_UNIT:procI|register_data_in[15]           ; PIPELINE_CONTROL_UNIT:procI|register_data_in[15]      ; slowClk      ; slowClk     ; 0.000        ; 0.063      ; 0.892      ;
+; 0.675 ; PIPELINE_CONTROL_UNIT:procI|opcode_0[4]                    ; PIPELINE_CONTROL_UNIT:procI|register_read_addr_A[1]   ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.894      ;
+; 0.681 ; PIPELINE_CONTROL_UNIT:procI|A_reg_3[3]                     ; PIPELINE_CONTROL_UNIT:procI|register_write_addr[3]    ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.900      ;
+; 0.683 ; PIPELINE_CONTROL_UNIT:procI|A_reg_1[4]                     ; PIPELINE_CONTROL_UNIT:procI|A_reg_2[4]                ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.902      ;
+; 0.686 ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_0[2]      ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_1[2] ; slowClk      ; slowClk     ; 0.000        ; 0.061      ; 0.904      ;
+; 0.688 ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_0[7]      ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_1[7] ; slowClk      ; slowClk     ; 0.000        ; 0.061      ; 0.906      ;
+; 0.689 ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_0[3]      ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_1[3] ; slowClk      ; slowClk     ; 0.000        ; 0.061      ; 0.907      ;
+; 0.697 ; PIPELINE_CONTROL_UNIT:procI|A[13]                          ; PIPELINE_CONTROL_UNIT:procI|dDataO[13]                ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.916      ;
+; 0.700 ; PIPELINE_CONTROL_UNIT:procI|opcode_0[1]                    ; PIPELINE_CONTROL_UNIT:procI|register_read_addr_A[1]   ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.919      ;
+; 0.725 ; PIPELINE_CONTROL_UNIT:procI|A[14]                          ; PIPELINE_CONTROL_UNIT:procI|dDataO[14]                ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.944      ;
+; 0.735 ; PIPELINE_CONTROL_UNIT:procI|A[0]                           ; PIPELINE_CONTROL_UNIT:procI|dDataO[0]                 ; slowClk      ; slowClk     ; 0.000        ; 0.088      ; 0.980      ;
+; 0.738 ; PIPELINE_CONTROL_UNIT:procI|A[12]                          ; PIPELINE_CONTROL_UNIT:procI|dDataO[12]                ; slowClk      ; slowClk     ; 0.000        ; 0.088      ; 0.983      ;
+; 0.740 ; PIPELINE_CONTROL_UNIT:procI|A[4]                           ; PIPELINE_CONTROL_UNIT:procI|dDataO[4]                 ; slowClk      ; slowClk     ; 0.000        ; 0.088      ; 0.985      ;
+; 0.759 ; PIPELINE_CONTROL_UNIT:procI|A[11]                          ; PIPELINE_CONTROL_UNIT:procI|dDataO[11]                ; slowClk      ; slowClk     ; 0.000        ; 0.088      ; 1.004      ;
+; 0.763 ; PIPELINE_CONTROL_UNIT:procI|B[0]                           ; PIPELINE_CONTROL_UNIT:procI|dAddr[0]                  ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 0.982      ;
+; 0.772 ; PIPELINE_CONTROL_UNIT:procI|B_reg_0[4]                     ; PIPELINE_CONTROL_UNIT:procI|register_read_addr_B[4]   ; slowClk      ; slowClk     ; 0.000        ; 0.064      ; 0.993      ;
+; 0.782 ; PIPELINE_CONTROL_UNIT:procI|A[7]                           ; PIPELINE_CONTROL_UNIT:procI|dDataO[7]                 ; slowClk      ; slowClk     ; 0.000        ; 0.078      ; 1.017      ;
+; 0.784 ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|data_out_B[1]  ; PIPELINE_CONTROL_UNIT:procI|B[1]                      ; slowClk      ; slowClk     ; 0.000        ; 0.079      ; 1.020      ;
+; 0.793 ; PIPELINE_CONTROL_UNIT:procI|register_data_in[1]            ; PIPELINE_CONTROL_UNIT:procI|register_data_in[1]       ; slowClk      ; slowClk     ; 0.000        ; 0.063      ; 1.013      ;
+; 0.798 ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|data_out_B[12] ; PIPELINE_CONTROL_UNIT:procI|dAddr[12]                 ; slowClk      ; slowClk     ; 0.000        ; 0.079      ; 1.034      ;
+; 0.803 ; PIPELINE_CONTROL_UNIT:procI|opcode_0[2]                    ; PIPELINE_CONTROL_UNIT:procI|opcode_1[2]               ; slowClk      ; slowClk     ; 0.000        ; 0.079      ; 1.039      ;
+; 0.803 ; PIPELINE_CONTROL_UNIT:procI|opcode_1[4]                    ; PIPELINE_CONTROL_UNIT:procI|opcode_2[4]               ; slowClk      ; slowClk     ; 0.000        ; 0.066      ; 1.026      ;
+; 0.806 ; PIPELINE_CONTROL_UNIT:procI|A_reg_2[2]                     ; PIPELINE_CONTROL_UNIT:procI|A_reg_3[2]                ; slowClk      ; slowClk     ; 0.000        ; 0.067      ; 1.030      ;
+; 0.807 ; PIPELINE_CONTROL_UNIT:procI|A_reg_2[1]                     ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_0[6] ; slowClk      ; slowClk     ; 0.000        ; 0.060      ; 1.024      ;
+; 0.809 ; PIPELINE_CONTROL_UNIT:procI|A_reg_2[2]                     ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_0[7] ; slowClk      ; slowClk     ; 0.000        ; 0.067      ; 1.033      ;
+; 0.810 ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|data_out_B[10] ; PIPELINE_CONTROL_UNIT:procI|dAddr[10]                 ; slowClk      ; slowClk     ; 0.000        ; 0.079      ; 1.046      ;
+; 0.812 ; PIPELINE_CONTROL_UNIT:procI|B_reg_0[2]                     ; PIPELINE_CONTROL_UNIT:procI|B_reg_1[2]                ; slowClk      ; slowClk     ; 0.000        ; 0.064      ; 1.033      ;
+; 0.819 ; PIPELINE_CONTROL_UNIT:procI|A_reg_0[2]                     ; PIPELINE_CONTROL_UNIT:procI|register_read_addr_A[2]   ; slowClk      ; slowClk     ; 0.000        ; 0.059      ; 1.035      ;
+; 0.819 ; PIPELINE_CONTROL_UNIT:procI|A_reg_0[2]                     ; PIPELINE_CONTROL_UNIT:procI|A_reg_1[2]                ; slowClk      ; slowClk     ; 0.000        ; 0.059      ; 1.035      ;
+; 0.829 ; PIPELINE_CONTROL_UNIT:procI|A_reg_1[3]                     ; PIPELINE_CONTROL_UNIT:procI|A_reg_2[3]                ; slowClk      ; slowClk     ; 0.000        ; 0.067      ; 1.053      ;
+; 0.844 ; PIPELINE_CONTROL_UNIT:procI|B_reg_2[2]                     ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_0[2] ; slowClk      ; slowClk     ; 0.000        ; 0.062      ; 1.063      ;
+; 0.858 ; PIPELINE_CONTROL_UNIT:procI|register_data_in[0]            ; PIPELINE_CONTROL_UNIT:procI|register_data_in[0]       ; slowClk      ; slowClk     ; 0.000        ; 0.063      ; 1.078      ;
+; 0.887 ; PIPELINE_CONTROL_UNIT:procI|instruction[7]                 ; PIPELINE_CONTROL_UNIT:procI|A_reg_0[2]                ; slowClk      ; slowClk     ; 0.000        ; -0.222     ; 0.822      ;
+; 0.890 ; PIPELINE_CONTROL_UNIT:procI|instruction[7]                 ; PIPELINE_CONTROL_UNIT:procI|program_counter[7]        ; slowClk      ; slowClk     ; 0.000        ; -0.222     ; 0.825      ;
+; 0.893 ; PIPELINE_CONTROL_UNIT:procI|A_reg_2[4]                     ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_0[9] ; slowClk      ; slowClk     ; 0.000        ; 0.061      ; 1.111      ;
+; 0.896 ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|data_out_B[6]  ; PIPELINE_CONTROL_UNIT:procI|dAddr[6]                  ; slowClk      ; slowClk     ; 0.000        ; 0.079      ; 1.132      ;
+; 0.900 ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|data_out_B[12] ; PIPELINE_CONTROL_UNIT:procI|B[12]                     ; slowClk      ; slowClk     ; 0.000        ; 0.079      ; 1.136      ;
+; 0.904 ; PIPELINE_CONTROL_UNIT:procI|instruction[6]                 ; PIPELINE_CONTROL_UNIT:procI|program_counter[6]        ; slowClk      ; slowClk     ; 0.000        ; -0.222     ; 0.839      ;
+; 0.907 ; PIPELINE_CONTROL_UNIT:procI|instruction[4]                 ; PIPELINE_CONTROL_UNIT:procI|program_counter[4]        ; slowClk      ; slowClk     ; 0.000        ; -0.222     ; 0.842      ;
+; 0.907 ; PIPELINE_CONTROL_UNIT:procI|B_reg_2[4]                     ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_0[4] ; slowClk      ; slowClk     ; 0.000        ; 0.064      ; 1.128      ;
+; 0.908 ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|data_out_A[2]  ; PIPELINE_CONTROL_UNIT:procI|A[2]                      ; slowClk      ; slowClk     ; 0.000        ; 0.078      ; 1.143      ;
+; 0.909 ; PIPELINE_CONTROL_UNIT:procI|instruction[4]                 ; PIPELINE_CONTROL_UNIT:procI|B_reg_0[4]                ; slowClk      ; slowClk     ; 0.000        ; -0.222     ; 0.844      ;
+; 0.909 ; PIPELINE_CONTROL_UNIT:procI|instruction[6]                 ; PIPELINE_CONTROL_UNIT:procI|A_reg_0[1]                ; slowClk      ; slowClk     ; 0.000        ; -0.222     ; 0.844      ;
+; 0.915 ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_1[2]      ; PIPELINE_CONTROL_UNIT:procI|program_counter[2]        ; slowClk      ; slowClk     ; 0.000        ; 0.059      ; 1.131      ;
+; 0.916 ; PIPELINE_CONTROL_UNIT:procI|opcode_2[0]                    ; PIPELINE_CONTROL_UNIT:procI|I[0]                      ; slowClk      ; slowClk     ; 0.000        ; 0.061      ; 1.134      ;
+; 0.916 ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|data_out_B[4]  ; PIPELINE_CONTROL_UNIT:procI|B[4]                      ; slowClk      ; slowClk     ; 0.000        ; 0.079      ; 1.152      ;
+; 0.920 ; PIPELINE_CONTROL_UNIT:procI|A[9]                           ; PIPELINE_CONTROL_UNIT:procI|dDataO[9]                 ; slowClk      ; slowClk     ; 0.000        ; 0.088      ; 1.165      ;
+; 0.920 ; PIPELINE_CONTROL_UNIT:procI|B_reg_0[1]                     ; PIPELINE_CONTROL_UNIT:procI|register_read_addr_B[1]   ; slowClk      ; slowClk     ; 0.000        ; 0.064      ; 1.141      ;
+; 0.920 ; PIPELINE_CONTROL_UNIT:procI|B_reg_2[0]                     ; PIPELINE_CONTROL_UNIT:procI|jump_program_counter_0[0] ; slowClk      ; slowClk     ; 0.000        ; 0.064      ; 1.141      ;
+; 0.932 ; PIPELINE_CONTROL_UNIT:procI|opcode_2[2]                    ; PIPELINE_CONTROL_UNIT:procI|opcode_3[2]               ; slowClk      ; slowClk     ; 0.000        ; 0.079      ; 1.168      ;
+; 0.932 ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|data_out_B[2]  ; PIPELINE_CONTROL_UNIT:procI|B[2]                      ; slowClk      ; slowClk     ; 0.000        ; 0.079      ; 1.168      ;
+; 0.932 ; PIPELINE_CONTROL_UNIT:procI|RegisterBank:U2|data_out_B[14] ; PIPELINE_CONTROL_UNIT:procI|B[14]                     ; slowClk      ; slowClk     ; 0.000        ; 0.079      ; 1.168      ;
+; 0.933 ; PIPELINE_CONTROL_UNIT:procI|A_reg_2[0]                     ; PIPELINE_CONTROL_UNIT:procI|A_reg_3[0]                ; slowClk      ; slowClk     ; 0.000        ; 0.063      ; 1.153      ;
++-------+------------------------------------------------------------+-------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Hold: 'clk50'                                                                                                                                                                                                                                    ;
++-------+------------------------------------------------+-------------------------------------------------------------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; Slack ; From Node                                      ; To Node                                                                                                           ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
++-------+------------------------------------------------+-------------------------------------------------------------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; 0.361 ; \clkP:clkDiv[0]                                ; \clkP:clkDiv[0]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.580      ;
+; 0.378 ; \clkP:clkDiv[22]                               ; \clkP:clkDiv[22]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.597      ;
+; 0.378 ; \clkP:clkDiv[22]                               ; slowClk                                                                                                           ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.597      ;
+; 0.428 ; PIPELINE_CONTROL_UNIT:procI|program_counter[4] ; rom10x16:instMemI|altsyncram:altsyncram_component|altsyncram_tqs3:auto_generated|ram_block1a2~porta_address_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.220      ; 0.865      ;
+; 0.432 ; PIPELINE_CONTROL_UNIT:procI|program_counter[7] ; rom10x16:instMemI|altsyncram:altsyncram_component|altsyncram_tqs3:auto_generated|ram_block1a2~porta_address_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.220      ; 0.869      ;
+; 0.433 ; PIPELINE_CONTROL_UNIT:procI|program_counter[1] ; rom10x16:instMemI|altsyncram:altsyncram_component|altsyncram_tqs3:auto_generated|ram_block1a2~porta_address_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.220      ; 0.870      ;
+; 0.437 ; PIPELINE_CONTROL_UNIT:procI|program_counter[6] ; rom10x16:instMemI|altsyncram:altsyncram_component|altsyncram_tqs3:auto_generated|ram_block1a0~porta_address_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.222      ; 0.876      ;
+; 0.451 ; PIPELINE_CONTROL_UNIT:procI|program_counter[2] ; rom10x16:instMemI|altsyncram:altsyncram_component|altsyncram_tqs3:auto_generated|ram_block1a0~porta_address_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.222      ; 0.890      ;
+; 0.465 ; PIPELINE_CONTROL_UNIT:procI|program_counter[0] ; rom10x16:instMemI|altsyncram:altsyncram_component|altsyncram_tqs3:auto_generated|ram_block1a0~porta_address_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.222      ; 0.904      ;
+; 0.469 ; PIPELINE_CONTROL_UNIT:procI|program_counter[6] ; rom10x16:instMemI|altsyncram:altsyncram_component|altsyncram_tqs3:auto_generated|ram_block1a2~porta_address_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.220      ; 0.906      ;
+; 0.470 ; PIPELINE_CONTROL_UNIT:procI|dDataO[10]         ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a26~porta_datain_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.223      ; 0.910      ;
+; 0.471 ; PIPELINE_CONTROL_UNIT:procI|program_counter[1] ; rom10x16:instMemI|altsyncram:altsyncram_component|altsyncram_tqs3:auto_generated|ram_block1a0~porta_address_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.222      ; 0.910      ;
+; 0.472 ; PIPELINE_CONTROL_UNIT:procI|program_counter[3] ; rom10x16:instMemI|altsyncram:altsyncram_component|altsyncram_tqs3:auto_generated|ram_block1a2~porta_address_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.220      ; 0.909      ;
+; 0.475 ; PIPELINE_CONTROL_UNIT:procI|program_counter[8] ; rom10x16:instMemI|altsyncram:altsyncram_component|altsyncram_tqs3:auto_generated|ram_block1a0~porta_address_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.222      ; 0.914      ;
+; 0.496 ; PIPELINE_CONTROL_UNIT:procI|program_counter[5] ; rom10x16:instMemI|altsyncram:altsyncram_component|altsyncram_tqs3:auto_generated|ram_block1a0~porta_address_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.222      ; 0.935      ;
+; 0.549 ; \clkP:clkDiv[11]                               ; \clkP:clkDiv[11]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.768      ;
+; 0.549 ; \clkP:clkDiv[9]                                ; \clkP:clkDiv[9]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.768      ;
+; 0.549 ; \clkP:clkDiv[2]                                ; \clkP:clkDiv[2]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.768      ;
+; 0.550 ; \clkP:clkDiv[18]                               ; \clkP:clkDiv[18]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.769      ;
+; 0.550 ; \clkP:clkDiv[15]                               ; \clkP:clkDiv[15]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.769      ;
+; 0.550 ; \clkP:clkDiv[12]                               ; \clkP:clkDiv[12]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.769      ;
+; 0.550 ; \clkP:clkDiv[10]                               ; \clkP:clkDiv[10]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.769      ;
+; 0.550 ; \clkP:clkDiv[7]                                ; \clkP:clkDiv[7]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.769      ;
+; 0.551 ; \clkP:clkDiv[17]                               ; \clkP:clkDiv[17]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.770      ;
+; 0.551 ; \clkP:clkDiv[14]                               ; \clkP:clkDiv[14]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.770      ;
+; 0.551 ; \clkP:clkDiv[8]                                ; \clkP:clkDiv[8]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.770      ;
+; 0.552 ; \clkP:clkDiv[16]                               ; \clkP:clkDiv[16]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.771      ;
+; 0.552 ; \clkP:clkDiv[13]                               ; \clkP:clkDiv[13]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.771      ;
+; 0.552 ; \clkP:clkDiv[6]                                ; \clkP:clkDiv[6]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.771      ;
+; 0.552 ; \clkP:clkDiv[4]                                ; \clkP:clkDiv[4]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.771      ;
+; 0.553 ; \clkP:clkDiv[20]                               ; \clkP:clkDiv[20]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.772      ;
+; 0.554 ; \clkP:clkDiv[5]                                ; \clkP:clkDiv[5]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.773      ;
+; 0.554 ; \clkP:clkDiv[3]                                ; \clkP:clkDiv[3]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.773      ;
+; 0.555 ; \clkP:clkDiv[21]                               ; \clkP:clkDiv[21]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.774      ;
+; 0.555 ; \clkP:clkDiv[19]                               ; \clkP:clkDiv[19]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.774      ;
+; 0.563 ; \clkP:clkDiv[0]                                ; \clkP:clkDiv[1]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.782      ;
+; 0.564 ; \clkP:clkDiv[1]                                ; \clkP:clkDiv[1]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 0.783      ;
+; 0.639 ; PIPELINE_CONTROL_UNIT:procI|dAddr[2]           ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a36~porta_address_reg0 ; slowClk      ; clk50       ; 0.000        ; 0.219      ; 1.075      ;
+; 0.641 ; PIPELINE_CONTROL_UNIT:procI|dAddr[2]           ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a49~porta_address_reg0 ; slowClk      ; clk50       ; 0.000        ; 0.219      ; 1.077      ;
+; 0.644 ; PIPELINE_CONTROL_UNIT:procI|dAddr[5]           ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a6~porta_address_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.219      ; 1.080      ;
+; 0.647 ; PIPELINE_CONTROL_UNIT:procI|dAddr[2]           ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a33~porta_address_reg0 ; slowClk      ; clk50       ; 0.000        ; 0.218      ; 1.082      ;
+; 0.668 ; PIPELINE_CONTROL_UNIT:procI|dAddr[0]           ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a6~porta_address_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.219      ; 1.104      ;
+; 0.688 ; PIPELINE_CONTROL_UNIT:procI|dAddr[9]           ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a4~porta_address_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.219      ; 1.124      ;
+; 0.691 ; PIPELINE_CONTROL_UNIT:procI|dAddr[4]           ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a36~porta_address_reg0 ; slowClk      ; clk50       ; 0.000        ; 0.219      ; 1.127      ;
+; 0.693 ; PIPELINE_CONTROL_UNIT:procI|dAddr[4]           ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a49~porta_address_reg0 ; slowClk      ; clk50       ; 0.000        ; 0.219      ; 1.129      ;
+; 0.706 ; PIPELINE_CONTROL_UNIT:procI|program_counter[9] ; rom10x16:instMemI|altsyncram:altsyncram_component|altsyncram_tqs3:auto_generated|ram_block1a2~porta_address_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.220      ; 1.143      ;
+; 0.711 ; PIPELINE_CONTROL_UNIT:procI|program_counter[5] ; rom10x16:instMemI|altsyncram:altsyncram_component|altsyncram_tqs3:auto_generated|ram_block1a2~porta_address_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.220      ; 1.148      ;
+; 0.713 ; PIPELINE_CONTROL_UNIT:procI|dAddr[8]           ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a29~porta_address_reg0 ; slowClk      ; clk50       ; 0.000        ; 0.220      ; 1.150      ;
+; 0.717 ; PIPELINE_CONTROL_UNIT:procI|dDataO[1]          ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a49~porta_datain_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.224      ; 1.158      ;
+; 0.718 ; PIPELINE_CONTROL_UNIT:procI|program_counter[0] ; rom10x16:instMemI|altsyncram:altsyncram_component|altsyncram_tqs3:auto_generated|ram_block1a2~porta_address_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.220      ; 1.155      ;
+; 0.721 ; PIPELINE_CONTROL_UNIT:procI|dDataO[6]          ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a54~porta_datain_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.221      ; 1.159      ;
+; 0.727 ; PIPELINE_CONTROL_UNIT:procI|dAddr[10]          ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a26~porta_address_reg0 ; slowClk      ; clk50       ; 0.000        ; 0.210      ; 1.154      ;
+; 0.730 ; PIPELINE_CONTROL_UNIT:procI|program_counter[3] ; rom10x16:instMemI|altsyncram:altsyncram_component|altsyncram_tqs3:auto_generated|ram_block1a0~porta_address_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.222      ; 1.169      ;
+; 0.734 ; PIPELINE_CONTROL_UNIT:procI|program_counter[4] ; rom10x16:instMemI|altsyncram:altsyncram_component|altsyncram_tqs3:auto_generated|ram_block1a0~porta_address_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.222      ; 1.173      ;
+; 0.738 ; PIPELINE_CONTROL_UNIT:procI|dAddr[0]           ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a26~porta_address_reg0 ; slowClk      ; clk50       ; 0.000        ; 0.210      ; 1.165      ;
+; 0.739 ; PIPELINE_CONTROL_UNIT:procI|program_counter[7] ; rom10x16:instMemI|altsyncram:altsyncram_component|altsyncram_tqs3:auto_generated|ram_block1a0~porta_address_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.222      ; 1.178      ;
+; 0.741 ; PIPELINE_CONTROL_UNIT:procI|program_counter[8] ; rom10x16:instMemI|altsyncram:altsyncram_component|altsyncram_tqs3:auto_generated|ram_block1a2~porta_address_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.220      ; 1.178      ;
+; 0.750 ; PIPELINE_CONTROL_UNIT:procI|program_counter[2] ; rom10x16:instMemI|altsyncram:altsyncram_component|altsyncram_tqs3:auto_generated|ram_block1a2~porta_address_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.220      ; 1.187      ;
+; 0.756 ; PIPELINE_CONTROL_UNIT:procI|dDataO[13]         ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a29~porta_datain_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.221      ; 1.194      ;
+; 0.756 ; PIPELINE_CONTROL_UNIT:procI|dDataO[13]         ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a61~porta_datain_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.223      ; 1.196      ;
+; 0.759 ; PIPELINE_CONTROL_UNIT:procI|dDataO[1]          ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a33~porta_datain_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.223      ; 1.199      ;
+; 0.765 ; PIPELINE_CONTROL_UNIT:procI|dDataO[13]         ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a13~porta_datain_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.223      ; 1.205      ;
+; 0.776 ; PIPELINE_CONTROL_UNIT:procI|dDataO[13]         ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a45~porta_datain_reg0  ; slowClk      ; clk50       ; 0.000        ; 0.223      ; 1.216      ;
+; 0.793 ; PIPELINE_CONTROL_UNIT:procI|dDataO[2]          ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a2~porta_datain_reg0   ; slowClk      ; clk50       ; 0.000        ; 0.220      ; 1.230      ;
+; 0.824 ; \clkP:clkDiv[10]                               ; \clkP:clkDiv[11]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.043      ;
+; 0.824 ; \clkP:clkDiv[12]                               ; \clkP:clkDiv[13]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.043      ;
+; 0.824 ; \clkP:clkDiv[2]                                ; \clkP:clkDiv[3]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.043      ;
+; 0.825 ; \clkP:clkDiv[8]                                ; \clkP:clkDiv[9]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.044      ;
+; 0.825 ; \clkP:clkDiv[14]                               ; \clkP:clkDiv[15]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.044      ;
+; 0.825 ; \clkP:clkDiv[18]                               ; \clkP:clkDiv[19]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.044      ;
+; 0.826 ; \clkP:clkDiv[6]                                ; \clkP:clkDiv[7]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.045      ;
+; 0.826 ; \clkP:clkDiv[16]                               ; \clkP:clkDiv[17]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.045      ;
+; 0.826 ; \clkP:clkDiv[4]                                ; \clkP:clkDiv[5]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.045      ;
+; 0.827 ; \clkP:clkDiv[20]                               ; \clkP:clkDiv[21]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.046      ;
+; 0.827 ; PIPELINE_CONTROL_UNIT:procI|dDataO[6]          ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a6~porta_datain_reg0   ; slowClk      ; clk50       ; 0.000        ; 0.231      ; 1.275      ;
+; 0.836 ; \clkP:clkDiv[11]                               ; \clkP:clkDiv[12]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.063      ; 1.056      ;
+; 0.837 ; \clkP:clkDiv[9]                                ; \clkP:clkDiv[10]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.056      ;
+; 0.838 ; \clkP:clkDiv[1]                                ; \clkP:clkDiv[2]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.057      ;
+; 0.838 ; \clkP:clkDiv[7]                                ; \clkP:clkDiv[8]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.057      ;
+; 0.838 ; \clkP:clkDiv[15]                               ; \clkP:clkDiv[16]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.057      ;
+; 0.838 ; \clkP:clkDiv[11]                               ; \clkP:clkDiv[13]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.063      ; 1.058      ;
+; 0.839 ; \clkP:clkDiv[17]                               ; \clkP:clkDiv[18]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.058      ;
+; 0.839 ; \clkP:clkDiv[13]                               ; \clkP:clkDiv[14]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.058      ;
+; 0.839 ; \clkP:clkDiv[9]                                ; \clkP:clkDiv[11]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.058      ;
+; 0.840 ; \clkP:clkDiv[1]                                ; \clkP:clkDiv[3]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.059      ;
+; 0.840 ; \clkP:clkDiv[7]                                ; \clkP:clkDiv[9]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.059      ;
+; 0.840 ; \clkP:clkDiv[15]                               ; \clkP:clkDiv[17]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.059      ;
+; 0.841 ; \clkP:clkDiv[5]                                ; \clkP:clkDiv[6]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.060      ;
+; 0.841 ; \clkP:clkDiv[3]                                ; \clkP:clkDiv[4]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.060      ;
+; 0.841 ; \clkP:clkDiv[13]                               ; \clkP:clkDiv[15]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.060      ;
+; 0.841 ; \clkP:clkDiv[17]                               ; \clkP:clkDiv[19]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.060      ;
+; 0.841 ; \clkP:clkDiv[0]                                ; \clkP:clkDiv[2]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.060      ;
+; 0.842 ; \clkP:clkDiv[21]                               ; \clkP:clkDiv[22]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.061      ;
+; 0.842 ; \clkP:clkDiv[19]                               ; \clkP:clkDiv[20]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.061      ;
+; 0.843 ; \clkP:clkDiv[5]                                ; \clkP:clkDiv[7]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.062      ;
+; 0.843 ; \clkP:clkDiv[3]                                ; \clkP:clkDiv[5]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.062      ;
+; 0.843 ; \clkP:clkDiv[0]                                ; \clkP:clkDiv[3]                                                                                                   ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.062      ;
+; 0.844 ; \clkP:clkDiv[19]                               ; \clkP:clkDiv[21]                                                                                                  ; clk50        ; clk50       ; 0.000        ; 0.062      ; 1.063      ;
+; 0.894 ; PIPELINE_CONTROL_UNIT:procI|dAddr[7]           ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a48~porta_address_reg0 ; slowClk      ; clk50       ; 0.000        ; 0.217      ; 1.328      ;
+; 0.899 ; PIPELINE_CONTROL_UNIT:procI|dAddr[0]           ; ram10x16:dataMemI|altsyncram:altsyncram_component|altsyncram_b5q3:auto_generated|ram_block1a52~porta_address_reg0 ; slowClk      ; clk50       ; 0.000        ; 0.228      ; 1.344      ;
++-------+------------------------------------------------+-------------------------------------------------------------------------------------------------------------------+--------------+-------------+--------------+------------+------------+
+
+
++-------------------------------------------------------------------------------------------------------------------------------------------+
+; Recovery: 'slowClk'                                                                                                                       ;
++--------+-----------+------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; Slack  ; From Node ; To Node                                        ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
++--------+-----------+------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; 16.454 ; rstN      ; PIPELINE_CONTROL_UNIT:procI|program_counter[3] ; clk50        ; slowClk     ; 20.000       ; 0.075      ; 3.606      ;
+; 16.454 ; rstN      ; PIPELINE_CONTROL_UNIT:procI|program_counter[9] ; clk50        ; slowClk     ; 20.000       ; 0.075      ; 3.606      ;
+; 16.454 ; rstN      ; PIPELINE_CONTROL_UNIT:procI|program_counter[8] ; clk50        ; slowClk     ; 20.000       ; 0.075      ; 3.606      ;
+; 16.454 ; rstN      ; PIPELINE_CONTROL_UNIT:procI|program_counter[5] ; clk50        ; slowClk     ; 20.000       ; 0.075      ; 3.606      ;
+; 16.454 ; rstN      ; PIPELINE_CONTROL_UNIT:procI|program_counter[2] ; clk50        ; slowClk     ; 20.000       ; 0.075      ; 3.606      ;
+; 16.454 ; rstN      ; PIPELINE_CONTROL_UNIT:procI|program_counter[0] ; clk50        ; slowClk     ; 20.000       ; 0.075      ; 3.606      ;
+; 16.462 ; rstN      ; PIPELINE_CONTROL_UNIT:procI|program_counter[7] ; clk50        ; slowClk     ; 20.000       ; 0.075      ; 3.598      ;
+; 16.462 ; rstN      ; PIPELINE_CONTROL_UNIT:procI|program_counter[6] ; clk50        ; slowClk     ; 20.000       ; 0.075      ; 3.598      ;
+; 16.462 ; rstN      ; PIPELINE_CONTROL_UNIT:procI|program_counter[4] ; clk50        ; slowClk     ; 20.000       ; 0.075      ; 3.598      ;
+; 16.462 ; rstN      ; PIPELINE_CONTROL_UNIT:procI|program_counter[1] ; clk50        ; slowClk     ; 20.000       ; 0.075      ; 3.598      ;
++--------+-----------+------------------------------------------------+--------------+-------------+--------------+------------+------------+
+
+
++-------------------------------------------------------------------------------------------------------------+
+; Recovery: 'clk50'                                                                                           ;
++--------+-----------+------------------+--------------+-------------+--------------+------------+------------+
+; Slack  ; From Node ; To Node          ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
++--------+-----------+------------------+--------------+-------------+--------------+------------+------------+
+; 16.723 ; rstN      ; \clkP:clkDiv[22] ; clk50        ; clk50       ; 20.000       ; -0.069     ; 3.203      ;
+; 16.723 ; rstN      ; slowClk          ; clk50        ; clk50       ; 20.000       ; -0.069     ; 3.203      ;
+; 16.723 ; rstN      ; \clkP:clkDiv[21] ; clk50        ; clk50       ; 20.000       ; -0.069     ; 3.203      ;
+; 16.723 ; rstN      ; \clkP:clkDiv[20] ; clk50        ; clk50       ; 20.000       ; -0.069     ; 3.203      ;
+; 16.723 ; rstN      ; \clkP:clkDiv[19] ; clk50        ; clk50       ; 20.000       ; -0.069     ; 3.203      ;
+; 16.723 ; rstN      ; \clkP:clkDiv[18] ; clk50        ; clk50       ; 20.000       ; -0.069     ; 3.203      ;
+; 16.723 ; rstN      ; \clkP:clkDiv[17] ; clk50        ; clk50       ; 20.000       ; -0.069     ; 3.203      ;
+; 16.723 ; rstN      ; \clkP:clkDiv[16] ; clk50        ; clk50       ; 20.000       ; -0.069     ; 3.203      ;
+; 16.723 ; rstN      ; \clkP:clkDiv[15] ; clk50        ; clk50       ; 20.000       ; -0.069     ; 3.203      ;
+; 16.723 ; rstN      ; \clkP:clkDiv[14] ; clk50        ; clk50       ; 20.000       ; -0.069     ; 3.203      ;
+; 16.723 ; rstN      ; \clkP:clkDiv[13] ; clk50        ; clk50       ; 20.000       ; -0.069     ; 3.203      ;
+; 16.723 ; rstN      ; \clkP:clkDiv[12] ; clk50        ; clk50       ; 20.000       ; -0.069     ; 3.203      ;
+; 16.730 ; rstN      ; \clkP:clkDiv[11] ; clk50        ; clk50       ; 20.000       ; -0.070     ; 3.195      ;
+; 16.730 ; rstN      ; \clkP:clkDiv[10] ; clk50        ; clk50       ; 20.000       ; -0.070     ; 3.195      ;
+; 16.730 ; rstN      ; \clkP:clkDiv[9]  ; clk50        ; clk50       ; 20.000       ; -0.070     ; 3.195      ;
+; 16.730 ; rstN      ; \clkP:clkDiv[8]  ; clk50        ; clk50       ; 20.000       ; -0.070     ; 3.195      ;
+; 16.730 ; rstN      ; \clkP:clkDiv[7]  ; clk50        ; clk50       ; 20.000       ; -0.070     ; 3.195      ;
+; 16.730 ; rstN      ; \clkP:clkDiv[6]  ; clk50        ; clk50       ; 20.000       ; -0.070     ; 3.195      ;
+; 16.730 ; rstN      ; \clkP:clkDiv[5]  ; clk50        ; clk50       ; 20.000       ; -0.070     ; 3.195      ;
+; 16.730 ; rstN      ; \clkP:clkDiv[4]  ; clk50        ; clk50       ; 20.000       ; -0.070     ; 3.195      ;
+; 16.730 ; rstN      ; \clkP:clkDiv[3]  ; clk50        ; clk50       ; 20.000       ; -0.070     ; 3.195      ;
+; 16.730 ; rstN      ; \clkP:clkDiv[2]  ; clk50        ; clk50       ; 20.000       ; -0.070     ; 3.195      ;
+; 16.730 ; rstN      ; \clkP:clkDiv[1]  ; clk50        ; clk50       ; 20.000       ; -0.070     ; 3.195      ;
+; 16.730 ; rstN      ; \clkP:clkDiv[0]  ; clk50        ; clk50       ; 20.000       ; -0.070     ; 3.195      ;
++--------+-----------+------------------+--------------+-------------+--------------+------------+------------+
+
+
++------------------------------------------------------------------------------------------------------------+
+; Removal: 'clk50'                                                                                           ;
++-------+-----------+------------------+--------------+-------------+--------------+------------+------------+
+; Slack ; From Node ; To Node          ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
++-------+-----------+------------------+--------------+-------------+--------------+------------+------------+
+; 2.708 ; rstN      ; \clkP:clkDiv[22] ; clk50        ; clk50       ; 0.000        ; 0.055      ; 2.920      ;
+; 2.708 ; rstN      ; slowClk          ; clk50        ; clk50       ; 0.000        ; 0.055      ; 2.920      ;
+; 2.708 ; rstN      ; \clkP:clkDiv[21] ; clk50        ; clk50       ; 0.000        ; 0.055      ; 2.920      ;
+; 2.708 ; rstN      ; \clkP:clkDiv[20] ; clk50        ; clk50       ; 0.000        ; 0.055      ; 2.920      ;
+; 2.708 ; rstN      ; \clkP:clkDiv[19] ; clk50        ; clk50       ; 0.000        ; 0.055      ; 2.920      ;
+; 2.708 ; rstN      ; \clkP:clkDiv[18] ; clk50        ; clk50       ; 0.000        ; 0.055      ; 2.920      ;
+; 2.708 ; rstN      ; \clkP:clkDiv[17] ; clk50        ; clk50       ; 0.000        ; 0.055      ; 2.920      ;
+; 2.708 ; rstN      ; \clkP:clkDiv[16] ; clk50        ; clk50       ; 0.000        ; 0.055      ; 2.920      ;
+; 2.708 ; rstN      ; \clkP:clkDiv[15] ; clk50        ; clk50       ; 0.000        ; 0.055      ; 2.920      ;
+; 2.708 ; rstN      ; \clkP:clkDiv[14] ; clk50        ; clk50       ; 0.000        ; 0.055      ; 2.920      ;
+; 2.708 ; rstN      ; \clkP:clkDiv[13] ; clk50        ; clk50       ; 0.000        ; 0.055      ; 2.920      ;
+; 2.708 ; rstN      ; \clkP:clkDiv[12] ; clk50        ; clk50       ; 0.000        ; 0.055      ; 2.920      ;
+; 2.731 ; rstN      ; \clkP:clkDiv[11] ; clk50        ; clk50       ; 0.000        ; 0.054      ; 2.942      ;
+; 2.731 ; rstN      ; \clkP:clkDiv[10] ; clk50        ; clk50       ; 0.000        ; 0.054      ; 2.942      ;
+; 2.731 ; rstN      ; \clkP:clkDiv[9]  ; clk50        ; clk50       ; 0.000        ; 0.054      ; 2.942      ;
+; 2.731 ; rstN      ; \clkP:clkDiv[8]  ; clk50        ; clk50       ; 0.000        ; 0.054      ; 2.942      ;
+; 2.731 ; rstN      ; \clkP:clkDiv[7]  ; clk50        ; clk50       ; 0.000        ; 0.054      ; 2.942      ;
+; 2.731 ; rstN      ; \clkP:clkDiv[6]  ; clk50        ; clk50       ; 0.000        ; 0.054      ; 2.942      ;
+; 2.731 ; rstN      ; \clkP:clkDiv[5]  ; clk50        ; clk50       ; 0.000        ; 0.054      ; 2.942      ;
+; 2.731 ; rstN      ; \clkP:clkDiv[4]  ; clk50        ; clk50       ; 0.000        ; 0.054      ; 2.942      ;
+; 2.731 ; rstN      ; \clkP:clkDiv[3]  ; clk50        ; clk50       ; 0.000        ; 0.054      ; 2.942      ;
+; 2.731 ; rstN      ; \clkP:clkDiv[2]  ; clk50        ; clk50       ; 0.000        ; 0.054      ; 2.942      ;
+; 2.731 ; rstN      ; \clkP:clkDiv[1]  ; clk50        ; clk50       ; 0.000        ; 0.054      ; 2.942      ;
+; 2.731 ; rstN      ; \clkP:clkDiv[0]  ; clk50        ; clk50       ; 0.000        ; 0.054      ; 2.942      ;
++-------+-----------+------------------+--------------+-------------+--------------+------------+------------+
+
+
++------------------------------------------------------------------------------------------------------------------------------------------+
+; Removal: 'slowClk'                                                                                                                       ;
++-------+-----------+------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; Slack ; From Node ; To Node                                        ; Launch Clock ; Latch Clock ; Relationship ; Clock Skew ; Data Delay ;
++-------+-----------+------------------------------------------------+--------------+-------------+--------------+------------+------------+
+; 2.789 ; rstN      ; PIPELINE_CONTROL_UNIT:procI|program_counter[3] ; clk50        ; slowClk     ; 0.000        ; 0.271      ; 3.247      ;
+; 2.789 ; rstN      ; PIPELINE_CONTROL_UNIT:procI|program_counter[9] ; clk50        ; slowClk     ; 0.000        ; 0.271      ; 3.247      ;
+; 2.789 ; rstN      ; PIPELINE_CONTROL_UNIT:procI|program_counter[8] ; clk50        ; slowClk     ; 0.000        ; 0.271      ; 3.247      ;
+; 2.789 ; rstN      ; PIPELINE_CONTROL_UNIT:procI|program_counter[5] ; clk50        ; slowClk     ; 0.000        ; 0.271      ; 3.247      ;
+; 2.789 ; rstN      ; PIPELINE_CONTROL_UNIT:procI|program_counter[2] ; clk50        ; slowClk     ; 0.000        ; 0.271      ; 3.247      ;
+; 2.789 ; rstN      ; PIPELINE_CONTROL_UNIT:procI|program_counter[0] ; clk50        ; slowClk     ; 0.000        ; 0.271      ; 3.247      ;
+; 2.814 ; rstN      ; PIPELINE_CONTROL_UNIT:procI|program_counter[7] ; clk50        ; slowClk     ; 0.000        ; 0.271      ; 3.272      ;
+; 2.814 ; rstN      ; PIPELINE_CONTROL_UNIT:procI|program_counter[6] ; clk50        ; slowClk     ; 0.000        ; 0.271      ; 3.272      ;
+; 2.814 ; rstN      ; PIPELINE_CONTROL_UNIT:procI|program_counter[4] ; clk50        ; slowClk     ; 0.000        ; 0.271      ; 3.272      ;
+; 2.814 ; rstN      ; PIPELINE_CONTROL_UNIT:procI|program_counter[1] ; clk50        ; slowClk     ; 0.000        ; 0.271      ; 3.272      ;
++-------+-----------+------------------------------------------------+--------------+-------------+--------------+------------+------------+
+
+
+-------------------------
+; Metastability Summary ;
+-------------------------
+No synchronizer chains to report.
+
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Board Trace Model Assignments                                                                                                                                                                                                                                                                                                                                                                                ;
++-----------+--------------+-------------------+-------------------------+-------------------------+---------------+---------------------+----------------+------------------+--------+------------------+------------------------+------------------------+--------------+---------------+-----------------+-------+---------------------+--------------------+---------------+-----------------+-------------+
+; Pin       ; I/O Standard ; Near Tline Length ; Near Tline L per Length ; Near Tline C per Length ; Near Series R ; Near Differential R ; Near Pull-up R ; Near Pull-down R ; Near C ; Far Tline Length ; Far Tline L per Length ; Far Tline C per Length ; Far Series R ; Far Pull-up R ; Far Pull-down R ; Far C ; Termination Voltage ; Far Differential R ; EBD File Name ; EBD Signal Name ; EBD Far-end ;
++-----------+--------------+-------------------+-------------------------+-------------------------+---------------+---------------------+----------------+------------------+--------+------------------+------------------------+------------------------+--------------+---------------+-----------------+-------+---------------------+--------------------+---------------+-----------------+-------------+
+; led[0]    ; 3.3-V LVTTL  ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; led[1]    ; 3.3-V LVTTL  ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; led[2]    ; 3.3-V LVTTL  ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; led[3]    ; 3.3-V LVTTL  ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; led[4]    ; 3.3-V LVTTL  ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; led[5]    ; 3.3-V LVTTL  ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; led[6]    ; 3.3-V LVTTL  ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; led[7]    ; 3.3-V LVTTL  ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; dramCsN   ; 3.3-V LVTTL  ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; epcsCsN   ; 3.3-V LVTTL  ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; gSensorCs ; 3.3-V LVTTL  ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
+; adcCsN    ; 3.3-V LVTTL  ; 0 in              ; 0 H/in                  ; 0 F/in                  ; short         ; -                   ; open           ; open             ; open   ; 0 in             ; 0 H/in                 ; 0 F/in                 ; short        ; open          ; open            ; open  ; 0 V                 ; -                  ; n/a           ; n/a             ; n/a         ;
++-----------+--------------+-------------------+-------------------------+-------------------------+---------------+---------------------+----------------+------------------+--------+------------------+------------------------+------------------------+--------------+---------------+-----------------+-------+---------------------+--------------------+---------------+-----------------+-------------+
+
+
++-----------------------------------------------------------+
+; Input Transition Times                                    ;
++--------+--------------+-----------------+-----------------+
+; Pin    ; I/O Standard ; 10-90 Rise Time ; 90-10 Fall Time ;
++--------+--------------+-----------------+-----------------+
+; key[1] ; 3.3-V LVTTL  ; 2640 ps         ; 2640 ps         ;
+; clk50  ; 3.3-V LVTTL  ; 2640 ps         ; 2640 ps         ;
+; key[0] ; 3.3-V LVTTL  ; 2640 ps         ; 2640 ps         ;
++--------+--------------+-----------------+-----------------+
+
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Signal Integrity Metrics (Slow 1200mv 85c Model)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ;
++-----------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
+; Pin       ; I/O Standard ; Board Delay on Rise ; Board Delay on Fall ; Steady State Voh at FPGA Pin ; Steady State Vol at FPGA Pin ; Voh Max at FPGA Pin ; Vol Min at FPGA Pin ; Ringback Voltage on Rise at FPGA Pin ; Ringback Voltage on Fall at FPGA Pin ; 10-90 Rise Time at FPGA Pin ; 90-10 Fall Time at FPGA Pin ; Monotonic Rise at FPGA Pin ; Monotonic Fall at FPGA Pin ; Steady State Voh at Far-end ; Steady State Vol at Far-end ; Voh Max at Far-end ; Vol Min at Far-end ; Ringback Voltage on Rise at Far-end ; Ringback Voltage on Fall at Far-end ; 10-90 Rise Time at Far-end ; 90-10 Fall Time at Far-end ; Monotonic Rise at Far-end ; Monotonic Fall at Far-end ;
++-----------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
+; led[0]    ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 2.99e-06 V                   ; 3.11 V              ; -0.0717 V           ; 0.209 V                              ; 0.168 V                              ; 6.66e-10 s                  ; 6.19e-10 s                  ; Yes                        ; No                         ; 3.08 V                      ; 2.99e-06 V                  ; 3.11 V             ; -0.0717 V          ; 0.209 V                             ; 0.168 V                             ; 6.66e-10 s                 ; 6.19e-10 s                 ; Yes                       ; No                        ;
+; led[1]    ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 2.99e-06 V                   ; 3.11 V              ; -0.0717 V           ; 0.209 V                              ; 0.168 V                              ; 6.66e-10 s                  ; 6.19e-10 s                  ; Yes                        ; No                         ; 3.08 V                      ; 2.99e-06 V                  ; 3.11 V             ; -0.0717 V          ; 0.209 V                             ; 0.168 V                             ; 6.66e-10 s                 ; 6.19e-10 s                 ; Yes                       ; No                        ;
+; led[2]    ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 2.99e-06 V                   ; 3.11 V              ; -0.0717 V           ; 0.209 V                              ; 0.168 V                              ; 6.66e-10 s                  ; 6.19e-10 s                  ; Yes                        ; No                         ; 3.08 V                      ; 2.99e-06 V                  ; 3.11 V             ; -0.0717 V          ; 0.209 V                             ; 0.168 V                             ; 6.66e-10 s                 ; 6.19e-10 s                 ; Yes                       ; No                        ;
+; led[3]    ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 2.99e-06 V                   ; 3.11 V              ; -0.0717 V           ; 0.209 V                              ; 0.168 V                              ; 6.66e-10 s                  ; 6.19e-10 s                  ; Yes                        ; No                         ; 3.08 V                      ; 2.99e-06 V                  ; 3.11 V             ; -0.0717 V          ; 0.209 V                             ; 0.168 V                             ; 6.66e-10 s                 ; 6.19e-10 s                 ; Yes                       ; No                        ;
+; led[4]    ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 2e-06 V                      ; 3.12 V              ; -0.0547 V           ; 0.276 V                              ; 0.181 V                              ; 9.17e-10 s                  ; 8.31e-10 s                  ; Yes                        ; No                         ; 3.08 V                      ; 2e-06 V                     ; 3.12 V             ; -0.0547 V          ; 0.276 V                             ; 0.181 V                             ; 9.17e-10 s                 ; 8.31e-10 s                 ; Yes                       ; No                        ;
+; led[5]    ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 2e-06 V                      ; 3.08 V              ; -0.00666 V          ; 0.298 V                              ; 0.277 V                              ; 5.29e-09 s                  ; 4.2e-09 s                   ; Yes                        ; No                         ; 3.08 V                      ; 2e-06 V                     ; 3.08 V             ; -0.00666 V         ; 0.298 V                             ; 0.277 V                             ; 5.29e-09 s                 ; 4.2e-09 s                  ; Yes                       ; No                        ;
+; led[6]    ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 2e-06 V                      ; 3.13 V              ; -0.0781 V           ; 0.202 V                              ; 0.359 V                              ; 6.54e-10 s                  ; 5e-10 s                     ; No                         ; No                         ; 3.08 V                      ; 2e-06 V                     ; 3.13 V             ; -0.0781 V          ; 0.202 V                             ; 0.359 V                             ; 6.54e-10 s                 ; 5e-10 s                    ; No                        ; No                        ;
+; led[7]    ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 2e-06 V                      ; 3.08 V              ; -0.00666 V          ; 0.298 V                              ; 0.277 V                              ; 5.29e-09 s                  ; 4.2e-09 s                   ; Yes                        ; No                         ; 3.08 V                      ; 2e-06 V                     ; 3.08 V             ; -0.00666 V         ; 0.298 V                             ; 0.277 V                             ; 5.29e-09 s                 ; 4.2e-09 s                  ; Yes                       ; No                        ;
+; dramCsN   ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 2.99e-06 V                   ; 3.08 V              ; -0.00675 V          ; 0.232 V                              ; 0.283 V                              ; 5.31e-09 s                  ; 4.2e-09 s                   ; Yes                        ; No                         ; 3.08 V                      ; 2.99e-06 V                  ; 3.08 V             ; -0.00675 V         ; 0.232 V                             ; 0.283 V                             ; 5.31e-09 s                 ; 4.2e-09 s                  ; Yes                       ; No                        ;
+; epcsCsN   ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 4.54e-06 V                   ; 3.09 V              ; -0.0134 V           ; 0.121 V                              ; 0.243 V                              ; 1.77e-09 s                  ; 1.7e-09 s                   ; Yes                        ; Yes                        ; 3.08 V                      ; 4.54e-06 V                  ; 3.09 V             ; -0.0134 V          ; 0.121 V                             ; 0.243 V                             ; 1.77e-09 s                 ; 1.7e-09 s                  ; Yes                       ; Yes                       ;
+; gSensorCs ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 2e-06 V                      ; 3.13 V              ; -0.0781 V           ; 0.202 V                              ; 0.359 V                              ; 6.54e-10 s                  ; 5e-10 s                     ; No                         ; No                         ; 3.08 V                      ; 2e-06 V                     ; 3.13 V             ; -0.0781 V          ; 0.202 V                             ; 0.359 V                             ; 6.54e-10 s                 ; 5e-10 s                    ; No                        ; No                        ;
+; adcCsN    ; 3.3-V LVTTL  ; 0 s                 ; 0 s                 ; 3.08 V                       ; 2.99e-06 V                   ; 3.11 V              ; -0.0717 V           ; 0.209 V                              ; 0.168 V                              ; 6.66e-10 s                  ; 6.19e-10 s                  ; Yes                        ; No                         ; 3.08 V                      ; 2.99e-06 V                  ; 3.11 V             ; -0.0717 V          ; 0.209 V                             ; 0.168 V                             ; 6.66e-10 s                 ; 6.19e-10 s                 ; Yes                       ; No                        ;
++-----------+--------------+---------------------+---------------------+------------------------------+------------------------------+---------------------+---------------------+--------------------------------------+--------------------------------------+-----------------------------+-----------------------------+----------------------------+----------------------------+-----------------------------+-----------------------------+--------------------+--------------------+-------------------------------------+-------------------------------------+----------------------------+----------------------------+---------------------------+---------------------------+
+
+
++-------------------------------------------------------------------+
+; Setup Transfers                                                   ;
++------------+----------+----------+----------+----------+----------+
+; From Clock ; To Clock ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
++------------+----------+----------+----------+----------+----------+
+; clk50      ; clk50    ; 277      ; 0        ; 0        ; 0        ;
+; slowClk    ; clk50    ; 1        ; 1494     ; 0        ; 0        ;
+; clk50      ; slowClk  ; 0        ; 0        ; 1161     ; 0        ;
+; slowClk    ; slowClk  ; 0        ; 96       ; 0        ; 9435     ;
++------------+----------+----------+----------+----------+----------+
+Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
+
+
++-------------------------------------------------------------------+
+; Hold Transfers                                                    ;
++------------+----------+----------+----------+----------+----------+
+; From Clock ; To Clock ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
++------------+----------+----------+----------+----------+----------+
+; clk50      ; clk50    ; 277      ; 0        ; 0        ; 0        ;
+; slowClk    ; clk50    ; 1        ; 1494     ; 0        ; 0        ;
+; clk50      ; slowClk  ; 0        ; 0        ; 1161     ; 0        ;
+; slowClk    ; slowClk  ; 0        ; 96       ; 0        ; 9435     ;
++------------+----------+----------+----------+----------+----------+
+Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
+
+
++-------------------------------------------------------------------+
+; Recovery Transfers                                                ;
++------------+----------+----------+----------+----------+----------+
+; From Clock ; To Clock ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
++------------+----------+----------+----------+----------+----------+
+; clk50      ; clk50    ; 24       ; 0        ; 0        ; 0        ;
+; clk50      ; slowClk  ; 0        ; 0        ; 10       ; 0        ;
++------------+----------+----------+----------+----------+----------+
+Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
+
+
++-------------------------------------------------------------------+
+; Removal Transfers                                                 ;
++------------+----------+----------+----------+----------+----------+
+; From Clock ; To Clock ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
++------------+----------+----------+----------+----------+----------+
+; clk50      ; clk50    ; 24       ; 0        ; 0        ; 0        ;
+; clk50      ; slowClk  ; 0        ; 0        ; 10       ; 0        ;
++------------+----------+----------+----------+----------+----------+
+Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
+
+
+---------------
+; Report TCCS ;
+---------------
+No dedicated SERDES Transmitter circuitry present in device or used in design
+
+
+---------------
+; Report RSKM ;
+---------------
+No non-DPA dedicated SERDES Receiver circuitry present in device or used in design
+
+
++------------------------------------------------+
+; Unconstrained Paths Summary                    ;
++---------------------------------+-------+------+
+; Property                        ; Setup ; Hold ;
++---------------------------------+-------+------+
+; Illegal Clocks                  ; 0     ; 0    ;
+; Unconstrained Clocks            ; 0     ; 0    ;
+; Unconstrained Input Ports       ; 0     ; 0    ;
+; Unconstrained Input Port Paths  ; 0     ; 0    ;
+; Unconstrained Output Ports      ; 0     ; 0    ;
+; Unconstrained Output Port Paths ; 0     ; 0    ;
++---------------------------------+-------+------+
+
+
++----------------------------------------+
+; Clock Status Summary                   ;
++---------+---------+------+-------------+
+; Target  ; Clock   ; Type ; Status      ;
++---------+---------+------+-------------+
+; clk50   ; clk50   ; Base ; Constrained ;
+; slowClk ; slowClk ; Base ; Constrained ;
++---------+---------+------+-------------+
+
+
++--------------------------+
+; Timing Analyzer Messages ;
++--------------------------+
+Info: *******************************************************************
+Info: Running Quartus Prime Timing Analyzer
+    Info: Version 24.1std.0 Build 1077 03/04/2025 SC Standard Edition
+    Info: Processing started: Thu May 15 17:21:27 2025
+Info: Command: quartus_sta de0Board -c de0Board
+Info: qsta_default_script.tcl version: #1
+Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
+Info (20030): Parallel compilation is enabled and will use 6 of the 6 processors detected
+Info (21077): Low junction temperature is 0 degrees C
+Info (21077): High junction temperature is 85 degrees C
+Info (332104): Reading SDC File: 'de0Board.sdc'
+Info (332151): Clock uncertainty is not calculated until you update the timing netlist.
+Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
+Info: Found TIMING_ANALYZER_REPORT_SCRIPT_INCLUDE_DEFAULT_ANALYSIS = ON
+Info (332146): Worst-case setup slack is 8.089
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     8.089               0.000 clk50 
+    Info (332119):    11.812               0.000 slowClk 
+Info (332146): Worst-case hold slack is 0.358
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     0.358               0.000 slowClk 
+    Info (332119):     0.361               0.000 clk50 
+Info (332146): Worst-case recovery slack is 16.454
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):    16.454               0.000 slowClk 
+    Info (332119):    16.723               0.000 clk50 
+Info (332146): Worst-case removal slack is 2.708
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     2.708               0.000 clk50 
+    Info (332119):     2.789               0.000 slowClk 
+Info (332146): Worst-case minimum pulse width slack is 9.487
+    Info (332119):     Slack       End Point TNS Clock 
+    Info (332119): ========= =================== =====================
+    Info (332119):     9.487               0.000 clk50 
+    Info (332119):   999.715               0.000 slowClk 
+Info (332101): Design is fully constrained for setup requirements
+Info (332101): Design is fully constrained for hold requirements
+Info: Quartus Prime Timing Analyzer was successful. 0 errors, 1 warning
+    Info: Peak virtual memory: 420 megabytes
+    Info: Processing ended: Thu May 15 17:21:29 2025
+    Info: Elapsed time: 00:00:02
+    Info: Total CPU time (on all processors): 00:00:01
+
+
